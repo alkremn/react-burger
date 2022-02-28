@@ -1,0 +1,11 @@
+.title{
+  font-size: 36px;
+  line-height: 40px;
+  font-style: normal;
+  font-weight: bold;
+  margin: 0;
+}
+
+.mainContent{
+  display: flex;
+}

@@ -1,0 +1,35 @@
+.list_item{
+  display: flex;
+  flex-direction: column;
+}
+
+.image{
+  margin: 0 16px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+}
+
+.name {
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  margin: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: 'JetBrains Mono';
+  text-align: center;
+  color:#F2F2F3;
+}
+
+.price_digits{
+  font-size: 28px;
+  margin-right: 9px;
+  color:#F2F2F3;
+}

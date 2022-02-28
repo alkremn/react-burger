@@ -1,0 +1,19 @@
+.container{
+  border: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 100px 16px 92px;
+  max-width: 600px;
+}
+.list{
+  padding: 0;
+  border: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  box-sizing: border-box;
+  min-height: 450px;
+  max-height: calc(100vh - 315px);
+  overflow: scroll;
+  overflow-x: hidden;
+}

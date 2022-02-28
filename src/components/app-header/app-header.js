@@ -5,6 +5,7 @@ import {
   Logo,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import headerStyles from './app-header.module.css';
 
 export default function AppHeader() {
@@ -12,33 +13,31 @@ export default function AppHeader() {
     <header className={headerStyles.header}>
       <ul className={headerStyles.links}>
         <li>
-          <a href='/'>
-            <BurgerIcon type='secondary' />
-            <p className='text text_type_main-default pl-2 text_color_inactive'>
-              Конструктор
-            </p>
-          </a>
+          <NavLink to='/'>
+            <BurgerIcon type='primary' />
+            <p className='text text_type_main-default pl-2'>Конструктор</p>
+          </NavLink>
         </li>
         <li>
-          <a href='/'>
+          <NavLink to='/'>
             <ListIcon type='secondary' />
             <p className='text text_type_main-default pl-2 text_color_inactive'>
               Лента заказов
             </p>
-          </a>
+          </NavLink>
         </li>
         <li className={headerStyles.link_logo}>
-          <a href='/'>
+          <NavLink to='/'>
             <Logo />
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a href='/'>
+          <NavLink to='/'>
             <ProfileIcon type='secondary' />
             <p className='text text_type_main-default pl-2 text_color_inactive'>
               Личный кабинет
             </p>
-          </a>
+          </NavLink>
         </li>
       </ul>
     </header>

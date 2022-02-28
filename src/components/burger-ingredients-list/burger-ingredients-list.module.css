@@ -1,0 +1,27 @@
+.list{
+  box-sizing: border-box;
+  min-height: 450px;
+  max-height: calc(100vh - 315px);
+  max-width: 600px;
+  padding: 15px;
+  display: grid;
+  column-gap: 24px;
+  row-gap: 32px;
+  grid-template-columns: 1fr 1fr;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2F2F37;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8585AD;
+  border-radius: 10px;
+}
