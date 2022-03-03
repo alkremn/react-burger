@@ -39,16 +39,18 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <>
       <AppHeader />
-      <div>
-        <h1 className={mainStyles.title}>Соберите бургер</h1>
-        <div className={mainStyles.mainContent}>
-          <BurgerIngredients ingredients={ingredients} />
-          <BurgerConstructor elements={ingredients.mains} />
+      <main className={mainStyles.mainContainer}>
+        <div className={mainStyles.mainLayout}>
+          <h1 className={mainStyles.title}>Соберите бургер</h1>
+          <div className={mainStyles.ingredients}>
+            <BurgerIngredients ingredients={ingredients} />
+            <BurgerConstructor elements={ingredients.mains} />
+          </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </>
   );
 }
 

@@ -1,11 +1,23 @@
+.mainContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mainLayout{
+  display: flex;
+  flex-direction: column;
+}
+
 .title{
   font-size: 36px;
+  align-self: flex-start;
   line-height: 40px;
   font-style: normal;
   font-weight: bold;
   margin: 0;
 }
 
-.mainContent{
+.ingredients{
   display: flex;
 }
