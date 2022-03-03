@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Iceland';
+  src: url('../../fonts/Iceland-Regular.ttf') format('ttf');
+}
+
 .mainContainer{
   display: flex;
   flex-direction: column;
@@ -10,6 +15,7 @@
 }
 
 .title{
+  padding: 40px 0 20px;
   font-size: 36px;
   align-self: flex-start;
   line-height: 40px;
@@ -20,4 +26,6 @@
 
 .ingredients{
   display: flex;
+  gap: 10px;
+  max-height: calc(100vh - 300px);
 }

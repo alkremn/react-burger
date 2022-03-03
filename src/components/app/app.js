@@ -6,6 +6,8 @@ import mainStyles from './app.module.css';
 import BurgerConstructor from './../burger-constructor/burger-constructor';
 
 function App() {
+  const [selectedBun, setSelectedBun] = useState({});
+  const [selectedIngridients, setSelectedIngridients] = useState([]);
   const [ingredients, setIngredients] = useState({
     buns: [],
     mains: [],
@@ -35,6 +37,9 @@ function App() {
         mains: mains,
         sauces: sauces,
       });
+
+      setSelectedBun(buns[0]);
+      setSelectedIngridients([...mains, ...sauces]);
     });
   }, []);
 
@@ -43,10 +48,15 @@ function App() {
       <AppHeader />
       <main className={mainStyles.mainContainer}>
         <div className={mainStyles.mainLayout}>
-          <h1 className={mainStyles.title}>Соберите бургер</h1>
+          <h1 className={`text text_type_main-default ${mainStyles.title}`}>
+            Соберите бургер
+          </h1>
           <div className={mainStyles.ingredients}>
             <BurgerIngredients ingredients={ingredients} />
-            <BurgerConstructor elements={ingredients.mains} />
+            <BurgerConstructor
+              selectedBun={selectedBun}
+              selectedIngredients={selectedIngridients}
+            />
           </div>
         </div>
       </main>

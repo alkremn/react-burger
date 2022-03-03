@@ -9,30 +9,49 @@ import {
 import burgerConstructorStyles from './burger-constructor.module.css';
 import { PropTypes } from 'prop-types';
 
-export default function BurgerConstructor({ elements }) {
-  const [total, setTotal] = useState(610);
+export default function BurgerConstructor({
+  selectedBun,
+  selectedIngredients,
+}) {
+  const [total] = useState(610);
 
   return (
     <section className={burgerConstructorStyles.container}>
+      <div className={burgerConstructorStyles.bun_container}>
+        <ConstructorElement
+          type='top'
+          isLocked={true}
+          text={`${selectedBun.name} (верх)`}
+          price={selectedBun.price}
+          thumbnail={selectedBun.image_mobile}
+        />
+      </div>
       <ul className={burgerConstructorStyles.list}>
-        {elements.map((element, i) => (
-          <li key={element._id} className={burgerConstructorStyles.listItem}>
-            {i > 0 && i < elements.length - 1 && (
+        {selectedIngredients &&
+          selectedIngredients.map(element => (
+            <li key={element._id} className={burgerConstructorStyles.listItem}>
               <div className={burgerConstructorStyles.dragIcon}>
                 <DragIcon type='primary' />
               </div>
-            )}
-            <ConstructorElement
-              key={element._id}
-              type={i === 0 ? 'top' : i === elements.length - 1 ? 'bottom' : ''}
-              isLocked={false}
-              text={element.name}
-              price={element.price}
-              thumbnail={element.image_mobile}
-            />
-          </li>
-        ))}
+              <ConstructorElement
+                key={element._id}
+                isLocked={false}
+                text={element.name}
+                price={element.price}
+                thumbnail={element.image_mobile}
+              />
+            </li>
+          ))}
       </ul>
+      <div className={burgerConstructorStyles.bun_container}>
+        <ConstructorElement
+          type='bottom'
+          isLocked={true}
+          text={`${selectedBun.name} (низ)`}
+          price={selectedBun.price}
+          thumbnail={selectedBun.image_mobile}
+        />
+      </div>
       <div className={burgerConstructorStyles.bottomContainer}>
         <span>{total}</span>
         <img
@@ -49,5 +68,6 @@ export default function BurgerConstructor({ elements }) {
 }
 
 BurgerConstructor.propTypes = {
-  elements: PropTypes.arrayOf(ingredientPropTypes.isRequired),
+  selectedBun: ingredientPropTypes,
+  selectedIngredients: PropTypes.arrayOf(ingredientPropTypes),
 };

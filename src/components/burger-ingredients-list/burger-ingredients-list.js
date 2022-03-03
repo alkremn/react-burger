@@ -5,10 +5,12 @@ import listStyles from './burger-ingredients-list.module.css';
 import { PropTypes } from 'prop-types';
 
 export default function BurgerIngredientsList({ title, ingredients }) {
-  const [countArray, setCountArray] = useState([1, 4, 1, 0, 5, 1, 0, 0]);
+  const [countArray] = useState([1, 4, 1, 0, 5, 1, 0, 0]);
   return (
     <>
-      <h2 className={listStyles.title}>{title}</h2>
+      <h2 className={`text text_type_main-default ${listStyles.title}`}>
+        {title}
+      </h2>
       <ul className={listStyles.list}>
         {ingredients &&
           ingredients.map((item, i) => (
@@ -25,5 +27,5 @@ export default function BurgerIngredientsList({ title, ingredients }) {
 
 BurgerIngredientsList.propTypes = {
   title: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(ingredientPropTypes.isRequired),
+  ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
 };
