@@ -1,0 +1,34 @@
+.list_item{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.image{
+  margin: 0 16px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+  font-size: 28px;
+}
+
+.name {
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+  color:#F2F2F3;
+}
+
+.price_digits{
+  font-size: 28px;
+  line-height: 24px;
+  margin-right: 9px;
+  color:#F2F2F3;
+  font-family: 'Iceland';
+}
