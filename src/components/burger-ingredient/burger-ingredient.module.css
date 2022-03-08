@@ -2,6 +2,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  cursor: pointer;
+  transition: all .2s linear;
+}
+
+.list_item:hover{
+  transform: scale(1.02);
 }
 
 .image{

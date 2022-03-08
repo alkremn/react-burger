@@ -4,7 +4,11 @@ import { ingredientPropTypes } from '../../utils/commonPropTypes';
 import listStyles from './burger-ingredients-list.module.css';
 import { PropTypes } from 'prop-types';
 
-export default function BurgerIngredientsList({ title, ingredients }) {
+export default function BurgerIngredientsList({
+  title,
+  ingredients,
+  onModalOpen,
+}) {
   const [countArray] = useState([1, 4, 1, 0, 5, 1, 0, 0]);
   return (
     <>
@@ -18,6 +22,7 @@ export default function BurgerIngredientsList({ title, ingredients }) {
               key={item._id}
               ingredient={item}
               count={countArray[i]}
+              onModalOpen={onModalOpen}
             />
           ))}
       </ul>
