@@ -1,0 +1,23 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #F2F2F3;
+}
+
+.title{
+  margin: 0;
+  align-self: flex-start;
+}
+
+.name{
+  margin: 16px 0 0;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 30px;
+}
+.nutritionList{
+  display: flex;
+  margin: 32px 0 60px;
+  column-gap: 20px;
+}

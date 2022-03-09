@@ -6,12 +6,18 @@ import BurgerConstructor from './../burger-constructor/burger-constructor';
 import { data as dataJson } from '../../utils/data.js';
 import { apiUrl } from './../../utils/utils';
 import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import OrderDetails from '../order-details/order-details';
 
 function App() {
   const [selectedBun, setSelectedBun] = useState({});
-  const [selectedIngridients, setSelectedIngridients] = useState([]);
-  const [visible, setVisible] = useState(true);
-  const [ingredients, setIngredients] = useState({
+  const [ingredients, setIngredients] = useState({});
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] =
+    useState(false);
+  const [selectedIngredient, setSelectedIngredient] = useState(null);
+  const [filteredIngredients, setfilteredIngredients] = useState({
     buns: [],
     mains: [],
     sauces: [],
@@ -22,6 +28,8 @@ function App() {
       try {
         // const response = await fetch(apiUrl);
         // const dataJson = await response.json();
+
+        setIngredients(dataJson);
 
         const buns = [];
         const mains = [];
@@ -40,14 +48,15 @@ function App() {
               break;
           }
 
-          setIngredients({
+          setfilteredIngredients({
             buns: buns,
             mains: mains,
             sauces: sauces,
           });
 
           setSelectedBun(buns[0]);
-          setSelectedIngridients([...mains, ...sauces]);
+          setSelectedIngredients([...mains, ...sauces]);
+          setSelectedIngredient(mains[0]);
         });
       } catch (error) {
         console.log(error);
@@ -56,10 +65,26 @@ function App() {
     fetchData();
   }, []);
 
-  const handleOpenModal = e => {
-    console.log(e.target.classList);
-    if (!e.target.classList.contains('popup')) {
-      setVisible(!visible);
+  const handleFormSubmit = e => {
+    e.preventDefault();
+    setIsVisible(true);
+  };
+
+  const handleOpenModal = id => {
+    const selectedIngredient = ingredients.find(item => item._id === id);
+    setSelectedIngredient(selectedIngredient);
+    setIsIngredientDetailsSelected(true);
+    setIsVisible(true);
+  };
+
+  const handleClosePopup = e => {
+    if (
+      e.target.classList.contains('popup') ||
+      e.target.classList.contains('closeButton')
+    ) {
+      setIsIngredientDetailsSelected(false);
+      setIsVisible(false);
+      setSelectedIngredient(null);
     }
   };
 
@@ -73,14 +98,23 @@ function App() {
           </h1>
           <div className={mainStyles.ingredients}>
             <BurgerIngredients
-              ingredients={ingredients}
+              ingredients={filteredIngredients}
               onModalOpen={handleOpenModal}
             />
             <BurgerConstructor
               selectedBun={selectedBun}
-              selectedIngredients={selectedIngridients}
+              selectedIngredients={selectedIngredients}
+              onFormSubmit={handleFormSubmit}
             />
-            {visible && <Modal onClose={handleOpenModal} />}
+            {isVisible && (
+              <Modal onClose={handleClosePopup}>
+                {isIngredientDetailsSelected ? (
+                  <IngredientDetails ingredient={selectedIngredient} />
+                ) : (
+                  <OrderDetails />
+                )}
+              </Modal>
+            )}
           </div>
         </div>
       </main>

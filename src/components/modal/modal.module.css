@@ -1,6 +1,5 @@
 .container{
   width: 720px;
-  height: 718px;
   position: relative;
   padding: 40px 40px 60px; 
   display: flex;
@@ -10,19 +9,25 @@
   border-radius: 40px;
   border: 1px solid rgba(76, 76, 255, 0.2);
   box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  cursor: default;
 }
 
-.title{
-  font-style: normal;
-  font-weight: bold;
-  color: #F2F2F3;
-}
+
 
 .closeButton{
   position: absolute;
-  top: 60px;
+  top: 50px;
   right: 40px;
   background: transparent;
+  width: 18px;
+  height: 18px;
+  background-image: url('../../images/icons/close_icon.svg');
   border: none;
   cursor: pointer;
+  z-index: 100;
+  transition: all .2s ease-in-out;
+}
+
+.closeButton:hover{
+  transform: scale(1.1);
 }

@@ -9,7 +9,10 @@ import { PropTypes } from 'prop-types';
 
 export default function BurgerIngredient({ ingredient, count, onModalOpen }) {
   return (
-    <li className={listItemStyles.list_item} onClick={onModalOpen}>
+    <li
+      className={listItemStyles.list_item}
+      onClick={() => onModalOpen(ingredient._id)}
+    >
       {count > 0 && <Counter count={count} size='default' />}
       <img
         className={listItemStyles.image}
