@@ -71,4 +71,5 @@ export default function BurgerConstructor({
 BurgerConstructor.propTypes = {
   selectedBun: ingredientPropTypes,
   selectedIngredients: PropTypes.arrayOf(ingredientPropTypes),
+  onFormSubmit: PropTypes.func.isRequired,
 };

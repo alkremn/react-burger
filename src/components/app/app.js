@@ -3,7 +3,6 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import AppHeader from './../app-header/app-header';
 import mainStyles from './app.module.css';
 import BurgerConstructor from './../burger-constructor/burger-constructor';
-import { data as dataJson } from '../../utils/data.js';
 import { apiUrl } from './../../utils/utils';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
@@ -26,16 +25,16 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await fetch(apiUrl);
-        // const dataJson = await response.json();
+        const response = await fetch(apiUrl);
+        const dataJson = await response.json();
 
-        setIngredients(dataJson);
+        setIngredients(dataJson.data);
 
         const buns = [];
         const mains = [];
         const sauces = [];
 
-        dataJson.forEach(i => {
+        dataJson.data.forEach(i => {
           switch (i.type) {
             case 'bun':
               buns.push(i);
@@ -70,11 +69,19 @@ function App() {
     setIsVisible(true);
   };
 
-  const handleOpenModal = id => {
+  const handleKeyPress = e => {
+    console.log('asdf');
+    if (e.code === 'Escape') {
+      handleClose();
+    }
+  };
+
+  const handleOpenPopup = id => {
     const selectedIngredient = ingredients.find(item => item._id === id);
     setSelectedIngredient(selectedIngredient);
     setIsIngredientDetailsSelected(true);
     setIsVisible(true);
+    window.addEventListener('keydown', handleKeyPress);
   };
 
   const handleClosePopup = e => {
@@ -82,10 +89,15 @@ function App() {
       e.target.classList.contains('popup') ||
       e.target.classList.contains('closeButton')
     ) {
-      setIsIngredientDetailsSelected(false);
-      setIsVisible(false);
-      setSelectedIngredient(null);
+      handleClose();
     }
+  };
+
+  const handleClose = () => {
+    setIsIngredientDetailsSelected(false);
+    setIsVisible(false);
+    setSelectedIngredient(null);
+    window.removeEventListener('keydown', handleKeyPress);
   };
 
   return (
@@ -99,7 +111,7 @@ function App() {
           <div className={mainStyles.ingredients}>
             <BurgerIngredients
               ingredients={filteredIngredients}
-              onModalOpen={handleOpenModal}
+              onPopupOpen={handleOpenPopup}
             />
             <BurgerConstructor
               selectedBun={selectedBun}

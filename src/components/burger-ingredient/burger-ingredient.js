@@ -7,11 +7,11 @@ import { ingredientPropTypes } from '../../utils/commonPropTypes';
 import listItemStyles from './burger-ingredient.module.css';
 import { PropTypes } from 'prop-types';
 
-export default function BurgerIngredient({ ingredient, count, onModalOpen }) {
+export default function BurgerIngredient({ ingredient, count, onPopupOpen }) {
   return (
     <li
       className={listItemStyles.list_item}
-      onClick={() => onModalOpen(ingredient._id)}
+      onClick={() => onPopupOpen(ingredient._id)}
     >
       {count > 0 && <Counter count={count} size='default' />}
       <img
@@ -33,4 +33,5 @@ export default function BurgerIngredient({ ingredient, count, onModalOpen }) {
 BurgerIngredient.propTypes = {
   ingredient: ingredientPropTypes.isRequired,
   count: PropTypes.number,
+  onPopupOpen: PropTypes.func.isRequired,
 };

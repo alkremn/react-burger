@@ -1,6 +1,7 @@
 import React from 'react';
 import NutritionFact from '../nutrition-fact/nutrition-fact';
 import ingredientDetailsStyles from './ingredient-details.module.css';
+import { ingredientPropTypes } from './../../utils/commonPropTypes';
 
 export default function IngredientDetails({ ingredient }) {
   return (
@@ -25,3 +26,7 @@ export default function IngredientDetails({ ingredient }) {
     </div>
   );
 }
+
+IngredientDetails.propTypes = {
+  ingredient: ingredientPropTypes,
+};

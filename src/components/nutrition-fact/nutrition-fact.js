@@ -1,5 +1,6 @@
 import React from 'react';
 import nutritionFactStyles from './nutrition-fact.module.css';
+import { PropTypes } from 'prop-types';
 
 export default function NutritionFact({ title, value }) {
   return (
@@ -11,3 +12,8 @@ export default function NutritionFact({ title, value }) {
     </div>
   );
 }
+
+NutritionFact.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
+};

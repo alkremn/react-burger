@@ -7,7 +7,7 @@ import { PropTypes } from 'prop-types';
 export default function BurgerIngredientsList({
   title,
   ingredients,
-  onModalOpen,
+  onPopupOpen,
 }) {
   const [countArray] = useState([1, 4, 1, 0, 5, 1, 0, 0]);
   return (
@@ -22,7 +22,7 @@ export default function BurgerIngredientsList({
               key={item._id}
               ingredient={item}
               count={countArray[i]}
-              onModalOpen={onModalOpen}
+              onPopupOpen={onPopupOpen}
             />
           ))}
       </ul>
@@ -33,4 +33,5 @@ export default function BurgerIngredientsList({
 BurgerIngredientsList.propTypes = {
   title: PropTypes.string.isRequired,
   ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
+  onPopupOpen: PropTypes.func.isRequired,
 };
