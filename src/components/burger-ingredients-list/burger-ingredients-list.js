@@ -4,7 +4,11 @@ import { ingredientPropTypes } from '../../utils/commonPropTypes';
 import listStyles from './burger-ingredients-list.module.css';
 import { PropTypes } from 'prop-types';
 
-export default function BurgerIngredientsList({ title, ingredients }) {
+export default function BurgerIngredientsList({
+  title,
+  ingredients,
+  onPopupOpen,
+}) {
   const [countArray] = useState([1, 4, 1, 0, 5, 1, 0, 0]);
   return (
     <>
@@ -18,6 +22,7 @@ export default function BurgerIngredientsList({ title, ingredients }) {
               key={item._id}
               ingredient={item}
               count={countArray[i]}
+              onPopupOpen={onPopupOpen}
             />
           ))}
       </ul>
@@ -28,4 +33,5 @@ export default function BurgerIngredientsList({ title, ingredients }) {
 BurgerIngredientsList.propTypes = {
   title: PropTypes.string.isRequired,
   ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
+  onPopupOpen: PropTypes.func.isRequired,
 };

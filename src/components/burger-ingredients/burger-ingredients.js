@@ -6,7 +6,7 @@ import burgerIngredientsStyles from './burger-ingredients.module.css';
 import { titles, titlesEn } from '../../utils/utils';
 import { PropTypes } from 'prop-types';
 
-export default function BurgerIngredients({ ingredients }) {
+export default function BurgerIngredients({ ingredients, onPopupOpen }) {
   const [current, setCurrent] = useState(0);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [currentTitle, setCurrentTitle] = useState(titles[0]);
@@ -40,6 +40,7 @@ export default function BurgerIngredients({ ingredients }) {
         <BurgerIngredientsList
           title={currentTitle}
           ingredients={selectedIngredients}
+          onPopupOpen={onPopupOpen}
         />
       )}
     </section>
@@ -52,4 +53,5 @@ BurgerIngredients.propTypes = {
     mains: PropTypes.arrayOf(ingredientPropTypes).isRequired,
     sauces: PropTypes.arrayOf(ingredientPropTypes).isRequired,
   }),
+  onPopupOpen: PropTypes.func.isRequired,
 };

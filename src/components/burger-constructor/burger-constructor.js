@@ -12,11 +12,12 @@ import { PropTypes } from 'prop-types';
 export default function BurgerConstructor({
   selectedBun,
   selectedIngredients,
+  onFormSubmit,
 }) {
   const [total] = useState(610);
 
   return (
-    <section className={burgerConstructorStyles.container}>
+    <form className={burgerConstructorStyles.container} onSubmit={onFormSubmit}>
       <div className={burgerConstructorStyles.bun_container}>
         <ConstructorElement
           type='top'
@@ -63,11 +64,12 @@ export default function BurgerConstructor({
           Оформить заказ
         </Button>
       </div>
-    </section>
+    </form>
   );
 }
 
 BurgerConstructor.propTypes = {
   selectedBun: ingredientPropTypes,
   selectedIngredients: PropTypes.arrayOf(ingredientPropTypes),
+  onFormSubmit: PropTypes.func.isRequired,
 };
