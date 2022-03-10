@@ -26,8 +26,12 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await fetch(apiUrl);
-        const dataJson = await response.json();
 
+        if (!response.ok) {
+          throw new Error(`Ошибка ${response.status}`);
+        }
+
+        const dataJson = await response.json();
         setIngredients(dataJson.data);
 
         const buns = [];
@@ -69,35 +73,17 @@ function App() {
     setIsVisible(true);
   };
 
-  const handleKeyPress = e => {
-    console.log('asdf');
-    if (e.code === 'Escape') {
-      handleClose();
-    }
-  };
-
   const handleOpenPopup = id => {
     const selectedIngredient = ingredients.find(item => item._id === id);
     setSelectedIngredient(selectedIngredient);
     setIsIngredientDetailsSelected(true);
     setIsVisible(true);
-    window.addEventListener('keydown', handleKeyPress);
   };
 
-  const handleClosePopup = e => {
-    if (
-      e.target.classList.contains('popup') ||
-      e.target.classList.contains('closeButton')
-    ) {
-      handleClose();
-    }
-  };
-
-  const handleClose = () => {
+  const handleClosePopup = () => {
     setIsIngredientDetailsSelected(false);
     setIsVisible(false);
     setSelectedIngredient(null);
-    window.removeEventListener('keydown', handleKeyPress);
   };
 
   return (
