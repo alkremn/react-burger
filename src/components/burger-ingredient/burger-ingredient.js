@@ -1,10 +1,14 @@
 import React from 'react';
+import listItemStyles from './burger-ingredient.module.css';
+
+// components
 import {
   Counter,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+
+// PropTypes
 import { ingredientPropTypes } from '../../utils/commonPropTypes';
-import listItemStyles from './burger-ingredient.module.css';
 import { PropTypes } from 'prop-types';
 
 export default function BurgerIngredient({ ingredient, count, onPopupOpen }) {
@@ -20,7 +24,9 @@ export default function BurgerIngredient({ ingredient, count, onPopupOpen }) {
         alt={ingredient.name}
       />
       <p className={listItemStyles.price}>
-        <span className={listItemStyles.price_digits}>{ingredient.price}</span>
+        <span className={listItemStyles.price_digits}>
+          {ingredient.price.toLocaleString('en-US')}
+        </span>
         <CurrencyIcon type='primary' />
       </p>
       <p className={`text text_type_main-default ${listItemStyles.name}`}>

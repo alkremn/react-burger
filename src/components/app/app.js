@@ -13,9 +13,6 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 
-// api
-import { apiUrl } from './../../utils/utils';
-
 // context
 import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
 import { SelectedBunContext } from '../../services/selectedBunContext';
@@ -29,6 +26,12 @@ import {
   selectedBunReducer,
   selectedBunInitialState,
 } from '../../store/selectedBunStore';
+
+// api
+import { baseURL } from './../../utils/utils';
+
+// helper functions
+import { filterIngredients, getRandomIntredients } from '../../utils/utils';
 
 function App() {
   const [selectedBunState, selectedBunDispatcher] = useReducer(
@@ -52,7 +55,7 @@ function App() {
   });
 
   useEffect(() => {
-    fetch(apiUrl)
+    fetch(`${baseURL}/ingredients`)
       .then(res => {
         if (!res.ok) {
           return Promise.reject(`Ошибка ${res.status}`);
@@ -61,36 +64,18 @@ function App() {
       })
       .then(dataJson => {
         setIngredients(dataJson.data);
+        const ingriedientsData = filterIngredients(dataJson.data);
 
-        const buns = [];
-        const mains = [];
-        const sauces = [];
+        setfilteredIngredients(ingriedientsData);
 
-        dataJson.data.forEach(i => {
-          switch (i.type) {
-            case 'bun':
-              buns.push(i);
-              break;
-            case 'main':
-              mains.push(i);
-              break;
-            default:
-              sauces.push(i);
-              break;
-          }
+        selectedBunDispatcher({
+          type: ADD_SELECTED_BUN,
+          payload: ingriedientsData.buns[0],
+        });
 
-          setfilteredIngredients({
-            buns: buns,
-            mains: mains,
-            sauces: sauces,
-          });
-
-          selectedBunDispatcher({ type: ADD_SELECTED_BUN, payload: buns[0] });
-          selectedIngredientsDispatcher({
-            type: ADD_INGREDIENTS,
-            payload: [...mains, ...sauces],
-          });
-          setSelectedIngredient(mains[0]);
+        selectedIngredientsDispatcher({
+          type: ADD_INGREDIENTS,
+          payload: getRandomIntredients(ingriedientsData.mains),
         });
       })
       .catch(error => {

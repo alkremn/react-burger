@@ -1,17 +1,23 @@
 import React, { useState, useContext, useEffect } from 'react';
+import burgerConstructorStyles from './burger-constructor.module.css';
+
+// icons
 import currencyIcon from '../../images/icons/currency_icon.svg';
-import { ingredientPropTypes } from '../../utils/commonPropTypes';
+
+// components
 import {
   Button,
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import burgerConstructorStyles from './burger-constructor.module.css';
 import { PropTypes } from 'prop-types';
 
 // context
 import { SelectedBunContext } from '../../services/selectedBunContext';
 import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
+
+// helper functions
+import { calculateTotalCost } from '../../utils/utils';
 
 export default function BurgerConstructor({ onFormSubmit }) {
   const { selectedBunState } = useContext(SelectedBunContext);
@@ -21,24 +27,16 @@ export default function BurgerConstructor({ onFormSubmit }) {
   useEffect(() => {
     if (
       selectedBunState.selectedBun &&
-      selectedIngredientsState.selectedIngredients
+      selectedIngredientsState.selectedIngredients.length > 0
     ) {
-      const bunPrice = selectedBunState.selectedBun.price;
-      const ingredientsTotal =
-        selectedIngredientsState.selectedIngredients.reduce(
-          (prevItem, currentItem) => {
-            console.log(prevItem);
-            return prevItem.price + currentItem.price;
-          },
-          0
-        );
-      console.log(selectedIngredientsState.selectedIngredients);
-      setTotal(bunPrice + ingredientsTotal);
+      setTotal(
+        calculateTotalCost(
+          selectedBunState.selectedBun,
+          selectedIngredientsState.selectedIngredients
+        )
+      );
     }
-  }, [
-    selectedBunState.selectedBun,
-    selectedIngredientsState.selectedIngredients,
-  ]);
+  }, [selectedBunState, selectedIngredientsState]);
 
   return (
     <form className={burgerConstructorStyles.container} onSubmit={onFormSubmit}>
@@ -47,7 +45,7 @@ export default function BurgerConstructor({ onFormSubmit }) {
           type='top'
           isLocked={true}
           text={`${selectedBunState.selectedBun?.name} (верх)`}
-          price={selectedBunState.selectedBun?.price}
+          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
           thumbnail={selectedBunState.selectedBun?.image_mobile}
         />
       </div>
@@ -62,7 +60,7 @@ export default function BurgerConstructor({ onFormSubmit }) {
                 key={element._id}
                 isLocked={false}
                 text={element.name}
-                price={element.price}
+                price={element.price.toLocaleString('en-US')}
                 thumbnail={element.image_mobile}
               />
             </li>
@@ -73,7 +71,7 @@ export default function BurgerConstructor({ onFormSubmit }) {
           type='bottom'
           isLocked={true}
           text={`${selectedBunState.selectedBun?.name} (низ)`}
-          price={selectedBunState.selectedBun?.price}
+          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
           thumbnail={selectedBunState.selectedBun?.image_mobile}
         />
       </div>
@@ -93,7 +91,5 @@ export default function BurgerConstructor({ onFormSubmit }) {
 }
 
 BurgerConstructor.propTypes = {
-  selectedBun: ingredientPropTypes,
-  selectedIngredients: PropTypes.arrayOf(ingredientPropTypes),
   onFormSubmit: PropTypes.func.isRequired,
 };
