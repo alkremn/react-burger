@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import currencyIcon from '../../images/icons/currency_icon.svg';
 import { ingredientPropTypes } from '../../utils/commonPropTypes';
 import {
@@ -9,12 +9,36 @@ import {
 import burgerConstructorStyles from './burger-constructor.module.css';
 import { PropTypes } from 'prop-types';
 
-export default function BurgerConstructor({
-  selectedBun,
-  selectedIngredients,
-  onFormSubmit,
-}) {
-  const [total] = useState(610);
+// context
+import { SelectedBunContext } from '../../services/selectedBunContext';
+import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
+
+export default function BurgerConstructor({ onFormSubmit }) {
+  const { selectedBunState } = useContext(SelectedBunContext);
+  const { selectedIngredientsState } = useContext(SelectedIngredientsContext);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (
+      selectedBunState.selectedBun &&
+      selectedIngredientsState.selectedIngredients
+    ) {
+      const bunPrice = selectedBunState.selectedBun.price;
+      const ingredientsTotal =
+        selectedIngredientsState.selectedIngredients.reduce(
+          (prevItem, currentItem) => {
+            console.log(prevItem);
+            return prevItem.price + currentItem.price;
+          },
+          0
+        );
+      console.log(selectedIngredientsState.selectedIngredients);
+      setTotal(bunPrice + ingredientsTotal);
+    }
+  }, [
+    selectedBunState.selectedBun,
+    selectedIngredientsState.selectedIngredients,
+  ]);
 
   return (
     <form className={burgerConstructorStyles.container} onSubmit={onFormSubmit}>
@@ -22,14 +46,14 @@ export default function BurgerConstructor({
         <ConstructorElement
           type='top'
           isLocked={true}
-          text={`${selectedBun.name} (верх)`}
-          price={selectedBun.price}
-          thumbnail={selectedBun.image_mobile}
+          text={`${selectedBunState.selectedBun?.name} (верх)`}
+          price={selectedBunState.selectedBun?.price}
+          thumbnail={selectedBunState.selectedBun?.image_mobile}
         />
       </div>
       <ul className={burgerConstructorStyles.list}>
-        {selectedIngredients &&
-          selectedIngredients.map(element => (
+        {selectedIngredientsState.selectedIngredients &&
+          selectedIngredientsState.selectedIngredients.map(element => (
             <li key={element._id} className={burgerConstructorStyles.listItem}>
               <div className={burgerConstructorStyles.dragIcon}>
                 <DragIcon type='primary' />
@@ -48,9 +72,9 @@ export default function BurgerConstructor({
         <ConstructorElement
           type='bottom'
           isLocked={true}
-          text={`${selectedBun.name} (низ)`}
-          price={selectedBun.price}
-          thumbnail={selectedBun.image_mobile}
+          text={`${selectedBunState.selectedBun?.name} (низ)`}
+          price={selectedBunState.selectedBun?.price}
+          thumbnail={selectedBunState.selectedBun?.image_mobile}
         />
       </div>
       <div className={burgerConstructorStyles.bottomContainer}>
