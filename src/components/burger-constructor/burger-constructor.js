@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import burgerConstructorStyles from './burger-constructor.module.css';
+
+// icons
 import currencyIcon from '../../images/icons/currency_icon.svg';
-import { ingredientPropTypes } from '../../utils/commonPropTypes';
+
+// components
 import {
   Button,
   ConstructorElement,
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import burgerConstructorStyles from './burger-constructor.module.css';
 import { PropTypes } from 'prop-types';
 
-export default function BurgerConstructor({
-  selectedBun,
-  selectedIngredients,
-  onFormSubmit,
-}) {
-  const [total] = useState(610);
+// context
+import { SelectedBunContext } from '../../services/selectedBunContext';
+import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
+
+// helper functions
+import { calculateTotalCost } from '../../utils/utils';
+
+export default function BurgerConstructor({ onFormSubmit }) {
+  const { selectedBunState } = useContext(SelectedBunContext);
+  const { selectedIngredientsState } = useContext(SelectedIngredientsContext);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (
+      selectedBunState.selectedBun &&
+      selectedIngredientsState.selectedIngredients.length > 0
+    ) {
+      setTotal(
+        calculateTotalCost(
+          selectedBunState.selectedBun,
+          selectedIngredientsState.selectedIngredients
+        )
+      );
+    }
+  }, [selectedBunState, selectedIngredientsState]);
 
   return (
     <form className={burgerConstructorStyles.container} onSubmit={onFormSubmit}>
@@ -22,14 +44,14 @@ export default function BurgerConstructor({
         <ConstructorElement
           type='top'
           isLocked={true}
-          text={`${selectedBun.name} (верх)`}
-          price={selectedBun.price}
-          thumbnail={selectedBun.image_mobile}
+          text={`${selectedBunState.selectedBun?.name} (верх)`}
+          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
+          thumbnail={selectedBunState.selectedBun?.image_mobile}
         />
       </div>
       <ul className={burgerConstructorStyles.list}>
-        {selectedIngredients &&
-          selectedIngredients.map(element => (
+        {selectedIngredientsState.selectedIngredients &&
+          selectedIngredientsState.selectedIngredients.map(element => (
             <li key={element._id} className={burgerConstructorStyles.listItem}>
               <div className={burgerConstructorStyles.dragIcon}>
                 <DragIcon type='primary' />
@@ -38,7 +60,7 @@ export default function BurgerConstructor({
                 key={element._id}
                 isLocked={false}
                 text={element.name}
-                price={element.price}
+                price={element.price.toLocaleString('en-US')}
                 thumbnail={element.image_mobile}
               />
             </li>
@@ -48,9 +70,9 @@ export default function BurgerConstructor({
         <ConstructorElement
           type='bottom'
           isLocked={true}
-          text={`${selectedBun.name} (низ)`}
-          price={selectedBun.price}
-          thumbnail={selectedBun.image_mobile}
+          text={`${selectedBunState.selectedBun?.name} (низ)`}
+          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
+          thumbnail={selectedBunState.selectedBun?.image_mobile}
         />
       </div>
       <div className={burgerConstructorStyles.bottomContainer}>
@@ -69,7 +91,5 @@ export default function BurgerConstructor({
 }
 
 BurgerConstructor.propTypes = {
-  selectedBun: ingredientPropTypes,
-  selectedIngredients: PropTypes.arrayOf(ingredientPropTypes),
   onFormSubmit: PropTypes.func.isRequired,
 };

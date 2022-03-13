@@ -1,17 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import AppHeader from './../app-header/app-header';
+import React, { useEffect, useState, useReducer } from 'react';
 import mainStyles from './app.module.css';
+
+// constants
+import { ADD_SELECTED_BUN } from './../../utils/constants';
+import { ADD_INGREDIENTS } from './../../utils/constants';
+
+// components
+import AppHeader from './../app-header/app-header';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from './../burger-constructor/burger-constructor';
-import { apiUrl } from './../../utils/utils';
-import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 
+// context
+import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
+import { SelectedBunContext } from '../../services/selectedBunContext';
+
+// reducers and initial values
+import {
+  selectedIngredientsReducer,
+  selectedIngredientsInitialState,
+} from '../../store/selectedIngredientsStore';
+import {
+  selectedBunReducer,
+  selectedBunInitialState,
+} from '../../store/selectedBunStore';
+
+// api
+import { baseURL } from './../../utils/utils';
+
+// helper functions
+import { filterIngredients, getRandomIntredients } from '../../utils/utils';
+
 function App() {
-  const [selectedBun, setSelectedBun] = useState({});
+  const [selectedBunState, selectedBunDispatcher] = useReducer(
+    selectedBunReducer,
+    selectedBunInitialState
+  );
+  const [selectedIngredientsState, selectedIngredientsDispatcher] = useReducer(
+    selectedIngredientsReducer,
+    selectedIngredientsInitialState
+  );
+
   const [ingredients, setIngredients] = useState({});
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] =
     useState(false);
@@ -23,49 +55,32 @@ function App() {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
-          throw new Error(`Ошибка ${response.status}`);
+    fetch(`${baseURL}/ingredients`)
+      .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка ${res.status}`);
         }
-
-        const dataJson = await response.json();
+        return res.json();
+      })
+      .then(dataJson => {
         setIngredients(dataJson.data);
+        const ingriedientsData = filterIngredients(dataJson.data);
 
-        const buns = [];
-        const mains = [];
-        const sauces = [];
+        setfilteredIngredients(ingriedientsData);
 
-        dataJson.data.forEach(i => {
-          switch (i.type) {
-            case 'bun':
-              buns.push(i);
-              break;
-            case 'main':
-              mains.push(i);
-              break;
-            default:
-              sauces.push(i);
-              break;
-          }
-
-          setfilteredIngredients({
-            buns: buns,
-            mains: mains,
-            sauces: sauces,
-          });
-
-          setSelectedBun(buns[0]);
-          setSelectedIngredients([...mains, ...sauces]);
-          setSelectedIngredient(mains[0]);
+        selectedBunDispatcher({
+          type: ADD_SELECTED_BUN,
+          payload: ingriedientsData.buns[0],
         });
-      } catch (error) {
+
+        selectedIngredientsDispatcher({
+          type: ADD_INGREDIENTS,
+          payload: getRandomIntredients(ingriedientsData.mains),
+        });
+      })
+      .catch(error => {
         console.log(error);
-      }
-    };
-    fetchData();
+      });
   }, []);
 
   const handleFormSubmit = e => {
@@ -87,36 +102,41 @@ function App() {
   };
 
   return (
-    <>
-      <AppHeader />
-      <main className={mainStyles.mainContainer}>
-        <div className={mainStyles.mainLayout}>
-          <h1 className={`text text_type_main-default ${mainStyles.title}`}>
-            Соберите бургер
-          </h1>
-          <div className={mainStyles.ingredients}>
-            <BurgerIngredients
-              ingredients={filteredIngredients}
-              onPopupOpen={handleOpenPopup}
-            />
-            <BurgerConstructor
-              selectedBun={selectedBun}
-              selectedIngredients={selectedIngredients}
-              onFormSubmit={handleFormSubmit}
-            />
-            {isVisible && (
-              <Modal onClose={handleClosePopup}>
-                {isIngredientDetailsSelected ? (
-                  <IngredientDetails ingredient={selectedIngredient} />
-                ) : (
-                  <OrderDetails />
-                )}
-              </Modal>
-            )}
+    <SelectedIngredientsContext.Provider
+      value={{
+        selectedIngredientsState,
+        selectedIngredientsDispatcher,
+      }}
+    >
+      <SelectedBunContext.Provider
+        value={{ selectedBunState, selectedBunDispatcher }}
+      >
+        <AppHeader />
+        <main className={mainStyles.mainContainer}>
+          <div className={mainStyles.mainLayout}>
+            <h1 className={`text text_type_main-default ${mainStyles.title}`}>
+              Соберите бургер
+            </h1>
+            <div className={mainStyles.ingredients}>
+              <BurgerIngredients
+                ingredients={filteredIngredients}
+                onPopupOpen={handleOpenPopup}
+              />
+              <BurgerConstructor onFormSubmit={handleFormSubmit} />
+              {isVisible && (
+                <Modal onClose={handleClosePopup}>
+                  {isIngredientDetailsSelected ? (
+                    <IngredientDetails ingredient={selectedIngredient} />
+                  ) : (
+                    <OrderDetails />
+                  )}
+                </Modal>
+              )}
+            </div>
           </div>
-        </div>
-      </main>
-    </>
+        </main>
+      </SelectedBunContext.Provider>
+    </SelectedIngredientsContext.Provider>
   );
 }
 
