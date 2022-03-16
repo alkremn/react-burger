@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import burgerConstructorStyles from './burger-constructor.module.css';
 
 // icons
@@ -12,31 +12,27 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { PropTypes } from 'prop-types';
 
-// context
-import { SelectedBunContext } from '../../services/selectedBunContext';
-import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
-
 // helper functions
 import { calculateTotalCost } from '../../utils/utils';
 
 export default function BurgerConstructor({ onFormSubmit }) {
-  const { selectedBunState } = useContext(SelectedBunContext);
-  const { selectedIngredientsState } = useContext(SelectedIngredientsContext);
+  const [selectedBunState, setSelectedBunState] = useState({});
+  const [selectedIngredientsState, setSelectedIngredientsState] = useState({});
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    if (
-      selectedBunState.selectedBun &&
-      selectedIngredientsState.selectedIngredients.length > 0
-    ) {
-      setTotal(
-        calculateTotalCost(
-          selectedBunState.selectedBun,
-          selectedIngredientsState.selectedIngredients
-        )
-      );
-    }
-  }, [selectedBunState, selectedIngredientsState]);
+  // useEffect(() => {
+  //   if (
+  //     selectedBunState.selectedBun &&
+  //     selectedIngredientsState.selectedIngredients.length > 0
+  //   ) {
+  //     setTotal(
+  //       calculateTotalCost(
+  //         selectedBunState.selectedBun,
+  //         selectedIngredientsState.selectedIngredients
+  //       )
+  //     );
+  //   }
+  // }, [selectedBunState, selectedIngredientsState]);
 
   return (
     <form className={burgerConstructorStyles.container} onSubmit={onFormSubmit}>
