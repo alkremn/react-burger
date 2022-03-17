@@ -1,0 +1,21 @@
+.sectionContainer{
+  margin-bottom: 40px;
+  padding-left: 0;
+}
+
+.list{
+  box-sizing: border-box;
+  max-width: 600px;
+  padding-left: 0;
+  margin-right: 10px;
+  display: grid;
+  column-gap: 24px;
+  row-gap: 32px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.title{
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 30px;
+}

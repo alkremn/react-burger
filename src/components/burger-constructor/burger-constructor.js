@@ -14,25 +14,19 @@ import { PropTypes } from 'prop-types';
 
 // helper functions
 import { calculateTotalCost } from '../../utils/utils';
+import { useSelector } from 'react-redux';
 
 export default function BurgerConstructor({ onFormSubmit }) {
-  const [selectedBunState, setSelectedBunState] = useState({});
-  const [selectedIngredientsState, setSelectedIngredientsState] = useState({});
+  const { selectedBun, selectedIngredients } = useSelector(
+    store => store.ingredients
+  );
   const [total, setTotal] = useState(0);
 
-  // useEffect(() => {
-  //   if (
-  //     selectedBunState.selectedBun &&
-  //     selectedIngredientsState.selectedIngredients.length > 0
-  //   ) {
-  //     setTotal(
-  //       calculateTotalCost(
-  //         selectedBunState.selectedBun,
-  //         selectedIngredientsState.selectedIngredients
-  //       )
-  //     );
-  //   }
-  // }, [selectedBunState, selectedIngredientsState]);
+  useEffect(() => {
+    if (selectedBun) {
+      setTotal(calculateTotalCost(selectedBun, selectedIngredients));
+    }
+  }, [selectedBun, selectedIngredients]);
 
   return (
     <form className={burgerConstructorStyles.container} onSubmit={onFormSubmit}>
@@ -40,35 +34,34 @@ export default function BurgerConstructor({ onFormSubmit }) {
         <ConstructorElement
           type='top'
           isLocked={true}
-          text={`${selectedBunState.selectedBun?.name} (верх)`}
-          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
-          thumbnail={selectedBunState.selectedBun?.image_mobile}
+          text={`${selectedBun?.name} (верх)`}
+          price={selectedBun?.price}
+          thumbnail={selectedBun?.image_mobile}
         />
       </div>
       <ul className={burgerConstructorStyles.list}>
-        {selectedIngredientsState.selectedIngredients &&
-          selectedIngredientsState.selectedIngredients.map(element => (
-            <li key={element._id} className={burgerConstructorStyles.listItem}>
-              <div className={burgerConstructorStyles.dragIcon}>
-                <DragIcon type='primary' />
-              </div>
-              <ConstructorElement
-                key={element._id}
-                isLocked={false}
-                text={element.name}
-                price={element.price.toLocaleString('en-US')}
-                thumbnail={element.image_mobile}
-              />
-            </li>
-          ))}
+        {selectedIngredients.map(element => (
+          <li key={element._id} className={burgerConstructorStyles.listItem}>
+            <div className={burgerConstructorStyles.dragIcon}>
+              <DragIcon type='primary' />
+            </div>
+            <ConstructorElement
+              key={element._id}
+              isLocked={false}
+              text={element.name}
+              price={element.price}
+              thumbnail={element.image_mobile}
+            />
+          </li>
+        ))}
       </ul>
       <div className={burgerConstructorStyles.bun_container}>
         <ConstructorElement
           type='bottom'
           isLocked={true}
-          text={`${selectedBunState.selectedBun?.name} (низ)`}
-          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
-          thumbnail={selectedBunState.selectedBun?.image_mobile}
+          text={`${selectedBun?.name} (низ)`}
+          price={selectedBun?.price}
+          thumbnail={selectedBun?.image_mobile}
         />
       </div>
       <div className={burgerConstructorStyles.bottomContainer}>

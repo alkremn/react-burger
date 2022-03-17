@@ -1,6 +1,7 @@
 import {
   FETCH_INGREDIENTS_SUCCESS,
   FETCH_INGREDIENTS_FAIL,
+  ADD_SELECTED_BUN,
   ADD_SELECTED_INGREDIENT,
   REMOVE_SELECTED_INGREDIENT,
   ADD_DETAILED_INGREDIENT,
@@ -9,6 +10,7 @@ import {
 
 const initialState = {
   ingredients: [],
+  selectedBun: null,
   selectedIngredients: [],
   detailedIngredient: null,
   error: null,
@@ -20,6 +22,8 @@ export const ingredientsReducer = (state = initialState, action) => {
       return { ...state, ingredients: action.payload, error: null };
     case FETCH_INGREDIENTS_FAIL:
       return { ...state, error: action.payload };
+    case ADD_SELECTED_BUN:
+      return { ...state, selectedBun: action.payload };
     case ADD_SELECTED_INGREDIENT:
       return {
         ...state,

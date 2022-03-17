@@ -1,37 +1,41 @@
-import React, { useState } from 'react';
-import BurgerIngredient from './../burger-ingredient/burger-ingredient';
-import { ingredientPropTypes } from '../../utils/commonPropTypes';
+import React, { useEffect, useState } from 'react';
+
+import { filterIngredients, titles } from '../../utils/utils';
+
 import listStyles from './burger-ingredients-list.module.css';
 import { PropTypes } from 'prop-types';
+import { useSelector } from 'react-redux';
+import BurgerIngredientsSection from '../burger-ingredients-section/burger-ingredients-section';
 
 export default function BurgerIngredientsList({
-  title,
-  ingredients,
+  onRefChnage,
   onPopupOpen,
+  onScroll,
 }) {
-  const [countArray] = useState([1, 4, 1, 0, 5, 1, 0, 0]);
+  const { ingredients } = useSelector(store => store.ingredients);
+  const [filteredIngredients, setFilteredIngredients] = useState([[], [], []]);
+
+  useEffect(() => {
+    if (ingredients.length > 0) {
+      setFilteredIngredients(filterIngredients(ingredients));
+    }
+  }, [ingredients]);
+
   return (
-    <>
-      <h2 className={`text text_type_main-default ${listStyles.title}`}>
-        {title}
-      </h2>
-      <ul className={listStyles.list}>
-        {ingredients &&
-          ingredients.map((item, i) => (
-            <BurgerIngredient
-              key={item._id}
-              ingredient={item}
-              count={countArray[i]}
-              onPopupOpen={onPopupOpen}
-            />
-          ))}
-      </ul>
-    </>
+    <ul className={listStyles.list}>
+      {titles.map((title, i) => (
+        <BurgerIngredientsSection
+          key={i}
+          title={title}
+          ingredients={filteredIngredients[i]}
+          onPopupOpen={onPopupOpen}
+          onScroll={onScroll}
+        />
+      ))}
+    </ul>
   );
 }
 
 BurgerIngredientsList.propTypes = {
-  title: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
   onPopupOpen: PropTypes.func.isRequired,
 };

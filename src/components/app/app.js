@@ -19,29 +19,12 @@ import OrderDetails from '../order-details/order-details';
 import { filterIngredients, getRandomIntredients } from '../../utils/utils';
 
 function App() {
-  const dispatch = useDispatch();
-
   const { ingredients } = useSelector(store => store.ingredients);
 
   const [isVisible, setIsVisible] = useState(false);
   const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] =
     useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
-  const [filteredIngredients, setfilteredIngredients] = useState({
-    buns: [],
-    mains: [],
-    sauces: [],
-  });
-
-  useEffect(() => {
-    dispatch(fetchIngredientsAction());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (ingredients.length > 0) {
-      setfilteredIngredients(filterIngredients(ingredients));
-    }
-  }, [ingredients]);
 
   const handleFormSubmit = e => {
     e.preventDefault();
@@ -65,26 +48,18 @@ function App() {
     <>
       <AppHeader />
       <main className={mainStyles.mainContainer}>
-        <div className={mainStyles.mainLayout}>
-          <h1 className={`text text_type_main-default ${mainStyles.title}`}>
-            Соберите бургер
-          </h1>
-          <div className={mainStyles.ingredients}>
-            <BurgerIngredients
-              ingredients={filteredIngredients}
-              onPopupOpen={handleOpenPopup}
-            />
-            <BurgerConstructor onFormSubmit={handleFormSubmit} />
-            {isVisible && (
-              <Modal onClose={handleClosePopup}>
-                {isIngredientDetailsSelected ? (
-                  <IngredientDetails ingredient={selectedIngredient} />
-                ) : (
-                  <OrderDetails />
-                )}
-              </Modal>
-            )}
-          </div>
+        <div className={mainStyles.ingredients}>
+          <BurgerIngredients onPopupOpen={handleOpenPopup} />
+          <BurgerConstructor onFormSubmit={handleFormSubmit} />
+          {isVisible && (
+            <Modal onClose={handleClosePopup}>
+              {isIngredientDetailsSelected ? (
+                <IngredientDetails ingredient={selectedIngredient} />
+              ) : (
+                <OrderDetails />
+              )}
+            </Modal>
+          )}
         </div>
       </main>
     </>

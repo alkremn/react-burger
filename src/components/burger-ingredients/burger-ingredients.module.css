@@ -1,3 +1,17 @@
+.container{
+  margin-top: 40px;
+}
+
+.title{
+  margin: 0;
+  font-size: 36px;
+  align-self: flex-start;
+  line-height: 40px;
+  font-style: normal;
+  font-weight: bold;
+}
+
 .menu{
   display: flex;
+  margin-top: 20px;
 }

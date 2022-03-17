@@ -14,15 +14,7 @@
   flex-direction: column;
 }
 
-.title{
-  padding: 40px 0 20px;
-  font-size: 36px;
-  align-self: flex-start;
-  line-height: 40px;
-  font-style: normal;
-  font-weight: bold;
-  margin: 0;
-}
+
 
 .ingredients{
   display: flex;

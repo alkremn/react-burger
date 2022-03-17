@@ -24,9 +24,7 @@ export default function BurgerIngredient({ ingredient, count, onPopupOpen }) {
         alt={ingredient.name}
       />
       <p className={listItemStyles.price}>
-        <span className={listItemStyles.price_digits}>
-          {ingredient.price.toLocaleString('en-US')}
-        </span>
+        <span className={listItemStyles.price_digits}>{ingredient.price}</span>
         <CurrencyIcon type='primary' />
       </p>
       <p className={`text text_type_main-default ${listItemStyles.name}`}>

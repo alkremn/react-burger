@@ -1,27 +1,27 @@
 export const baseURL = 'https://norma.nomoreparties.space/api';
 export const titles = ['Булки', 'Соусы', 'Начинки'];
-export const titlesEn = ['buns', 'sauces', 'mains'];
+export const titlesEn = ['bun', 'sauce', 'main'];
 
 export function filterIngredients(ingredients) {
   const buns = [];
   const mains = [];
   const sauces = [];
 
-  ingredients.forEach(i => {
-    switch (i.type) {
+  ingredients.forEach(item => {
+    switch (item.type) {
       case 'bun':
-        buns.push(i);
+        buns.push(item);
         break;
       case 'main':
-        mains.push(i);
+        mains.push(item);
         break;
       default:
-        sauces.push(i);
+        sauces.push(item);
         break;
     }
   });
 
-  return { buns, mains, sauces };
+  return [buns, mains, sauces];
 }
 
 export function getRandomIntredients(ingredients) {
@@ -47,7 +47,7 @@ export function calculateTotalCost(bun, ingredients) {
     return totalCost + currentItem.price;
   }, 0);
 
-  return (bunCost + ingredientsCost).toLocaleString('en-US');
+  return bunCost + ingredientsCost;
 }
 
 export function getIngredientIds(bun, ingredients) {
