@@ -18,11 +18,10 @@ export default function BurgerIngredientsSection({
         {title}
       </h2>
       <ul className={ingredientsSectionStyles.list} ref={listRef}>
-        {ingredients.map((item, i) => (
+        {ingredients.map(item => (
           <BurgerIngredient
             key={item._id}
             ingredient={item}
-            count={1}
             onPopupOpen={onPopupOpen}
           />
         ))}

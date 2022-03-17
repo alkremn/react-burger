@@ -6,6 +6,8 @@ import {
   REMOVE_SELECTED_INGREDIENT,
   ADD_DETAILED_INGREDIENT,
   REMOVE_DETAILED_INGREDIENT,
+  INCREMENT_INGREDIENT_COUNT,
+  DECREMENT_INGREDIENT_COUNT,
 } from '../constants/ingredientsContstants';
 
 const initialState = {
@@ -19,7 +21,14 @@ const initialState = {
 export const ingredientsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_INGREDIENTS_SUCCESS:
-      return { ...state, ingredients: action.payload, error: null };
+      return {
+        ...state,
+        ingredients: action.payload.map(item => {
+          item.count = 0;
+          return item;
+        }),
+        error: null,
+      };
     case FETCH_INGREDIENTS_FAIL:
       return { ...state, error: action.payload };
     case ADD_SELECTED_BUN:
@@ -27,14 +36,38 @@ export const ingredientsReducer = (state = initialState, action) => {
     case ADD_SELECTED_INGREDIENT:
       return {
         ...state,
-        selectedIngredients: [...state.selectedIngredients, action.item],
+        selectedIngredients: [...state.selectedIngredients, action.payload],
       };
     case REMOVE_SELECTED_INGREDIENT:
       return {
         ...state,
         selectedIngredients: [...state.selectedIngredients].filter(
-          item => item.id !== action.id
+          item => item.uniqueId !== action.payload
         ),
+      };
+    case INCREMENT_INGREDIENT_COUNT:
+      return {
+        ...state,
+        ingredients: state.ingredients.map(item => {
+          if (item._id === action.payload) {
+            ++item.count;
+            return item;
+          } else {
+            return item;
+          }
+        }),
+      };
+    case DECREMENT_INGREDIENT_COUNT:
+      return {
+        ...state,
+        ingredients: state.ingredients.map(item => {
+          if (item._id === action.payload) {
+            --item.count;
+            return item;
+          } else {
+            return item;
+          }
+        }),
       };
     case ADD_DETAILED_INGREDIENT:
       return {

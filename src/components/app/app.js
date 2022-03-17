@@ -18,6 +18,10 @@ import OrderDetails from '../order-details/order-details';
 // helper functions
 import { filterIngredients, getRandomIntredients } from '../../utils/utils';
 
+// react-dnd
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
 function App() {
   const { ingredients } = useSelector(store => store.ingredients);
 
@@ -49,8 +53,10 @@ function App() {
       <AppHeader />
       <main className={mainStyles.mainContainer}>
         <div className={mainStyles.ingredients}>
-          <BurgerIngredients onPopupOpen={handleOpenPopup} />
-          <BurgerConstructor onFormSubmit={handleFormSubmit} />
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients onPopupOpen={handleOpenPopup} />
+            <BurgerConstructor onFormSubmit={handleFormSubmit} />
+          </DndProvider>
           {isVisible && (
             <Modal onClose={handleClosePopup}>
               {isIngredientDetailsSelected ? (
