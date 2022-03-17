@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux';
 import BurgerIngredientsSection from '../burger-ingredients-section/burger-ingredients-section';
 
 export default function BurgerIngredientsList({
-  onRefChnage,
   onPopupOpen,
-  onScroll,
+  listRefs,
+  headerRefs,
 }) {
   const { ingredients } = useSelector(store => store.ingredients);
   const [filteredIngredients, setFilteredIngredients] = useState([[], [], []]);
@@ -29,7 +29,8 @@ export default function BurgerIngredientsList({
           title={title}
           ingredients={filteredIngredients[i]}
           onPopupOpen={onPopupOpen}
-          onScroll={onScroll}
+          listRef={listRefs[i]}
+          headerRef={headerRefs[i]}
         />
       ))}
     </ul>

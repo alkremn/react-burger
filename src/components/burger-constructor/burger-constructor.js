@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import burgerConstructorStyles from './burger-constructor.module.css';
 
 // icons
@@ -20,12 +20,9 @@ export default function BurgerConstructor({ onFormSubmit }) {
   const { selectedBun, selectedIngredients } = useSelector(
     store => store.ingredients
   );
-  const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    if (selectedBun) {
-      setTotal(calculateTotalCost(selectedBun, selectedIngredients));
-    }
+  const totalPrice = useMemo(() => {
+    return calculateTotalCost(selectedBun, selectedIngredients);
   }, [selectedBun, selectedIngredients]);
 
   return (
@@ -65,7 +62,7 @@ export default function BurgerConstructor({ onFormSubmit }) {
         />
       </div>
       <div className={burgerConstructorStyles.bottomContainer}>
-        <span>{total}</span>
+        <span>{totalPrice}</span>
         <img
           className={burgerConstructorStyles.currencyIcon}
           src={currencyIcon}

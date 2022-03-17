@@ -42,12 +42,11 @@ export function getRandomIntredients(ingredients) {
 }
 
 export function calculateTotalCost(bun, ingredients) {
-  const bunCost = bun.price;
   const ingredientsCost = ingredients.reduce((totalCost, currentItem) => {
     return totalCost + currentItem.price;
   }, 0);
 
-  return bunCost + ingredientsCost;
+  return ingredientsCost + bun ? bun.price : 0;
 }
 
 export function getIngredientIds(bun, ingredients) {
