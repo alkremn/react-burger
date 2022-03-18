@@ -21,7 +21,7 @@ export default function OrderDetails() {
   useEffect(() => {
     if (selectedBun && selectedIngredients.length > 0) {
       dispatch(postOrder(getIngredientIds(selectedBun, selectedIngredients)));
-      dispatch(removeSelectedIngredients());
+      dispatch(removeSelectedIngredients(selectedBun));
     }
   }, [dispatch, selectedBun, selectedIngredients]);
 

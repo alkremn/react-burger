@@ -68,7 +68,6 @@ export default function BurgerConstructorCard({
 
   return (
     <li
-      key={element.uniqueId}
       className={burgerConstructorCardStyles.listItem}
       ref={ref}
       style={{ opacity }}
@@ -77,7 +76,6 @@ export default function BurgerConstructorCard({
         <DragIcon type='primary' />
       </div>
       <ConstructorElement
-        key={element.uniqueId}
         isLocked={false}
         text={element.name}
         price={element.price}

@@ -10,6 +10,7 @@ import {
   REMOVE_DETAILED_INGREDIENT,
   INCREMENT_INGREDIENT_COUNT,
   DECREMENT_INGREDIENT_COUNT,
+  REMOVE_SELECTED_BUN,
 } from '../constants/ingredientsContstants';
 
 const initialState = {
@@ -35,6 +36,8 @@ export const ingredientsReducer = (state = initialState, action) => {
       return { ...state, error: action.payload };
     case ADD_SELECTED_BUN:
       return { ...state, selectedBun: action.payload };
+    case REMOVE_SELECTED_BUN:
+      return { ...state, selectedBun: null };
     case ADD_SELECTED_INGREDIENT:
       return {
         ...state,

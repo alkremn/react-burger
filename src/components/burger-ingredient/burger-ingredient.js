@@ -15,7 +15,7 @@ import { useDrag } from 'react-dnd';
 export default function BurgerIngredient({ ingredient, onPopupOpen }) {
   const [, dragRef] = useDrag({
     type: 'ingredient',
-    item: { ingredient },
+    item: ingredient,
   });
 
   return (

@@ -32,11 +32,14 @@ export default function BurgerConstructor({ onFormSubmit }) {
     store => store.ingredients
   );
 
-  const [, dropTarget] = useDrop({
+  const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop({ ingredient }) {
-      dispatch(addSelectedIngredient(ingredient));
+    drop(ingredient) {
+      dispatch(addSelectedIngredient(selectedBun, ingredient));
     },
+    collect: monitor => ({
+      isHover: monitor.isOver(),
+    }),
   });
 
   const handleDelete = ingredient => {
@@ -58,50 +61,75 @@ export default function BurgerConstructor({ onFormSubmit }) {
 
   return (
     <form
-      className={burgerConstructorStyles.container}
+      className={`${burgerConstructorStyles.container} ${
+        isHover ? burgerConstructorStyles.borderStyle : ''
+      }`}
       onSubmit={onFormSubmit}
       ref={dropTarget}
     >
-      <div className={burgerConstructorStyles.bun_container}>
-        <ConstructorElement
-          type='top'
-          isLocked={true}
-          text={`${selectedBun?.name} (верх)`}
-          price={selectedBun?.price}
-          thumbnail={selectedBun?.image_mobile}
-        />
-      </div>
-      <ul className={burgerConstructorStyles.list}>
-        {selectedIngredients.map((element, i) => (
-          <BurgerConstructorCard
-            key={element.uniqueId}
-            index={i}
-            element={element}
-            onDelete={handleDelete}
-            onIngredientMove={handleIngredientMove}
-          />
-        ))}
-      </ul>
-      <div className={burgerConstructorStyles.bun_container}>
-        <ConstructorElement
-          type='bottom'
-          isLocked={true}
-          text={`${selectedBun?.name} (низ)`}
-          price={selectedBun?.price}
-          thumbnail={selectedBun?.image_mobile}
-        />
-      </div>
-      <div className={burgerConstructorStyles.bottomContainer}>
-        <span>{totalPrice}</span>
-        <img
-          className={burgerConstructorStyles.currencyIcon}
-          src={currencyIcon}
-          alt='currency icon'
-        />
-        <Button type='primary' size='large'>
-          Оформить заказ
-        </Button>
-      </div>
+      <>
+        {selectedBun ? (
+          <div className={burgerConstructorStyles.bun_container}>
+            <ConstructorElement
+              type='top'
+              isLocked={true}
+              text={`${selectedBun?.name} (верх)`}
+              price={selectedBun?.price}
+              thumbnail={selectedBun?.image_mobile}
+            />
+          </div>
+        ) : selectedIngredients.length > 0 ? (
+          <span
+            className={`text text_type_main-default ${burgerConstructorStyles.emptyListText}`}
+          >
+            Пожалуйста, выберите булку
+          </span>
+        ) : null}
+        {selectedIngredients.length > 0 ? (
+          <ul className={burgerConstructorStyles.list}>
+            {selectedIngredients.map((element, i) => (
+              <BurgerConstructorCard
+                key={element.uniqueId}
+                index={i}
+                element={element}
+                onDelete={handleDelete}
+                onIngredientMove={handleIngredientMove}
+              />
+            ))}
+          </ul>
+        ) : (
+          <span
+            className={`text text_type_main-default ${burgerConstructorStyles.list} ${burgerConstructorStyles.emptyListText}`}
+          >
+            Пожалуйста, перенесите сюда {!selectedBun && 'булку и '}
+            ингредиенты для создания заказа
+          </span>
+        )}
+        <div className={burgerConstructorStyles.bun_container}>
+          {selectedBun && (
+            <ConstructorElement
+              type='bottom'
+              isLocked={true}
+              text={`${selectedBun?.name} (низ)`}
+              price={selectedBun?.price}
+              thumbnail={selectedBun?.image_mobile}
+            />
+          )}
+        </div>
+        {selectedBun && selectedIngredients.length > 0 && (
+          <div className={burgerConstructorStyles.bottomContainer}>
+            <span>{totalPrice}</span>
+            <img
+              className={burgerConstructorStyles.currencyIcon}
+              src={currencyIcon}
+              alt='currency icon'
+            />
+            <Button type='primary' size='large'>
+              Оформить заказ
+            </Button>
+          </div>
+        )}
+      </>
     </form>
   );
 }

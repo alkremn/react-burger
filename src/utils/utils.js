@@ -21,7 +21,7 @@ export function filterIngredients(ingredients) {
     }
   });
 
-  return [buns, mains, sauces];
+  return [buns, sauces, mains];
 }
 
 export function getRandomIntredients(ingredients) {
@@ -50,4 +50,11 @@ export function calculateTotalCost(bun, ingredients) {
 
 export function getIngredientIds(bun, ingredients) {
   return [bun._id, ...ingredients.map(i => i._id)];
+}
+
+export function checkResponse(response) {
+  if (!response.ok) {
+    return Promise.reject(`Ошибка ${response.status}`);
+  }
+  return response.json();
 }

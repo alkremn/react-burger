@@ -1,12 +1,17 @@
-import { LOADING_FINISH, LOADING_START } from '../constants/asyncConstants';
+import { baseURL, checkResponse } from './../../utils/utils';
+
 import {
-  POST_ORDER_FAIL,
-  POST_ORDER_SUCCESS,
-} from '../constants/orderConstants';
-import { baseURL } from './../../utils/utils';
+  getStartLoadingAction,
+  getFinishLoadingAction,
+} from '../actionCreators/asyncActionCreator';
+
+import {
+  getPostOrderSuccessAction,
+  getPostOrderFailAction,
+} from './../actionCreators/orderActionCreators';
 
 export const postOrder = ingredientIds => async dispatch => {
-  dispatch({ type: LOADING_START });
+  dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/orders`, {
     method: 'POST',
@@ -15,23 +20,15 @@ export const postOrder = ingredientIds => async dispatch => {
     },
     body: JSON.stringify({ ingredients: ingredientIds }),
   })
-    .then(res => {
-      if (!res.ok) {
-        return Promise.reject(`Ошибка ${res.status}`);
-      }
-      return res.json();
-    })
+    .then(res => checkResponse(res))
     .then(data => {
       if (!data.success) {
         return Promise.reject(data.message);
       }
-      dispatch({
-        type: POST_ORDER_SUCCESS,
-        payload: { name: data.name, number: data.order.number },
-      });
+      dispatch(getPostOrderSuccessAction(data));
     })
     .catch(error => {
-      dispatch({ type: POST_ORDER_FAIL, payload: error.message });
+      dispatch(getPostOrderFailAction(error));
     })
-    .finally(() => dispatch({ type: LOADING_FINISH }));
+    .finally(() => dispatch(getFinishLoadingAction()));
 };
