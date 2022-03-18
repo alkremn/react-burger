@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import mainStyles from './app.module.css';
 
 // redux
-import { useDispatch, useSelector } from 'react-redux';
-
-// actions
-import { fetchIngredientsAction } from './../../services/actions/ingredientsActions';
+import { useSelector } from 'react-redux';
 
 // components
 import AppHeader from './../app-header/app-header';
@@ -15,15 +12,14 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 
-// helper functions
-import { filterIngredients, getRandomIntredients } from '../../utils/utils';
-
 // react-dnd
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
-  const { ingredients } = useSelector(store => store.ingredients);
+  const { ingredients, selectedIngredients } = useSelector(
+    store => store.ingredients
+  );
 
   const [isVisible, setIsVisible] = useState(false);
   const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] =
@@ -32,7 +28,9 @@ function App() {
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    setIsVisible(true);
+    if (selectedIngredients.length > 0) {
+      setIsVisible(true);
+    }
   };
 
   const handleOpenPopup = id => {

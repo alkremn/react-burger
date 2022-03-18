@@ -1,25 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { titles } from '../../utils/utils';
 
 // redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // components
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsList from './../burger-ingredients-list/burger-ingredients-list';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 
-// helper functions
-import { filterIngredients, titles, titlesEn } from '../../utils/utils';
-
 // actions
 import { fetchIngredientsAction } from './../../services/actions/ingredientsActions';
 
 // types
 import { PropTypes } from 'prop-types';
-import { useInView } from 'react-intersection-observer';
 
 export default function BurgerIngredients({ onPopupOpen }) {
   const dispatch = useDispatch();
+
   const [currentTab, setCurrentTab] = useState(0);
 
   const [firstListRef, firstInView] = useInView({ threshold: 0.2 });

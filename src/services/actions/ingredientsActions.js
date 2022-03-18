@@ -5,9 +5,11 @@ import {
   FETCH_INGREDIENTS_FAIL,
   ADD_SELECTED_BUN,
   ADD_SELECTED_INGREDIENT,
+  ADD_SELECTED_INGREDIENTS,
   INCREMENT_INGREDIENT_COUNT,
   DECREMENT_INGREDIENT_COUNT,
   REMOVE_SELECTED_INGREDIENT,
+  REMOVE_SELECTED_INGREDIENTS,
 } from './../constants/ingredientsContstants';
 
 export const updateSelectedBun = selectedBun => async dispatch => {
@@ -39,15 +41,27 @@ export const fetchIngredientsAction = () => async dispatch => {
     .finally(() => dispatch({ type: LOADING_FINISH }));
 };
 
-export const addSelectedIngredient = ingredient => async dispatch => {
+export const addSelectedIngredients = ingredients => async dispatch => {
+  dispatch({ type: ADD_SELECTED_INGREDIENTS, payload: ingredients });
+};
+
+export const addSelectedIngredient = (ingredient, index) => async dispatch => {
   if (ingredient.type === 'bun') {
     dispatch(updateSelectedBun(ingredient));
     dispatch({ type: DECREMENT_INGREDIENT_COUNT, payload: ingredient._id });
   } else {
-    const updatedIngredient = { ...ingredient, uniqueId: Date.now() };
+    const updatedIngredient = {
+      ...ingredient,
+      uniqueId: Date.now(),
+      idx: index,
+    };
     dispatch({ type: ADD_SELECTED_INGREDIENT, payload: updatedIngredient });
     dispatch({ type: INCREMENT_INGREDIENT_COUNT, payload: ingredient._id });
   }
+};
+
+export const removeSelectedIngredients = () => async dispatch => {
+  dispatch({ type: REMOVE_SELECTED_INGREDIENTS });
 };
 
 export const removeSelectedIngredient = ingredient => async dispatch => {

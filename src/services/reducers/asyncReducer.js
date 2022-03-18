@@ -1,15 +1,15 @@
 import { LOADING_START, LOADING_FINISH } from '../constants/asyncConstants';
 
 const initialState = {
-  loading: false,
+  isLoading: false,
 };
 
 export const asyncReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOADING_START:
-      return { ...state, loading: true };
+      return { ...state, isLoading: true };
     case LOADING_FINISH:
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     default:
       return state;
   }

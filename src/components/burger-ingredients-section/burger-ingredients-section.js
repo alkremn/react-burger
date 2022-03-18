@@ -1,6 +1,8 @@
 import React from 'react';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 import ingredientsSectionStyles from './burger-ingredients-section.module.css';
+import { PropTypes } from 'prop-types';
+import { ingredientPropTypes } from './../../utils/commonPropTypes';
 
 export default function BurgerIngredientsSection({
   title,
@@ -29,3 +31,11 @@ export default function BurgerIngredientsSection({
     </li>
   );
 }
+
+BurgerIngredientsSection.propTypes = {
+  title: PropTypes.string.isRequired,
+  ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
+  onPopupOpen: PropTypes.func.isRequired,
+  listRef: PropTypes.func.isRequired,
+  headerRef: PropTypes.object.isRequired,
+};

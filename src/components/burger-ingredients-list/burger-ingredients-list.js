@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
-import { filterIngredients, titles } from '../../utils/utils';
-
 import listStyles from './burger-ingredients-list.module.css';
 import { PropTypes } from 'prop-types';
-import { useSelector } from 'react-redux';
 import BurgerIngredientsSection from '../burger-ingredients-section/burger-ingredients-section';
+import { filterIngredients, titles } from '../../utils/utils';
+// redux
+import { useSelector } from 'react-redux';
 
 export default function BurgerIngredientsList({
   onPopupOpen,
@@ -39,4 +38,6 @@ export default function BurgerIngredientsList({
 
 BurgerIngredientsList.propTypes = {
   onPopupOpen: PropTypes.func.isRequired,
+  listRefs: PropTypes.arrayOf(PropTypes.func).isRequired,
+  headerRefs: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

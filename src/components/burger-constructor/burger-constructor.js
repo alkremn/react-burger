@@ -1,6 +1,7 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import { useDrop, useDrag } from 'react-dnd';
+import { PropTypes } from 'prop-types';
+import { useDrop } from 'react-dnd';
 
 // icons
 import currencyIcon from '../../images/icons/currency_icon.svg';
@@ -12,9 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   ConstructorElement,
-  DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { PropTypes } from 'prop-types';
+import BurgerConstructorCard from '../burger-constructor-card/burger-constructor-card';
 
 // helper functions
 import { calculateTotalCost } from '../../utils/utils';
@@ -22,6 +22,7 @@ import { calculateTotalCost } from '../../utils/utils';
 // actions
 import {
   addSelectedIngredient,
+  addSelectedIngredients,
   removeSelectedIngredient,
 } from './../../services/actions/ingredientsActions';
 
@@ -38,31 +39,22 @@ export default function BurgerConstructor({ onFormSubmit }) {
     },
   });
 
-  const ref = useRef(null);
-  const [{ hadlerId }, drop] = useDrop({
-    accept: '',
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
-  });
-  const [{ isDragging }, drag] = useDrag({
-    type: 'ingredients',
-    collect: monitor => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
   const handleDelete = ingredient => {
     dispatch(removeSelectedIngredient(ingredient));
   };
 
+  const handleIngredientMove = useCallback(
+    (dragIndex, hoverIndex) => {
+      const ingredients = [...selectedIngredients];
+      ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
+      dispatch(addSelectedIngredients(ingredients));
+    },
+    [dispatch, selectedIngredients]
+  );
+
   const totalPrice = useMemo(() => {
     return calculateTotalCost(selectedBun, selectedIngredients);
   }, [selectedBun, selectedIngredients]);
-
-  drag(drop(ref));
 
   return (
     <form
@@ -80,24 +72,14 @@ export default function BurgerConstructor({ onFormSubmit }) {
         />
       </div>
       <ul className={burgerConstructorStyles.list}>
-        {selectedIngredients.map(element => (
-          <li
+        {selectedIngredients.map((element, i) => (
+          <BurgerConstructorCard
             key={element.uniqueId}
-            className={burgerConstructorStyles.listItem}
-            draggable
-          >
-            <div className={burgerConstructorStyles.dragIcon}>
-              <DragIcon type='primary' />
-            </div>
-            <ConstructorElement
-              key={element.uniqueId}
-              isLocked={false}
-              text={element.name}
-              price={element.price}
-              thumbnail={element.image_mobile}
-              handleClose={e => handleDelete(element)}
-            />
-          </li>
+            index={i}
+            element={element}
+            onDelete={handleDelete}
+            onIngredientMove={handleIngredientMove}
+          />
         ))}
       </ul>
       <div className={burgerConstructorStyles.bun_container}>

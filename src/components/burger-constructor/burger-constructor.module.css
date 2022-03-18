@@ -5,6 +5,7 @@
   padding: 0 16px 92px;
   margin-top: 100px;
   min-width: 600px;
+  
 }
 
 .bun_container{
@@ -19,20 +20,9 @@
   align-items: flex-end;
   row-gap: 16px;
   width: 100%;
-  min-height: 350px;
-  max-height: calc(100vh - 600px);
   overflow: scroll;
   overflow-x: hidden;
-}
-
-.listItem{
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.dragIcon{
-  margin-right: 10px;
+  height: calc(100vh - 600px);
 }
 
 .bottomContainer{

@@ -1,13 +1,22 @@
-import { ADD_ORDER, REMOVE_ORDER } from '../constants/orderConstants';
+import {
+  POST_ORDER_SUCCESS,
+  POST_ORDER_FAIL,
+} from '../constants/orderConstants';
 
 const initialState = {
-  order: {},
+  order: {
+    name: null,
+    number: null,
+  },
+  error: null,
 };
 
 export const orderReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_ORDER:
-      return { ...state, order: action.payload };
+    case POST_ORDER_SUCCESS:
+      return { ...state, error: null, order: action.payload };
+    case POST_ORDER_FAIL:
+      return { ...initialState, error: action.payload };
     default:
       return state;
   }

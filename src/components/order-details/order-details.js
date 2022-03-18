@@ -1,55 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import orderDetailsStyles from './order-details.module.css';
 
 // icons
 import checkImage from '../../images/icons/check_mark.svg';
 
 // helpers
-import { baseURL, getIngredientIds } from '../../utils/utils';
-
+import { getIngredientIds } from '../../utils/utils';
+import { useSelector, useDispatch } from 'react-redux';
+import { postOrder } from './../../services/actions/orderActions';
+import { removeSelectedIngredients } from './../../services/actions/ingredientsActions';
 
 export default function OrderDetails() {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector(store => store.async);
+  const { selectedBun, selectedIngredients } = useSelector(
+    store => store.ingredients
+  );
+  const { order } = useSelector(store => store.order);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [orderName, setOrderName] = useState('');
-  const [orderNumber, setOrderNumber] = useState(null);
-
-  // useEffect(() => {
-  //   if (
-  //     selectedBunState.selectedBun &&
-  //     selectedIngredientsState.selectedIngredients.length > 0
-  //   ) {
-  //     setIsLoading(true);
-  //     const ingredientIds = getIngredientIds(
-  //       selectedBunState.selectedBun,
-  //       selectedIngredientsState.selectedIngredients
-  //     );
-  //     fetch(`${baseURL}/orders`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ ingredients: ingredientIds }),
-  //     })
-  //       .then(res => {
-  //         if (!res.ok) {
-  //           return Promise.reject(`Ошибка ${res.status}`);
-  //         }
-  //         return res.json();
-  //       })
-  //       .then(data => {
-  //         if (!data.success) {
-  //           return Promise.reject(data.message);
-  //         }
-  //         setOrderName(data.name);
-  //         setOrderNumber(data.order.number);
-  //       })
-  //       .catch(error => {
-  //         console.log(error);
-  //       })
-  //       .finally(() => setIsLoading(false));
-  //   }
-  // }, [selectedBunState, selectedIngredientsState]);
+  useEffect(() => {
+    if (selectedBun && selectedIngredients.length > 0) {
+      dispatch(postOrder(getIngredientIds(selectedBun, selectedIngredients)));
+      dispatch(removeSelectedIngredients());
+    }
+  }, [dispatch, selectedBun, selectedIngredients]);
 
   return (
     <div className={orderDetailsStyles.container}>
@@ -57,15 +31,15 @@ export default function OrderDetails() {
         <span
           className={`text text_type_main-large ${orderDetailsStyles.loadingText}`}
         >
-          Saving...
+          Заказ создается...
         </span>
       ) : (
         <>
-          <h2 className={orderDetailsStyles.digits}>{orderNumber}</h2>
+          <h2 className={orderDetailsStyles.digits}>{order?.number}</h2>
           <h3
             className={`text text_type_main-default ${orderDetailsStyles.title}`}
           >
-            {orderName}
+            {order?.name}
           </h3>
           <img
             className={orderDetailsStyles.image}
