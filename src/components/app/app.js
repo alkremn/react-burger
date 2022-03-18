@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import mainStyles from './app.module.css';
 
-// constants
-import { ADD_SELECTED_BUN } from './../../utils/constants';
-import { ADD_INGREDIENTS } from './../../utils/constants';
+// redux
+import { useSelector } from 'react-redux';
 
 // components
 import AppHeader from './../app-header/app-header';
@@ -13,79 +12,25 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 
-// context
-import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
-import { SelectedBunContext } from '../../services/selectedBunContext';
-
-// reducers and initial values
-import {
-  selectedIngredientsReducer,
-  selectedIngredientsInitialState,
-} from '../../store/selectedIngredientsStore';
-import {
-  selectedBunReducer,
-  selectedBunInitialState,
-} from '../../store/selectedBunStore';
-
-// api
-import { baseURL } from './../../utils/utils';
-
-// helper functions
-import { filterIngredients, getRandomIntredients } from '../../utils/utils';
+// react-dnd
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
-  const [selectedBunState, selectedBunDispatcher] = useReducer(
-    selectedBunReducer,
-    selectedBunInitialState
-  );
-  const [selectedIngredientsState, selectedIngredientsDispatcher] = useReducer(
-    selectedIngredientsReducer,
-    selectedIngredientsInitialState
+  const { ingredients, selectedIngredients } = useSelector(
+    store => store.ingredients
   );
 
-  const [ingredients, setIngredients] = useState({});
   const [isVisible, setIsVisible] = useState(false);
   const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] =
     useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
-  const [filteredIngredients, setfilteredIngredients] = useState({
-    buns: [],
-    mains: [],
-    sauces: [],
-  });
-
-  useEffect(() => {
-    fetch(`${baseURL}/ingredients`)
-      .then(res => {
-        if (!res.ok) {
-          return Promise.reject(`Ошибка ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(dataJson => {
-        setIngredients(dataJson.data);
-        const ingriedientsData = filterIngredients(dataJson.data);
-
-        setfilteredIngredients(ingriedientsData);
-
-        selectedBunDispatcher({
-          type: ADD_SELECTED_BUN,
-          payload: ingriedientsData.buns[0],
-        });
-
-        selectedIngredientsDispatcher({
-          type: ADD_INGREDIENTS,
-          payload: getRandomIntredients(ingriedientsData.mains),
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    setIsVisible(true);
+    if (selectedIngredients.length > 0) {
+      setIsVisible(true);
+    }
   };
 
   const handleOpenPopup = id => {
@@ -102,41 +47,26 @@ function App() {
   };
 
   return (
-    <SelectedIngredientsContext.Provider
-      value={{
-        selectedIngredientsState,
-        selectedIngredientsDispatcher,
-      }}
-    >
-      <SelectedBunContext.Provider
-        value={{ selectedBunState, selectedBunDispatcher }}
-      >
-        <AppHeader />
-        <main className={mainStyles.mainContainer}>
-          <div className={mainStyles.mainLayout}>
-            <h1 className={`text text_type_main-default ${mainStyles.title}`}>
-              Соберите бургер
-            </h1>
-            <div className={mainStyles.ingredients}>
-              <BurgerIngredients
-                ingredients={filteredIngredients}
-                onPopupOpen={handleOpenPopup}
-              />
-              <BurgerConstructor onFormSubmit={handleFormSubmit} />
-              {isVisible && (
-                <Modal onClose={handleClosePopup}>
-                  {isIngredientDetailsSelected ? (
-                    <IngredientDetails ingredient={selectedIngredient} />
-                  ) : (
-                    <OrderDetails />
-                  )}
-                </Modal>
+    <>
+      <AppHeader />
+      <main className={mainStyles.mainContainer}>
+        <div className={mainStyles.ingredients}>
+          <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients onPopupOpen={handleOpenPopup} />
+            <BurgerConstructor onFormSubmit={handleFormSubmit} />
+          </DndProvider>
+          {isVisible && (
+            <Modal onClose={handleClosePopup}>
+              {isIngredientDetailsSelected ? (
+                <IngredientDetails ingredient={selectedIngredient} />
+              ) : (
+                <OrderDetails />
               )}
-            </div>
-          </div>
-        </main>
-      </SelectedBunContext.Provider>
-    </SelectedIngredientsContext.Provider>
+            </Modal>
+          )}
+        </div>
+      </main>
+    </>
   );
 }
 

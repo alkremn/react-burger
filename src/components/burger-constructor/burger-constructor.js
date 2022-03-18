@@ -1,91 +1,135 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import burgerConstructorStyles from './burger-constructor.module.css';
+import { PropTypes } from 'prop-types';
+import { useDrop } from 'react-dnd';
 
 // icons
 import currencyIcon from '../../images/icons/currency_icon.svg';
+
+// redux
+import { useDispatch, useSelector } from 'react-redux';
 
 // components
 import {
   Button,
   ConstructorElement,
-  DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { PropTypes } from 'prop-types';
-
-// context
-import { SelectedBunContext } from '../../services/selectedBunContext';
-import { SelectedIngredientsContext } from '../../services/selectedIngredientsContext';
+import BurgerConstructorCard from '../burger-constructor-card/burger-constructor-card';
 
 // helper functions
 import { calculateTotalCost } from '../../utils/utils';
 
-export default function BurgerConstructor({ onFormSubmit }) {
-  const { selectedBunState } = useContext(SelectedBunContext);
-  const { selectedIngredientsState } = useContext(SelectedIngredientsContext);
-  const [total, setTotal] = useState(0);
+// actions
+import {
+  addSelectedIngredient,
+  addSelectedIngredients,
+  removeSelectedIngredient,
+} from './../../services/actions/ingredientsActions';
 
-  useEffect(() => {
-    if (
-      selectedBunState.selectedBun &&
-      selectedIngredientsState.selectedIngredients.length > 0
-    ) {
-      setTotal(
-        calculateTotalCost(
-          selectedBunState.selectedBun,
-          selectedIngredientsState.selectedIngredients
-        )
-      );
-    }
-  }, [selectedBunState, selectedIngredientsState]);
+export default function BurgerConstructor({ onFormSubmit }) {
+  const dispatch = useDispatch();
+  const { selectedBun, selectedIngredients } = useSelector(
+    store => store.ingredients
+  );
+
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(ingredient) {
+      dispatch(addSelectedIngredient(selectedBun, ingredient));
+    },
+    collect: monitor => ({
+      isHover: monitor.isOver(),
+    }),
+  });
+
+  const handleDelete = ingredient => {
+    dispatch(removeSelectedIngredient(ingredient));
+  };
+
+  const handleIngredientMove = useCallback(
+    (dragIndex, hoverIndex) => {
+      const ingredients = [...selectedIngredients];
+      ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
+      dispatch(addSelectedIngredients(ingredients));
+    },
+    [dispatch, selectedIngredients]
+  );
+
+  const totalPrice = useMemo(() => {
+    return calculateTotalCost(selectedBun, selectedIngredients);
+  }, [selectedBun, selectedIngredients]);
 
   return (
-    <form className={burgerConstructorStyles.container} onSubmit={onFormSubmit}>
-      <div className={burgerConstructorStyles.bun_container}>
-        <ConstructorElement
-          type='top'
-          isLocked={true}
-          text={`${selectedBunState.selectedBun?.name} (верх)`}
-          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
-          thumbnail={selectedBunState.selectedBun?.image_mobile}
-        />
-      </div>
-      <ul className={burgerConstructorStyles.list}>
-        {selectedIngredientsState.selectedIngredients &&
-          selectedIngredientsState.selectedIngredients.map(element => (
-            <li key={element._id} className={burgerConstructorStyles.listItem}>
-              <div className={burgerConstructorStyles.dragIcon}>
-                <DragIcon type='primary' />
-              </div>
-              <ConstructorElement
-                key={element._id}
-                isLocked={false}
-                text={element.name}
-                price={element.price.toLocaleString('en-US')}
-                thumbnail={element.image_mobile}
+    <form
+      className={`${burgerConstructorStyles.container} ${
+        isHover ? burgerConstructorStyles.borderStyle : ''
+      }`}
+      onSubmit={onFormSubmit}
+      ref={dropTarget}
+    >
+      <>
+        {selectedBun ? (
+          <div className={burgerConstructorStyles.bun_container}>
+            <ConstructorElement
+              type='top'
+              isLocked={true}
+              text={`${selectedBun?.name} (верх)`}
+              price={selectedBun?.price}
+              thumbnail={selectedBun?.image_mobile}
+            />
+          </div>
+        ) : selectedIngredients.length > 0 ? (
+          <span
+            className={`text text_type_main-default ${burgerConstructorStyles.emptyListText}`}
+          >
+            Пожалуйста, выберите булку
+          </span>
+        ) : null}
+        {selectedIngredients.length > 0 ? (
+          <ul className={burgerConstructorStyles.list}>
+            {selectedIngredients.map((element, i) => (
+              <BurgerConstructorCard
+                key={element.uniqueId}
+                index={i}
+                element={element}
+                onDelete={handleDelete}
+                onIngredientMove={handleIngredientMove}
               />
-            </li>
-          ))}
-      </ul>
-      <div className={burgerConstructorStyles.bun_container}>
-        <ConstructorElement
-          type='bottom'
-          isLocked={true}
-          text={`${selectedBunState.selectedBun?.name} (низ)`}
-          price={selectedBunState.selectedBun?.price.toLocaleString('en-US')}
-          thumbnail={selectedBunState.selectedBun?.image_mobile}
-        />
-      </div>
-      <div className={burgerConstructorStyles.bottomContainer}>
-        <span>{total}</span>
-        <img
-          className={burgerConstructorStyles.currencyIcon}
-          src={currencyIcon}
-          alt='currency icon'
-        />
-        <Button type='primary' size='large'>
-          Оформить заказ
-        </Button>
-      </div>
+            ))}
+          </ul>
+        ) : (
+          <span
+            className={`text text_type_main-default ${burgerConstructorStyles.list} ${burgerConstructorStyles.emptyListText}`}
+          >
+            Пожалуйста, перенесите сюда {!selectedBun && 'булку и '}
+            ингредиенты для создания заказа
+          </span>
+        )}
+        <div className={burgerConstructorStyles.bun_container}>
+          {selectedBun && (
+            <ConstructorElement
+              type='bottom'
+              isLocked={true}
+              text={`${selectedBun?.name} (низ)`}
+              price={selectedBun?.price}
+              thumbnail={selectedBun?.image_mobile}
+            />
+          )}
+        </div>
+        {selectedBun && selectedIngredients.length > 0 && (
+          <div className={burgerConstructorStyles.bottomContainer}>
+            <span>{totalPrice}</span>
+            <img
+              className={burgerConstructorStyles.currencyIcon}
+              src={currencyIcon}
+              alt='currency icon'
+            />
+            <Button type='primary' size='large'>
+              Оформить заказ
+            </Button>
+          </div>
+        )}
+      </>
     </form>
   );
 }

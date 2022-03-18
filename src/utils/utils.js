@@ -1,27 +1,27 @@
 export const baseURL = 'https://norma.nomoreparties.space/api';
 export const titles = ['Булки', 'Соусы', 'Начинки'];
-export const titlesEn = ['buns', 'sauces', 'mains'];
+export const titlesEn = ['bun', 'sauce', 'main'];
 
 export function filterIngredients(ingredients) {
   const buns = [];
   const mains = [];
   const sauces = [];
 
-  ingredients.forEach(i => {
-    switch (i.type) {
+  ingredients.forEach(item => {
+    switch (item.type) {
       case 'bun':
-        buns.push(i);
+        buns.push(item);
         break;
       case 'main':
-        mains.push(i);
+        mains.push(item);
         break;
       default:
-        sauces.push(i);
+        sauces.push(item);
         break;
     }
   });
 
-  return { buns, mains, sauces };
+  return [buns, sauces, mains];
 }
 
 export function getRandomIntredients(ingredients) {
@@ -42,14 +42,19 @@ export function getRandomIntredients(ingredients) {
 }
 
 export function calculateTotalCost(bun, ingredients) {
-  const bunCost = bun.price;
   const ingredientsCost = ingredients.reduce((totalCost, currentItem) => {
     return totalCost + currentItem.price;
   }, 0);
-
-  return (bunCost + ingredientsCost).toLocaleString('en-US');
+  return ingredientsCost + (bun ? bun.price : 0);
 }
 
 export function getIngredientIds(bun, ingredients) {
   return [bun._id, ...ingredients.map(i => i._id)];
+}
+
+export function checkResponse(response) {
+  if (!response.ok) {
+    return Promise.reject(`Ошибка ${response.status}`);
+  }
+  return response.json();
 }

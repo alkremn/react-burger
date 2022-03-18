@@ -1,4 +1,4 @@
-.list_item{
+.listItem{
   display: flex;
   flex-direction: column;
   position: relative;
@@ -6,7 +6,7 @@
   transition: all .2s linear;
 }
 
-.list_item:hover{
+.listItem:hover{
   transform: scale(1.02);
 }
 
@@ -31,7 +31,7 @@
   color:#F2F2F3;
 }
 
-.price_digits{
+.priceDigits{
   font-size: 28px;
   line-height: 24px;
   margin-right: 9px;

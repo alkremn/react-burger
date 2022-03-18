@@ -1,57 +1,86 @@
-import React, { useEffect, useState } from 'react';
-import { ingredientPropTypes } from '../../utils/commonPropTypes';
+import React, { useEffect, useRef, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { titles } from '../../utils/utils';
+
+// redux
+import { useDispatch } from 'react-redux';
+
+// components
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsList from './../burger-ingredients-list/burger-ingredients-list';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
-import { titles, titlesEn } from '../../utils/utils';
+
+// actions
+import { fetchIngredientsAction } from './../../services/actions/ingredientsActions';
+
+// types
 import { PropTypes } from 'prop-types';
 
-export default function BurgerIngredients({ ingredients, onPopupOpen }) {
-  const [current, setCurrent] = useState(0);
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [currentTitle, setCurrentTitle] = useState(titles[0]);
+export default function BurgerIngredients({ onPopupOpen }) {
+  const dispatch = useDispatch();
+
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const [firstListRef, firstInView] = useInView({ threshold: 0.2 });
+  const [secondListRef, secondInView] = useInView({ threshold: 0.2 });
+  const [thridListRef, thirdInView] = useInView({ threshold: 0.2 });
+  const listRefs = [firstListRef, secondListRef, thridListRef];
+
+  const firstHeaderRef = useRef(null);
+  const secondHeaderRef = useRef(null);
+  const thirdHeaderRef = useRef(null);
+  const headerRefs = [firstHeaderRef, secondHeaderRef, thirdHeaderRef];
 
   useEffect(() => {
-    setSelectedIngredients(ingredients[titlesEn[0]]);
-  }, [ingredients]);
+    if (firstInView) {
+      setCurrentTab(0);
+    } else if (secondInView) {
+      setCurrentTab(1);
+    } else {
+      setCurrentTab(2);
+    }
+  }, [firstInView, secondInView, thirdInView]);
+
+  useEffect(() => {
+    dispatch(fetchIngredientsAction());
+  }, [dispatch]);
 
   const handleMenuClick = idx => {
-    setCurrent(idx);
-    setCurrentTitle(titles[idx]);
-    setSelectedIngredients(ingredients[titlesEn[idx]]);
+    setCurrentTab(idx);
+    if (headerRefs[idx].current) {
+      headerRefs[idx].current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
-    <section>
+    <section className={burgerIngredientsStyles.container}>
+      <h1
+        className={`text text_type_main-default ${burgerIngredientsStyles.title}`}
+      >
+        Соберите бургер
+      </h1>
       <div className={burgerIngredientsStyles.menu}>
         {titles &&
           titles.map((title, i) => (
             <Tab
               key={i}
               value={i}
-              active={current === i}
+              active={currentTab === i}
               onClick={handleMenuClick}
             >
               {title}
             </Tab>
           ))}
       </div>
-      {selectedIngredients && (
-        <BurgerIngredientsList
-          title={currentTitle}
-          ingredients={selectedIngredients}
-          onPopupOpen={onPopupOpen}
-        />
-      )}
+      <BurgerIngredientsList
+        onPopupOpen={onPopupOpen}
+        listRefs={listRefs}
+        headerRefs={headerRefs}
+      />
     </section>
   );
 }
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.shape({
-    buns: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-    mains: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-    sauces: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-  }),
   onPopupOpen: PropTypes.func.isRequired,
 };

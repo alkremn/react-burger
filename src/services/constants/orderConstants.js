@@ -1,0 +1,4 @@
+export const POST_ORDER_SUCCESS = 'POST_ORDER_SUCCESS';
+export const POST_ORDER_FAIL = 'POST_ORDER_FAIL';
+export const ADD_ORDER = 'ADD_ORDER';
+export const REMOVE_ORDER = 'REMOVE_ORDER';

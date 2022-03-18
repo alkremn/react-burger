@@ -1,0 +1,15 @@
+.listItem{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform .2s linear;
+}
+
+.listItem:hover{
+  transform: scale(1.02);
+}
+
+.dragIcon{
+  margin-right: 10px;
+}

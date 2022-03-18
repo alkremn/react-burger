@@ -1,9 +1,17 @@
 .container{
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  padding: 0 16px 92px;
+  padding: 20px 16px;
+  margin: 100px 0 92px;
   max-width: 600px;
+  align-items: flex-end;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all .2s ease-in-out;
+}
+
+.borderStyle{
+  border-color: #8585AD;
 }
 
 .bun_container{
@@ -17,20 +25,21 @@
   flex-direction: column;
   align-items: flex-end;
   row-gap: 16px;
-  min-height: 350px;
-  max-height: calc(100vh - 600px);
+  width: 100%;
   overflow: scroll;
   overflow-x: hidden;
+  height: calc(100vh - 600px);
 }
 
-.listItem{
-  width: 100%;
+.emptyListText{
+  width: 70%;
+  min-height: 80px;
   display: flex;
+  justify-content: center;
   align-items: center;
-}
-
-.dragIcon{
-  margin-right: 10px;
+  text-align: center;
+  align-self: center;
+  overflow: hidden;
 }
 
 .bottomContainer{
