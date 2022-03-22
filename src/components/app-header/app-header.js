@@ -19,7 +19,7 @@ export default function AppHeader() {
           </NavLink>
         </li>
         <li>
-          <NavLink to='/'>
+          <NavLink to='/orders'>
             <ListIcon type='secondary' />
             <p className='text text_type_main-default pl-2 text_color_inactive'>
               Лента заказов
@@ -32,7 +32,7 @@ export default function AppHeader() {
           </NavLink>
         </li>
         <li>
-          <NavLink to='/'>
+          <NavLink to='/profile'>
             <ProfileIcon type='secondary' />
             <p className='text text_type_main-default pl-2 text_color_inactive'>
               Личный кабинет

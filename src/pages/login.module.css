@@ -1,0 +1,28 @@
+.container{
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title{
+  margin: 0;
+}
+.inputContainer {
+  width: 100%;
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.ButtonContainer{
+  margin-top: 24px;
+}
+.bottomText{
+  margin: 80px 0 16px;
+}
+.link{
+  color: #4C4CFF;
+  text-decoration: none;
+  margin-left: 8px;
+}
