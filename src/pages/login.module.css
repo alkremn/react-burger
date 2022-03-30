@@ -1,13 +1,19 @@
 .container{
   max-width: 480px;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  color: #8585AD;
 }
+
 .title{
   margin: 0;
+  color: #F2F2F3;
 }
+
 .inputContainer {
   width: 100%;
   margin-top: 24px;
@@ -15,12 +21,19 @@
   justify-content: center;
 }
 
+.input{
+  width: 100%;
+}
+
 .ButtonContainer{
   margin-top: 24px;
 }
+
 .bottomText{
   margin: 80px 0 16px;
+ 
 }
+
 .link{
   color: #4C4CFF;
   text-decoration: none;

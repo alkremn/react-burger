@@ -10,7 +10,7 @@ import {
   getPostOrderFailAction,
 } from './../actionCreators/orderActionCreators';
 
-export const postOrder = ingredientIds => async dispatch => {
+export const postOrderAction = ingredientIds => async dispatch => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/orders`, {

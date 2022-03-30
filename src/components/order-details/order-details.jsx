@@ -7,8 +7,10 @@ import checkImage from '../../images/icons/check_mark.svg';
 // helpers
 import { getIngredientIds } from '../../utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { postOrder } from './../../services/actions/orderActions';
-import { removeSelectedIngredients } from './../../services/actions/ingredientsActions';
+
+// actions
+import { postOrderAction } from './../../services/actions/orderActions';
+import { removeSelectedIngredientsAction } from './../../services/actions/ingredientsActions';
 
 export default function OrderDetails() {
   const dispatch = useDispatch();
@@ -20,8 +22,10 @@ export default function OrderDetails() {
 
   useEffect(() => {
     if (selectedBun && selectedIngredients.length > 0) {
-      dispatch(postOrder(getIngredientIds(selectedBun, selectedIngredients)));
-      dispatch(removeSelectedIngredients(selectedBun));
+      dispatch(
+        postOrderAction(getIngredientIds(selectedBun, selectedIngredients))
+      );
+      dispatch(removeSelectedIngredientsAction(selectedBun));
     }
   }, [dispatch, selectedBun, selectedIngredients]);
 

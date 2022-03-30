@@ -1,0 +1,13 @@
+.container div:first-child {
+  margin-top: 0;
+}
+
+.inputContainer {
+  margin-top: 24px;
+  width: 480px;
+}
+
+.inputContainer {
+  width: 100%;
+}
+

@@ -30,11 +30,11 @@ export const fetchIngredientsAction = () => async dispatch => {
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const addSelectedIngredients = ingredients => async dispatch => {
+export const addSelectedIngredientsAction = ingredients => async dispatch => {
   dispatch(getAddSelectedIngredientsAction(ingredients));
 };
 
-export const addSelectedIngredient =
+export const addSelectedIngredientAction =
   (selectedBun, ingredient) => async dispatch => {
     if (ingredient.type === 'bun') {
       if (selectedBun) {
@@ -52,13 +52,14 @@ export const addSelectedIngredient =
     dispatch(getIncrementIngredientCountAction(ingredient));
   };
 
-export const removeSelectedIngredients = (selectedBun) => async dispatch => {
-  dispatch(getRemoveSelectedIngredientsAction());
-  dispatch(getDecrementIngredientCountAction(selectedBun));
-  dispatch(getRemoveSelectedBunAction());
-};
+export const removeSelectedIngredientsAction =
+  selectedBun => async dispatch => {
+    dispatch(getRemoveSelectedIngredientsAction());
+    dispatch(getDecrementIngredientCountAction(selectedBun));
+    dispatch(getRemoveSelectedBunAction());
+  };
 
-export const removeSelectedIngredient = ingredient => async dispatch => {
+export const removeSelectedIngredientAction = ingredient => async dispatch => {
   dispatch(getRemoveSelectedIngredientAction(ingredient));
   dispatch(getDecrementIngredientCountAction(ingredient));
 };

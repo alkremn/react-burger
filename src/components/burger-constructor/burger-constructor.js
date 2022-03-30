@@ -21,9 +21,9 @@ import { calculateTotalCost } from '../../utils/utils';
 
 // actions
 import {
-  addSelectedIngredient,
-  addSelectedIngredients,
-  removeSelectedIngredient,
+  addSelectedIngredientAction,
+  addSelectedIngredientsAction,
+  removeSelectedIngredientAction,
 } from './../../services/actions/ingredientsActions';
 
 export default function BurgerConstructor({ onFormSubmit }) {
@@ -35,7 +35,7 @@ export default function BurgerConstructor({ onFormSubmit }) {
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(ingredient) {
-      dispatch(addSelectedIngredient(selectedBun, ingredient));
+      dispatch(addSelectedIngredientAction(selectedBun, ingredient));
     },
     collect: monitor => ({
       isHover: monitor.isOver(),
@@ -43,14 +43,14 @@ export default function BurgerConstructor({ onFormSubmit }) {
   });
 
   const handleDelete = ingredient => {
-    dispatch(removeSelectedIngredient(ingredient));
+    dispatch(removeSelectedIngredientAction(ingredient));
   };
 
   const handleIngredientMove = useCallback(
     (dragIndex, hoverIndex) => {
       const ingredients = [...selectedIngredients];
       ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
-      dispatch(addSelectedIngredients(ingredients));
+      dispatch(addSelectedIngredientsAction(ingredients));
     },
     [dispatch, selectedIngredients]
   );
