@@ -44,6 +44,7 @@ export const ProfileDetails = () => {
     setDisabledFields({ ...disabledFields, name: !disabledFields.name });
     if (nameRef.current) {
       nameRef.current.focus();
+      console.log('asdf');
     }
   };
 

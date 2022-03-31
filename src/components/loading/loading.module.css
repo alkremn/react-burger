@@ -1,0 +1,40 @@
+.container{
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.loadingGear {
+  width: 100px;
+  height: 100px;
+  background-image: url('../../images/icons/loading-gear.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-animation: rotation 2s infinite linear;
+  -moz-animation: rotation 2s infinite linear;
+  -o-animation: rotation 2s infinite linear;
+  animation: rotation 2s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+  from {-webkit-transform: rotate(0deg);}
+  to   {-webkit-transform: rotate(359deg);}
+}
+@-moz-keyframes rotation {
+  from {-moz-transform: rotate(0deg);}
+  to   {-moz-transform: rotate(359deg);}
+}
+@-o-keyframes rotation {
+  from {-o-transform: rotate(0deg);}
+  to   {-o-transform: rotate(359deg);}
+}
+@keyframes rotation {
+  from {transform: rotate(0deg);}
+  to   {transform: rotate(359deg);}
+}

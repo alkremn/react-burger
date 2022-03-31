@@ -71,11 +71,10 @@ export function validateEmail(email) {
     );
 }
 
-export function createAuthPayload(response) {
+export function createAuthPayload(user, token) {
   return {
-    user: response.user,
-    accessToken: response.accessToken,
-    refreshToken: response.refreshToken,
+    user: user,
+    accessToken: token,
   };
 }
 

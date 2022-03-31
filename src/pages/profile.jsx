@@ -15,7 +15,8 @@ export const ProfilePage = () => {
         <ul className={styles.menu}>
           <li className={styles.link}>
             <NavLink
-              to='/profile/details'
+              to='/profile'
+              end
               onClick={() => setIsProfileActive(true)}
               className={({ isActive }) =>
                 'text text_type_main-medium ' +

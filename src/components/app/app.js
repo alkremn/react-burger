@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styles from './app.module.css';
 
@@ -19,29 +19,31 @@ import {
   IngredientPage,
   NotFoundPage,
 } from '../../pages/index';
+import { useSelector } from 'react-redux';
+import { Loading } from '../loading/loading';
 
 function App() {
+  const { user } = useSelector(store => store.auth);
+  const { isLoading } = useSelector(store => store.async);
+
   return (
     <Router>
-      <AppHeader />
+      {isLoading && <Loading />}
+      {user ? <AppHeader /> : null}
       <main className={styles.mainContainer}>
         <Routes>
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/forgot-password' element={<ForgotPasswordPage />} />
           <Route path='/reset-password' element={<ResetPasswordPage />} />
-          <Route path='/profile' element={<ProtectedRoute />}>
+          <Route path='/' element={<ProtectedRoute />}>
+            <Route exact path='/' element={<ConstructorPage />} />
+            <Route path='/ingredients/:id' element={<IngredientPage />} />
             <Route path='/profile' element={<ProfilePage />}>
-              <Route path='/profile/details' element={<ProfileDetails />} />
+              <Route exact path='/profile' element={<ProfileDetails />} />
               <Route exact path='/profile/orders' element={<OrderHistory />} />
               <Route exact path='/profile/logout' element={<OrderHistory />} />
             </Route>
-          </Route>
-          <Route path='/ingredients/:id' element={<ProtectedRoute />}>
-            <Route path='/ingredients/:id' element={<IngredientPage />} />
-          </Route>
-          <Route exact path='/' element={<ProtectedRoute />}>
-            <Route exact path='/' element={<ConstructorPage />} />
           </Route>
           <Route path='*' element={<NotFoundPage />} />
         </Routes>

@@ -56,7 +56,7 @@ export default function AppHeader() {
         </li>
         <li>
           <NavLink
-            to='/orders'
+            to='/profile/orders'
             onMouseEnter={() => handleMouseEnter('orders')}
             onMouseLeave={() => handleMouseLeave('orders')}
             onClick={() => handleLinkClick('orders')}
@@ -78,7 +78,7 @@ export default function AppHeader() {
         </li>
         <li>
           <NavLink
-            to='/profile/details'
+            to='/profile'
             onMouseEnter={() => handleMouseEnter('profile')}
             onMouseLeave={() => handleMouseLeave('profile')}
             onClick={() => handleLinkClick('profile')}
