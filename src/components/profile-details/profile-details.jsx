@@ -2,16 +2,25 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './profile-details.module.css';
 
 // components
-import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
+import {
+  Button,
+  Input,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 
-const initialForm = {
-  name: '',
-  email: '',
-  password: '',
-};
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+
+// helper functions
+import { validateEmail, WRONG_EMAIL_TITLE } from '../../utils/utils';
+
+// actions
+import { updateUserAction } from './../../services/actions/authActions';
+
+const initialForm = { name: '', email: '', password: '' };
+const initialDisabledFields = { name: true, email: true, password: true };
 
 export const ProfileDetails = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector(store => store.auth);
 
   const nameRef = useRef(null);
@@ -19,17 +28,9 @@ export const ProfileDetails = () => {
   const passwordRef = useRef(null);
 
   const [form, setForm] = useState(initialForm);
-  const [disabledFields, setDisabledFields] = useState({
-    name: true,
-    email: true,
-    password: true,
-  });
-
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
+  const [errors, setErrors] = useState(initialForm);
+  const [activeField, setActiveField] = useState('');
+  const [disabledFields, setDisabledFields] = useState(initialDisabledFields);
 
   useEffect(() => {
     if (user) {
@@ -37,36 +38,55 @@ export const ProfileDetails = () => {
     }
   }, [user]);
 
-  const handleValidateInput = () => {};
-  const handleInputChange = () => {};
+  useEffect(() => {
+    switch (activeField) {
+      case 'name':
+        nameRef.current.focus();
+        break;
+      case 'email':
+        emailRef.current.focus();
+        break;
+      case 'password':
+        passwordRef.current.focus();
+        break;
+      default:
+    }
+  }, [activeField]);
 
-  const handleNameIconClick = () => {
-    setDisabledFields({ ...disabledFields, name: !disabledFields.name });
-    if (nameRef.current) {
-      nameRef.current.focus();
-      console.log('asdf');
+  const handleInputChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleValidateInput = e => {
+    const emailText = e.target.value;
+    if (e.target.name === 'email') {
+      if (!validateEmail(emailText)) {
+        setErrors({ ...errors, email: WRONG_EMAIL_TITLE });
+      } else {
+        setErrors({ ...errors, email: '' });
+      }
     }
   };
 
-  const handleEmailIconClick = () => {
-    setDisabledFields({ ...disabledFields, email: !disabledFields.email });
-    if (emailRef.current) {
-      emailRef.current.focus();
-    }
+  const handleNameIconClick = title => {
+    setDisabledFields({ ...initialDisabledFields, [title]: false });
+    setForm({ ...initialForm, name: user.name, email: user.email });
+    setActiveField(title);
   };
 
-  const handlePasswordIconClick = () => {
-    setDisabledFields({
-      ...disabledFields,
-      password: !disabledFields.password,
-    });
-    if (passwordRef.current) {
-      passwordRef.current.focus();
-    }
+  const handleFormSubmit = e => {
+    e.preventDefault();
+    dispatch(updateUserAction(form));
+  };
+
+  const handleCancelClick = () => {
+    setDisabledFields(initialDisabledFields);
+    setForm({ ...initialForm, name: user.name, email: user.email });
+    setActiveField('');
   };
 
   return (
-    <div className={styles.container}>
+    <form className={styles.container} onSubmit={handleFormSubmit}>
       <div className={styles.inputContainer}>
         <Input
           ref={nameRef}
@@ -74,13 +94,13 @@ export const ProfileDetails = () => {
           name='name'
           placeholder='Имя'
           disabled={disabledFields.name}
-          icon='EditIcon'
+          icon={activeField === 'name' ? 'CloseIcon' : 'EditIcon'}
           value={form.name}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
-          onIconClick={handleNameIconClick}
-          error={errors.email !== ''}
-          errorText={errors.email}
+          onIconClick={() => handleNameIconClick('name')}
+          error={errors.name !== ''}
+          errorText={errors.name}
         />
       </div>
       <div className={styles.inputContainer}>
@@ -90,11 +110,11 @@ export const ProfileDetails = () => {
           name='email'
           placeholder='Логин'
           disabled={disabledFields.email}
-          icon='EditIcon'
+          icon={activeField === 'email' ? 'CloseIcon' : 'EditIcon'}
           value={form.email}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
-          onIconClick={handleEmailIconClick}
+          onIconClick={() => handleNameIconClick('email')}
           error={errors.email !== ''}
           errorText={errors.email}
         />
@@ -106,15 +126,25 @@ export const ProfileDetails = () => {
           name='password'
           placeholder='Пароль'
           disabled={disabledFields.password}
-          icon='EditIcon'
+          icon={activeField === 'password' ? 'CloseIcon' : 'EditIcon'}
           value={form.password}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
-          onIconClick={handlePasswordIconClick}
-          error={errors.email !== ''}
-          errorText={errors.email}
+          onIconClick={() => handleNameIconClick('password')}
+          error={errors.password !== ''}
+          errorText={errors.password}
         />
       </div>
-    </div>
+      {activeField !== '' && (
+        <div className={styles.bottomContainer}>
+          <Button type='primary' size='medium' htmlType='submit'>
+            Сохранить
+          </Button>
+          <button className={styles.cancelButton} onClick={handleCancelClick}>
+            <span className='text text_type_main-default'>Отмена</span>
+          </button>
+        </div>
+      )}
+    </form>
   );
 };

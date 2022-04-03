@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { NavLink, Outlet } from 'react-router-dom';
+import { logoutAction } from '../services/actions/authActions';
 import styles from './profile.module.css';
 
 export const ProfilePage = () => {
+  const dispatch = useDispatch();
+
   const [isProfileActive, setIsProfileActive] = useState(true);
 
   const handleLogout = e => {
-    console.log(e);
+    dispatch(logoutAction());
   };
 
   return (

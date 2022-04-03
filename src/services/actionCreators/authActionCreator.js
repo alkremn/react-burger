@@ -7,7 +7,6 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
   UPDATE_TOKEN,
-  UPDATE_USER,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
 } from '../constants/authConstants';

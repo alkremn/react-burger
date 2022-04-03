@@ -6,30 +6,36 @@ import {
   UPDATE_TOKEN,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAIL,
 } from './../constants/authConstants';
 
 const initialState = {
   user: null,
   accessToken: null,
-  error: null,
+  message: '',
 };
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      return { ...state, ...action.payload, error: null };
+      return { ...state, ...action.payload, message: null };
     case REGISTER_FAIL:
       return { ...initialState, error: action.payload };
     case LOGIN_SUCCESS:
-      return { ...state, ...action.payload, error: null };
-    case UPDATE_TOKEN:
-      return { ...state, accessToken: action.payload, error: null };
+      return { ...state, ...action.payload, message: null };
     case LOGIN_FAIL:
-      return { ...initialState, error: action.payload };
+      return { ...initialState, message: action.payload };
+    case LOGOUT_SUCCESS:
+      return { ...initialState, user: null, message: action.payload };
+    case LOGOUT_FAIL:
+      return { ...initialState, user: null, message: action.payload };
     case UPDATE_USER_SUCCESS:
-      return { ...initialState, user: action.payload, error: null };
+      return { ...initialState, user: action.payload, message: null };
     case UPDATE_USER_FAIL:
-      return { ...initialState, user: null, error: action.payload };
+      return { ...initialState, user: null, message: action.payload };
+    case UPDATE_TOKEN:
+      return { ...state, accessToken: action.payload, message: null };
     default:
       return state;
   }

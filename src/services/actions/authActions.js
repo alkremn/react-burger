@@ -35,10 +35,16 @@ export const loginAction = form => async dispatch => {
       if (!data.success) {
         return Promise.reject(data.message);
       }
-      localStorage.setItem('token', data.refreshToken);
-      const token = data.accessToken.split(' ')[0];
+      localStorage.setItem(
+        'userInfo',
+        JSON.stringify({
+          ...data.user,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        })
+      );
 
-      dispatch(getLoginSuccessAction(data.user, token));
+      dispatch(getLoginSuccessAction(data.user, data.accessToken));
     })
     .catch(error => {
       dispatch(getLoginFailAction(error));
@@ -61,9 +67,16 @@ export const registerAction = form => async dispatch => {
       if (!data.success) {
         return Promise.reject(data.message);
       }
-      localStorage.setItem('token', data.refreshToken);
-      const token = data.accessToken.split(' ')[0];
-      dispatch(getRegisterSuccessAction(data.user, token));
+      localStorage.setItem(
+        'userInfo',
+        JSON.stringify({
+          ...data.user,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        })
+      );
+
+      dispatch(getRegisterSuccessAction(data.user, data.accessToken));
     })
     .catch(error => {
       dispatch(getRegisterFailAction(error));
@@ -100,39 +113,12 @@ export const refreshTokenAction = () => async dispatch => {
   }
 };
 
-export const logoutAction = () => async dispatch => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    dispatch(getStartLoadingAction());
-
-    fetch(`${baseURL}/auth/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token: token }),
-    })
-      .then(res => checkResponse(res))
-      .then(data => {
-        if (!data.success) {
-          return Promise.reject(data.message);
-        }
-        localStorage.removeItem('token');
-        dispatch(getLogoutSuccessAction(data));
-      })
-      .catch(error => {
-        dispatch(getLogoutFailAction(error));
-      })
-      .finally(() => dispatch(getFinishLoadingAction()));
-  }
-};
-
 export const getUserAction = () => async (dispatch, getState) => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/auth/user`, {
     headers: {
-      Authorization: `Bearer ${getState().auth.user.token}`,
+      Authorization: getState().auth.user.accessToken,
     },
   })
     .then(res => checkResponse(res))
@@ -150,11 +136,11 @@ export const getUserAction = () => async (dispatch, getState) => {
 
 export const updateUserAction = user => async (dispatch, getState) => {
   dispatch(getStartLoadingAction());
-
+  console.log(user);
   fetch(`${baseURL}/auth/user`, {
     method: 'PATCH',
     headers: {
-      Authorization: `Bearer ${getState().auth.user.token}`,
+      Authorization: getState().auth.user.accessToken,
     },
     body: JSON.stringify(user),
   })
@@ -169,4 +155,32 @@ export const updateUserAction = user => async (dispatch, getState) => {
       dispatch(getUpdateUserFailAction(error));
     })
     .finally(() => dispatch(getFinishLoadingAction()));
+};
+
+export const logoutAction = () => async dispatch => {
+  const userInfo = localStorage.getItem('userInfo');
+  if (userInfo) {
+    dispatch(getStartLoadingAction());
+
+    fetch(`${baseURL}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: JSON.parse(userInfo).refreshToken }),
+    })
+      .then(res => checkResponse(res))
+      .then(data => {
+        console.log(data);
+        if (!data.success) {
+          return Promise.reject(data.message);
+        }
+        localStorage.removeItem('userInfo');
+        dispatch(getLogoutSuccessAction(data));
+      })
+      .catch(error => {
+        dispatch(getLogoutFailAction(error));
+      })
+      .finally(() => dispatch(getFinishLoadingAction()));
+  }
 };
