@@ -1,14 +1,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate, useLocation, Outlet } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 
-export const ProtectedRoute = () => {
-  const location = useLocation();
+export const ProtectedRoute = ({ children, ...rest }) => {
   const { user } = useSelector(store => store.auth);
 
-  return user ? (
-    <Outlet />
-  ) : (
-    <Navigate to={{ pathname: '/login' }} state={{ from: location.pathname }} />
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        user ? children : <Redirect to={{ pathname: '/login', location: { from: location } }} />
+      }
+    />
   );
 };

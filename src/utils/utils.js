@@ -1,6 +1,8 @@
 export const baseURL = 'https://norma.nomoreparties.space/api';
 export const titles = ['Булки', 'Соусы', 'Начинки'];
 export const titlesEn = ['bun', 'sauce', 'main'];
+export const hideHeaderPaths = ['/login', '/register', '/forgot-password', '/reset-password'];
+export const FORGOT_PASSWORD_URL = '/forgot-password';
 
 export const WRONG_EMAIL_TITLE = 'Некорректный E-mail';
 export const ENTER_NAME_TITLE = 'Введите имя';

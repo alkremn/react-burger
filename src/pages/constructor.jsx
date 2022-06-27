@@ -16,13 +16,10 @@ import OrderDetails from '../components/order-details/order-details';
 import Modal from '../components/modal/modal';
 
 export const ConstructorPage = () => {
-  const { ingredients, selectedIngredients } = useSelector(
-    store => store.ingredients
-  );
+  const { ingredients, selectedIngredients } = useSelector(store => store.ingredients);
 
   const [isVisible, setIsVisible] = useState(false);
-  const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] =
-    useState(false);
+  const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
   const handleFormSubmit = e => {

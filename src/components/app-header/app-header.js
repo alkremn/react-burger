@@ -1,12 +1,13 @@
+import React, { useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { hideHeaderPaths } from '../../utils/utils';
+import headerStyles from './app-header.module.css';
 import {
   BurgerIcon,
   ListIcon,
   ProfileIcon,
   Logo,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import headerStyles from './app-header.module.css';
 
 const defaultState = {
   constructor: false,
@@ -15,6 +16,7 @@ const defaultState = {
 };
 
 export default function AppHeader() {
+  const { pathname } = useLocation();
   const [activeLink, setActiveLink] = useState('constructor');
   const [state, setState] = useState({ ...defaultState, [activeLink]: true });
 
@@ -32,6 +34,8 @@ export default function AppHeader() {
     }
   };
 
+  if (hideHeaderPaths.includes(pathname)) return null;
+
   return (
     <header className={headerStyles.header}>
       <ul className={headerStyles.links}>
@@ -42,9 +46,7 @@ export default function AppHeader() {
             onMouseLeave={() => handleMouseLeave('constructor')}
             onClick={() => handleLinkClick('constructor')}
           >
-            <BurgerIcon
-              type={`${state.constructor ? 'primary' : 'secondary'}`}
-            />
+            <BurgerIcon type={`${state.constructor ? 'primary' : 'secondary'}`} />
             <p
               className={`text text_type_main-default pl-2 ${
                 state.constructor ? 'text_color_active' : 'text_color_inactive'
@@ -56,7 +58,7 @@ export default function AppHeader() {
         </li>
         <li>
           <NavLink
-            to='/profile/orders'
+            to='#'
             onMouseEnter={() => handleMouseEnter('orders')}
             onMouseLeave={() => handleMouseLeave('orders')}
             onClick={() => handleLinkClick('orders')}

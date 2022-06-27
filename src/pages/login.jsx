@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './login.module.css';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
-import {
-  Button,
-  Input,
-  PasswordInput,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   isEmailEmpty,
@@ -21,8 +17,8 @@ export const LoginPage = () => {
   const { user } = useSelector(store => store.auth);
   const dispatch = useDispatch();
 
-  const navigate = useNavigate();
   const { state } = useLocation();
+  const history = useHistory();
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({ email: '', password: '' });
@@ -57,11 +53,11 @@ export const LoginPage = () => {
   useEffect(() => {
     if (user) {
       if (state) {
-        navigate(state.from);
+        history.push(state.from);
       }
-      navigate('/');
+      history.replace({ pathname: '/' });
     }
-  }, [user, navigate, state]);
+  }, [user, history, state]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -83,19 +79,10 @@ export const LoginPage = () => {
         />
       </div>
       <div className={styles.inputContainer}>
-        <PasswordInput
-          name='password'
-          value={form.password}
-          onChange={handleInputChange}
-        />
+        <PasswordInput name='password' value={form.password} onChange={handleInputChange} />
       </div>
       <div className={styles.ButtonContainer}>
-        <Button
-          type='primary'
-          size='medium'
-          disabled={isSubmitDisabled}
-          htmlType='submit'
-        >
+        <Button type='primary' size='medium' disabled={isSubmitDisabled} htmlType='submit'>
           Войти
         </Button>
       </div>

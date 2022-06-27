@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Switch, useRouteMatch } from 'react-router-dom';
 import { logoutAction } from '../services/actions/authActions';
 import styles from './profile.module.css';
+import { ProtectedRoute } from '../components/protected-route';
+import { ProfileDetails } from '../components/profile-details/profile-details';
+import { OrderHistory } from '../components/order-history/order-history';
 
 export const ProfilePage = () => {
   const dispatch = useDispatch();
+  const { path, url } = useRouteMatch();
 
   const [isProfileActive, setIsProfileActive] = useState(true);
 
@@ -19,25 +23,21 @@ export const ProfilePage = () => {
         <ul className={styles.menu}>
           <li className={styles.link}>
             <NavLink
-              to='/profile'
-              end
+              to={`${url}`}
+              exact
               onClick={() => setIsProfileActive(true)}
-              className={({ isActive }) =>
-                'text text_type_main-medium ' +
-                (isActive ? styles.linkActive : styles.link)
-              }
+              className={`text text_type_main-medium ${styles.link}`}
+              activeClassName={`text text_type_main-medium ${styles.linkActive}`}
             >
               Профиль
             </NavLink>
           </li>
           <li>
             <NavLink
-              to='/profile/orders'
+              to={`${url}/orders`}
               onClick={() => setIsProfileActive(false)}
-              className={({ isActive }) =>
-                'text text_type_main-medium ' +
-                (isActive ? styles.linkActive : styles.link)
-              }
+              className={`text text_type_main-medium ${styles.link}`}
+              activeClassName={`text text_type_main-medium ${styles.linkActive}`}
             >
               История заказов
             </NavLink>
@@ -51,7 +51,14 @@ export const ProfilePage = () => {
             </button>
           </li>
         </ul>
-        <Outlet />
+        <Switch>
+          <ProtectedRoute path={`${path}/`} exact={true}>
+            <ProfileDetails />
+          </ProtectedRoute>
+          <ProtectedRoute path={`${path}/orders`}>
+            <OrderHistory />
+          </ProtectedRoute>
+        </Switch>
       </div>
       {isProfileActive && (
         <p className={`text text_type_main-default ${styles.text}`}>
