@@ -7,15 +7,19 @@
 
 .links{
   display: flex;
+  width: 100%;
   align-items: center;
-  justify-content: space-between;
   list-style: none;
   padding-left: 0;
   margin: 0;
   flex: 1;
 }
 
-.links > li > a {
+.mainLinks {
+  display: flex;
+}
+
+.links > div > li > a, .links > li > a {
   display: flex;
   text-decoration: none;
   color:#F2F2F3;
@@ -23,7 +27,12 @@
 }
 
 .link_logo{
-  flex: 1;
+  flex:1;
   display: flex;
   justify-content: center;
+  margin-right: 125px;
+}
+
+.profileLink {
+  justify-self: end;
 }
