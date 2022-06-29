@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './profile-details.module.css';
 
 // components
-import {
-  Button,
-  Input,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -68,15 +65,16 @@ export const ProfileDetails = () => {
     }
   };
 
-  const handleNameIconClick = title => {
+  const handleEditModeIconClick = title => {
     setDisabledFields({ ...initialDisabledFields, [title]: false });
-    setForm({ ...initialForm, name: user.name, email: user.email });
     setActiveField(title);
   };
 
   const handleFormSubmit = e => {
     e.preventDefault();
     dispatch(updateUserAction(form));
+    setDisabledFields(initialDisabledFields);
+    setActiveField('');
   };
 
   const handleCancelClick = () => {
@@ -98,7 +96,7 @@ export const ProfileDetails = () => {
           value={form.name}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
-          onIconClick={() => handleNameIconClick('name')}
+          onIconClick={() => handleEditModeIconClick('name')}
           error={errors.name !== ''}
           errorText={errors.name}
         />
@@ -114,7 +112,7 @@ export const ProfileDetails = () => {
           value={form.email}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
-          onIconClick={() => handleNameIconClick('email')}
+          onIconClick={() => handleEditModeIconClick('email')}
           error={errors.email !== ''}
           errorText={errors.email}
         />
@@ -130,7 +128,7 @@ export const ProfileDetails = () => {
           value={form.password}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
-          onIconClick={() => handleNameIconClick('password')}
+          onIconClick={() => handleEditModeIconClick('password')}
           error={errors.password !== ''}
           errorText={errors.password}
         />

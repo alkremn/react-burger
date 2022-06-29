@@ -26,7 +26,6 @@ function App() {
 
   useEffect(() => {
     if (ingredients.length === 0) {
-      console.log('asdfasdf');
       dispatch(fetchIngredientsAction());
     }
   }, [ingredients, dispatch]);

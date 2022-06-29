@@ -1,4 +1,3 @@
-import { createAuthPayload } from '../../utils/utils';
 import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
@@ -11,10 +10,10 @@ import {
   UPDATE_USER_FAIL,
 } from '../constants/authConstants';
 
-export function getLoginSuccessAction(user, token) {
+export function getLoginSuccessAction({ user, accessToken, refreshToken }) {
   return {
     type: LOGIN_SUCCESS,
-    payload: createAuthPayload(user, token),
+    payload: { user, accessToken, refreshToken },
   };
 }
 
@@ -22,10 +21,10 @@ export function getLoginFailAction() {
   return { type: LOGIN_FAIL };
 }
 
-export function getRegisterSuccessAction(user, token) {
+export function getRegisterSuccessAction({ user, accessToken, refreshToken }) {
   return {
     type: REGISTER_SUCCESS,
-    payload: createAuthPayload(user, token),
+    payload: { user, accessToken, refreshToken },
   };
 }
 

@@ -9,7 +9,7 @@ export const ProtectedRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) =>
-        user ? children : <Redirect to={{ pathname: '/login', location: { from: location } }} />
+        user ? children : <Redirect to={{ pathname: '/login', from: location.pathname }} />
       }
     />
   );

@@ -13,6 +13,7 @@ import {
 const initialState = {
   user: null,
   accessToken: null,
+  refreshToken: null,
   message: '',
 };
 

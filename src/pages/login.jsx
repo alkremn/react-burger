@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './login.module.css';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,11 +13,10 @@ import {
 } from './../utils/utils';
 import { loginAction } from '../services/actions/authActions';
 
-export const LoginPage = () => {
+export const LoginPage = ({ location }) => {
   const { user } = useSelector(store => store.auth);
   const dispatch = useDispatch();
 
-  const { state } = useLocation();
   const history = useHistory();
 
   const [form, setForm] = useState({ email: '', password: '' });
@@ -52,12 +51,14 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      if (state) {
-        history.push(state.from);
+      console.log(location.from);
+      if (location.from) {
+        history.replace({ pathname: location.from });
+      } else {
+        history.replace({ pathname: '/' });
       }
-      history.replace({ pathname: '/' });
     }
-  }, [user, history, state]);
+  }, [user, history, location]);
 
   const handleSubmit = e => {
     e.preventDefault();

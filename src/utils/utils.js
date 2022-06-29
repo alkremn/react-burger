@@ -72,13 +72,6 @@ export function validateEmail(email) {
     );
 }
 
-export function createAuthPayload(user, token) {
-  return {
-    user: user,
-    accessToken: token,
-  };
-}
-
 export function isEmailEmpty(email) {
   return email === '';
 }

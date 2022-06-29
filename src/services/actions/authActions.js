@@ -38,13 +38,13 @@ export const loginAction = form => async dispatch => {
       localStorage.setItem(
         'userInfo',
         JSON.stringify({
-          ...data.user,
+          user: data.user,
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
         })
       );
 
-      dispatch(getLoginSuccessAction(data.user, data.accessToken));
+      dispatch(getLoginSuccessAction(data));
     })
     .catch(error => {
       dispatch(getLoginFailAction(error));
@@ -70,13 +70,13 @@ export const registerAction = form => async dispatch => {
       localStorage.setItem(
         'userInfo',
         JSON.stringify({
-          ...data.user,
+          user: data.user,
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
         })
       );
 
-      dispatch(getRegisterSuccessAction(data.user, data.accessToken));
+      dispatch(getRegisterSuccessAction(data));
     })
     .catch(error => {
       dispatch(getRegisterFailAction(error));
@@ -136,11 +136,10 @@ export const getUserAction = () => async (dispatch, getState) => {
 
 export const updateUserAction = user => async (dispatch, getState) => {
   dispatch(getStartLoadingAction());
-  console.log(user);
   fetch(`${baseURL}/auth/user`, {
     method: 'PATCH',
     headers: {
-      Authorization: getState().auth.user.accessToken,
+      Authorization: getState().auth.accessToken,
     },
     body: JSON.stringify(user),
   })
