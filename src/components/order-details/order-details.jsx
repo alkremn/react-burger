@@ -1,36 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import orderDetailsStyles from './order-details.module.css';
 
 // icons
 import checkImage from '../../images/icons/check_mark.svg';
 
 // helpers
-import { getIngredientIds } from '../../utils/utils';
-import { useSelector, useDispatch } from 'react-redux';
-
-// actions
-import { postOrderAction } from './../../services/actions/orderActions';
-import { removeSelectedIngredientsAction } from './../../services/actions/ingredientsActions';
-import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function OrderDetails() {
-  const { user } = useSelector(store => store.auth);
   const { isLoading } = useSelector(store => store.async);
   const { order } = useSelector(store => store.order);
-  const { selectedBun, selectedIngredients } = useSelector(store => store.ingredients);
-  const dispatch = useDispatch();
-  const history = useHistory();
-
-  useEffect(() => {
-    if (!user) {
-      history.push('/login');
-    } else {
-      if (selectedBun && selectedIngredients.length > 0) {
-        dispatch(postOrderAction(getIngredientIds(selectedBun, selectedIngredients)));
-        dispatch(removeSelectedIngredientsAction(selectedBun));
-      }
-    }
-  }, [dispatch, selectedBun, selectedIngredients, user, history]);
 
   return (
     <div className={orderDetailsStyles.container}>

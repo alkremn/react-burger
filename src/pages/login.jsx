@@ -51,7 +51,6 @@ export const LoginPage = ({ location }) => {
 
   useEffect(() => {
     if (user) {
-      console.log(location.from);
       if (location.from) {
         history.replace({ pathname: location.from });
       } else {

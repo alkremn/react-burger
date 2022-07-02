@@ -12,7 +12,6 @@ import {
 
 export const postOrderAction = ingredientIds => async (dispatch, getState) => {
   dispatch(getStartLoadingAction());
-
   fetch(`${baseURL}/orders`, {
     method: 'POST',
     headers: {

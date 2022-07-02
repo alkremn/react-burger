@@ -10,6 +10,8 @@ import {
   getRemoveSelectedIngredientAction,
   getRemoveSelectedIngredientsAction,
   getRemoveSelectedBunAction,
+  getAddDetailedIngredientAction,
+  getARemoveDetailedIngredientAction,
 } from '../actionCreators/ingredientsActionCreators';
 import {
   getFinishLoadingAction,
@@ -30,36 +32,41 @@ export const fetchIngredientsAction = () => async dispatch => {
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const addSelectedIngredientsAction = ingredients => async dispatch => {
+export const addSelectedIngredientsAction = ingredients => dispatch => {
   dispatch(getAddSelectedIngredientsAction(ingredients));
 };
 
-export const addSelectedIngredientAction =
-  (selectedBun, ingredient) => async dispatch => {
-    if (ingredient.type === 'bun') {
-      if (selectedBun) {
-        dispatch(getDecrementIngredientCountAction(selectedBun));
-      }
-      dispatch(getAddSelectedBunAction(ingredient));
-    } else {
-      const updatedIngredient = {
-        ...ingredient,
-        uniqueId: Date.now(),
-      };
-      dispatch(getAddSelectedIngredientAction(updatedIngredient));
+export const addSelectedIngredientAction = (selectedBun, ingredient) => dispatch => {
+  if (ingredient.type === 'bun') {
+    if (selectedBun) {
+      dispatch(getDecrementIngredientCountAction(selectedBun));
     }
+    dispatch(getAddSelectedBunAction(ingredient));
+  } else {
+    const updatedIngredient = {
+      ...ingredient,
+      uniqueId: Date.now(),
+    };
+    dispatch(getAddSelectedIngredientAction(updatedIngredient));
+  }
 
-    dispatch(getIncrementIngredientCountAction(ingredient));
-  };
+  dispatch(getIncrementIngredientCountAction(ingredient));
+};
 
-export const removeSelectedIngredientsAction =
-  selectedBun => async dispatch => {
-    dispatch(getRemoveSelectedIngredientsAction());
-    dispatch(getDecrementIngredientCountAction(selectedBun));
-    dispatch(getRemoveSelectedBunAction());
-  };
+export const removeSelectedIngredientsAction = selectedBun => dispatch => {
+  dispatch(getRemoveSelectedIngredientsAction());
+  dispatch(getDecrementIngredientCountAction(selectedBun));
+  dispatch(getRemoveSelectedBunAction());
+};
 
-export const removeSelectedIngredientAction = ingredient => async dispatch => {
+export const removeSelectedIngredientAction = ingredient => dispatch => {
   dispatch(getRemoveSelectedIngredientAction(ingredient));
   dispatch(getDecrementIngredientCountAction(ingredient));
+};
+export const addDetailedIngredient = ingredient => dispatch => {
+  dispatch(getAddDetailedIngredientAction(ingredient));
+};
+
+export const removeDetailedIngredient = () => dispatch => {
+  dispatch(getARemoveDetailedIngredientAction());
 };

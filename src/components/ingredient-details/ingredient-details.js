@@ -1,20 +1,18 @@
 import React from 'react';
 import NutritionFact from '../nutrition-fact/nutrition-fact';
 import ingredientDetailsStyles from './ingredient-details.module.css';
-import { ingredientPropTypes } from './../../utils/commonPropTypes';
+import { useSelector } from 'react-redux';
 
-export default function IngredientDetails({ ingredient }) {
+export default function IngredientDetails() {
+  const { detailedIngredient: ingredient } = useSelector(store => store.ingredients);
+
   return (
     <div className={ingredientDetailsStyles.container}>
-      <h2
-        className={`text text_type_main-large ${ingredientDetailsStyles.title}`}
-      >
+      <h2 className={`text text_type_main-large ${ingredientDetailsStyles.title}`}>
         Детали ингредиента
       </h2>
       <img src={ingredient?.image_large} alt={ingredient?.name} />
-      <p
-        className={`text text_type_main-large ${ingredientDetailsStyles.name}`}
-      >
+      <p className={`text text_type_main-large ${ingredientDetailsStyles.name}`}>
         {ingredient?.name}
       </p>
       <div className={ingredientDetailsStyles.nutritionList}>
@@ -26,7 +24,3 @@ export default function IngredientDetails({ ingredient }) {
     </div>
   );
 }
-
-IngredientDetails.propTypes = {
-  ingredient: ingredientPropTypes,
-};

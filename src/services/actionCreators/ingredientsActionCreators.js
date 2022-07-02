@@ -9,6 +9,8 @@ import {
   REMOVE_SELECTED_INGREDIENT,
   REMOVE_SELECTED_INGREDIENTS,
   REMOVE_SELECTED_BUN,
+  ADD_DETAILED_INGREDIENT,
+  REMOVE_DETAILED_INGREDIENT,
 } from './../constants/ingredientsContstants';
 
 export function getAddSelectedBunAction(selectedBun) {
@@ -48,4 +50,12 @@ export function getRemoveSelectedBunAction() {
 
 export function getRemoveSelectedIngredientAction(ingredient) {
   return { type: REMOVE_SELECTED_INGREDIENT, payload: ingredient.uniqueId };
+}
+
+export function getAddDetailedIngredientAction(ingredient) {
+  return { type: ADD_DETAILED_INGREDIENT, payload: ingredient };
+}
+
+export function getARemoveDetailedIngredientAction() {
+  return { type: REMOVE_DETAILED_INGREDIENT };
 }

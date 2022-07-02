@@ -9,7 +9,6 @@ import {
   getLogoutSuccessAction,
   getRegisterFailAction,
   getUpdateTokenAction,
-  getUpdateUserFailAction,
   getUpdateUserSuccessAction,
 } from '../actionCreators/authActionCreator';
 
@@ -38,13 +37,11 @@ export const loginAction = form => async dispatch => {
       localStorage.setItem(
         'userInfo',
         JSON.stringify({
-          user: data.user,
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
+          ...data,
+          accessToken: data.accessToken.split(' ')[1],
         })
       );
-
-      dispatch(getLoginSuccessAction(data));
+      dispatch(getLoginSuccessAction({ ...data, accessToken: data.accessToken.split(' ')[1] }));
     })
     .catch(error => {
       dispatch(getLoginFailAction(error));
@@ -71,12 +68,10 @@ export const registerAction = form => async dispatch => {
         'userInfo',
         JSON.stringify({
           user: data.user,
-          accessToken: data.accessToken,
           refreshToken: data.refreshToken,
         })
       );
-
-      dispatch(getRegisterSuccessAction(data));
+      dispatch(getRegisterSuccessAction({ ...data, accessToken: data.accessToken.split(' ')[1] }));
     })
     .catch(error => {
       dispatch(getRegisterFailAction(error));
@@ -84,9 +79,9 @@ export const registerAction = form => async dispatch => {
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const refreshTokenAction = () => async dispatch => {
-  const refreshToken = localStorage.getItem('token');
-  if (refreshToken) {
+export const refreshTokenAction = next => async dispatch => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  if (userInfo && userInfo.refreshToken) {
     dispatch(getStartLoadingAction());
 
     fetch(`${baseURL}/auth/token`, {
@@ -94,17 +89,17 @@ export const refreshTokenAction = () => async dispatch => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: refreshToken }),
+      body: JSON.stringify({ token: userInfo.refreshToken }),
     })
       .then(res => checkResponse(res))
       .then(data => {
         if (!data.success) {
           return Promise.reject(data.message);
         }
-
         localStorage.setItem('token', data.refreshToken);
         const token = data.accessToken.split(' ')[0];
         dispatch(getUpdateTokenAction(token));
+        next();
       })
       .catch(error => {
         dispatch(getRegisterFailAction(error));
@@ -118,7 +113,7 @@ export const getUserAction = () => async (dispatch, getState) => {
 
   fetch(`${baseURL}/auth/user`, {
     headers: {
-      Authorization: getState().auth.user.accessToken,
+      Authorization: `Bearer ${getState().auth.accessToken}`,
     },
   })
     .then(res => checkResponse(res))
@@ -129,7 +124,7 @@ export const getUserAction = () => async (dispatch, getState) => {
       dispatch(getUpdateUserSuccessAction(data));
     })
     .catch(error => {
-      dispatch(getUpdateUserFailAction(error));
+      dispatch(refreshTokenAction(getUserAction));
     })
     .finally(() => dispatch(getFinishLoadingAction()));
 };
@@ -139,7 +134,7 @@ export const updateUserAction = user => async (dispatch, getState) => {
   fetch(`${baseURL}/auth/user`, {
     method: 'PATCH',
     headers: {
-      Authorization: getState().auth.accessToken,
+      Authorization: `Bearer ${getState().auth.accessToken}`,
     },
     body: JSON.stringify(user),
   })
@@ -151,7 +146,7 @@ export const updateUserAction = user => async (dispatch, getState) => {
       dispatch(getUpdateUserSuccessAction(data));
     })
     .catch(error => {
-      dispatch(getUpdateUserFailAction(error));
+      dispatch(refreshTokenAction(updateUserAction));
     })
     .finally(() => dispatch(getFinishLoadingAction()));
 };
@@ -170,7 +165,6 @@ export const logoutAction = () => async dispatch => {
     })
       .then(res => checkResponse(res))
       .then(data => {
-        console.log(data);
         if (!data.success) {
           return Promise.reject(data.message);
         }

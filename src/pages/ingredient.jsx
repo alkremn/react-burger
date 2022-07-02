@@ -7,16 +7,18 @@ import { useParams, useHistory } from 'react-router-dom';
 
 export const IngredientPage = () => {
   const { ingredients } = useSelector(store => store.ingredients);
-  const [ingredient, setIngredient] = useState();
+  const [ingredient, setIngredient] = useState(null);
   const { id } = useParams();
   const history = useHistory();
 
   useEffect(() => {
-    const foundIngredient = ingredients.find(i => i._id === id);
-    if (foundIngredient) {
-      setIngredient(foundIngredient);
-    } else {
-      history.push('/not-found');
+    if (ingredients.length > 0) {
+      const foundIngredient = ingredients.find(i => i._id === id);
+      if (foundIngredient) {
+        setIngredient(foundIngredient);
+      } else {
+        history.push('/not-found');
+      }
     }
   }, [id, ingredients, history]);
 

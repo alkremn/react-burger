@@ -7,7 +7,6 @@ import { filterIngredients, titles } from '../../utils/utils';
 import { useSelector } from 'react-redux';
 
 export default function BurgerIngredientsList({
-  onPopupOpen,
   listRefs,
   headerRefs,
 }) {
@@ -27,7 +26,6 @@ export default function BurgerIngredientsList({
           key={i}
           title={title}
           ingredients={filteredIngredients[i]}
-          onPopupOpen={onPopupOpen}
           listRef={listRefs[i]}
           headerRef={headerRefs[i]}
         />
@@ -37,7 +35,6 @@ export default function BurgerIngredientsList({
 }
 
 BurgerIngredientsList.propTypes = {
-  onPopupOpen: PropTypes.func.isRequired,
   listRefs: PropTypes.arrayOf(PropTypes.func).isRequired,
   headerRefs: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

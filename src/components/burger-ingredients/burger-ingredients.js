@@ -7,11 +7,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsList from './../burger-ingredients-list/burger-ingredients-list';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 
-// types
-import { PropTypes } from 'prop-types';
-
-export default function BurgerIngredients({ onPopupOpen }) {
-
+export default function BurgerIngredients() {
   const [currentTab, setCurrentTab] = useState(0);
 
   const [firstListRef, firstInView] = useInView({ threshold: 0.2 });
@@ -54,15 +50,7 @@ export default function BurgerIngredients({ onPopupOpen }) {
             </Tab>
           ))}
       </div>
-      <BurgerIngredientsList
-        onPopupOpen={onPopupOpen}
-        listRefs={listRefs}
-        headerRefs={headerRefs}
-      />
+      <BurgerIngredientsList listRefs={listRefs} headerRefs={headerRefs} />
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  onPopupOpen: PropTypes.func.isRequired,
-};
