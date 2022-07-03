@@ -10,10 +10,10 @@ import {
   UPDATE_USER_FAIL,
 } from '../constants/authConstants';
 
-export function getLoginSuccessAction({ user, accessToken, refreshToken }) {
+export function getLoginSuccessAction(user) {
   return {
     type: LOGIN_SUCCESS,
-    payload: { user, accessToken, refreshToken },
+    payload: user,
   };
 }
 
@@ -21,10 +21,10 @@ export function getLoginFailAction() {
   return { type: LOGIN_FAIL };
 }
 
-export function getRegisterSuccessAction({ user, accessToken, refreshToken }) {
+export function getRegisterSuccessAction(user) {
   return {
     type: REGISTER_SUCCESS,
-    payload: { user, accessToken, refreshToken },
+    payload: user,
   };
 }
 

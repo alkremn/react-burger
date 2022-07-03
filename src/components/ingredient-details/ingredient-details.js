@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NutritionFact from '../nutrition-fact/nutrition-fact';
 import ingredientDetailsStyles from './ingredient-details.module.css';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 export default function IngredientDetails() {
-  const { detailedIngredient: ingredient } = useSelector(store => store.ingredients);
+  const { ingredients } = useSelector(store => store.ingredients);
+  const { id } = useParams();
+
+  const [ingredient, setIngredient] = useState(null);
+
+  useEffect(() => {
+    if (ingredients.length > 0) {
+      const selectedIngredient = ingredients.find(i => i._id === id);
+      setIngredient(selectedIngredient);
+    }
+  }, [id, ingredients]);
 
   return (
     <div className={ingredientDetailsStyles.container}>

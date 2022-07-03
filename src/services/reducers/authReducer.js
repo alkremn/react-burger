@@ -12,19 +12,17 @@ import {
 
 const initialState = {
   user: null,
-  accessToken: null,
-  refreshToken: null,
   message: '',
 };
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      return { ...state, ...action.payload, message: null };
+      return { ...state, user: action.payload, message: null };
     case REGISTER_FAIL:
       return { ...initialState, error: action.payload };
     case LOGIN_SUCCESS:
-      return { ...state, ...action.payload, message: null };
+      return { ...state, user: action.payload, message: null };
     case LOGIN_FAIL:
       return { ...initialState, message: action.payload };
     case LOGOUT_SUCCESS:
@@ -36,7 +34,7 @@ export const authReducer = (state = initialState, action) => {
     case UPDATE_USER_FAIL:
       return { ...initialState, user: null, message: action.payload };
     case UPDATE_TOKEN:
-      return { ...state, accessToken: action.payload, message: null };
+      return { ...state, user: { ...state.user, accessToken: action.payload }, message: null };
     default:
       return state;
   }

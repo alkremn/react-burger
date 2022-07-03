@@ -8,21 +8,14 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import { ingredientPropTypes } from '../../utils/commonPropTypes';
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { getAddDetailedIngredientAction } from '../../services/actionCreators/ingredientsActionCreators';
 
 export default function BurgerIngredient({ ingredient }) {
   const location = useLocation();
-  const dispatch = useDispatch();
 
   const [, dragRef] = useDrag({
     type: 'ingredient',
     item: ingredient,
   });
-
-  function handleIngredientSelect() {
-    dispatch(getAddDetailedIngredientAction(ingredient));
-  }
 
   return (
     <li className={listItemStyles.listItem} ref={dragRef}>
@@ -30,7 +23,6 @@ export default function BurgerIngredient({ ingredient }) {
         key={ingredient._id}
         style={{ textDecoration: 'none' }}
         to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location } }}
-        onClick={handleIngredientSelect}
       >
         {ingredient.count > 0 && <Counter count={ingredient.count} size='default' />}
         <img className={listItemStyles.image} src={ingredient.image} alt={ingredient.name} />

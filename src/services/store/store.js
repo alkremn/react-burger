@@ -4,7 +4,7 @@ import { rootReducer } from './../reducers/rootReducer';
 
 const initialState = {
   auth: {
-    ...(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null),
+    user: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
   },
 };
 

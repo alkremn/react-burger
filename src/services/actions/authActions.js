@@ -34,14 +34,11 @@ export const loginAction = form => async dispatch => {
       if (!data.success) {
         return Promise.reject(data.message);
       }
-      localStorage.setItem(
-        'userInfo',
-        JSON.stringify({
-          ...data,
-          accessToken: data.accessToken.split(' ')[1],
-        })
-      );
-      dispatch(getLoginSuccessAction({ ...data, accessToken: data.accessToken.split(' ')[1] }));
+      const userInfo = getUserInfo(data);
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
+
+      dispatch(getLoginSuccessAction(userInfo));
     })
     .catch(error => {
       dispatch(getLoginFailAction(error));
@@ -64,14 +61,11 @@ export const registerAction = form => async dispatch => {
       if (!data.success) {
         return Promise.reject(data.message);
       }
-      localStorage.setItem(
-        'userInfo',
-        JSON.stringify({
-          user: data.user,
-          refreshToken: data.refreshToken,
-        })
-      );
-      dispatch(getRegisterSuccessAction({ ...data, accessToken: data.accessToken.split(' ')[1] }));
+      const userInfo = getUserInfo(data);
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
+
+      dispatch(getRegisterSuccessAction(userInfo));
     })
     .catch(error => {
       dispatch(getRegisterFailAction(error));
@@ -80,8 +74,8 @@ export const registerAction = form => async dispatch => {
 };
 
 export const refreshTokenAction = next => async dispatch => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  if (userInfo && userInfo.refreshToken) {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (refreshToken) {
     dispatch(getStartLoadingAction());
 
     fetch(`${baseURL}/auth/token`, {
@@ -89,17 +83,20 @@ export const refreshTokenAction = next => async dispatch => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: userInfo.refreshToken }),
+      body: JSON.stringify({ token: refreshToken }),
     })
       .then(res => checkResponse(res))
       .then(data => {
         if (!data.success) {
           return Promise.reject(data.message);
         }
-        localStorage.setItem('token', data.refreshToken);
-        const token = data.accessToken.split(' ')[0];
-        dispatch(getUpdateTokenAction(token));
-        next();
+        localStorage.setItem('refreshToken', data.refreshToken);
+        const accessToken = data.accessToken.split(' ')[1];
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, accessToken }));
+
+        dispatch(getUpdateTokenAction(accessToken));
+        dispatch(next());
       })
       .catch(error => {
         dispatch(getRegisterFailAction(error));
@@ -123,7 +120,7 @@ export const getUserAction = () => async (dispatch, getState) => {
       }
       dispatch(getUpdateUserSuccessAction(data));
     })
-    .catch(error => {
+    .catch(() => {
       dispatch(refreshTokenAction(getUserAction));
     })
     .finally(() => dispatch(getFinishLoadingAction()));
@@ -134,7 +131,7 @@ export const updateUserAction = user => async (dispatch, getState) => {
   fetch(`${baseURL}/auth/user`, {
     method: 'PATCH',
     headers: {
-      Authorization: `Bearer ${getState().auth.accessToken}`,
+      Authorization: `Bearer ${getState().auth.user.accessToken}`,
     },
     body: JSON.stringify(user),
   })
@@ -152,8 +149,8 @@ export const updateUserAction = user => async (dispatch, getState) => {
 };
 
 export const logoutAction = () => async dispatch => {
-  const userInfo = localStorage.getItem('userInfo');
-  if (userInfo) {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (refreshToken) {
     dispatch(getStartLoadingAction());
 
     fetch(`${baseURL}/auth/logout`, {
@@ -161,7 +158,7 @@ export const logoutAction = () => async dispatch => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: JSON.parse(userInfo).refreshToken }),
+      body: JSON.stringify({ token: refreshToken }),
     })
       .then(res => checkResponse(res))
       .then(data => {
@@ -169,6 +166,7 @@ export const logoutAction = () => async dispatch => {
           return Promise.reject(data.message);
         }
         localStorage.removeItem('userInfo');
+        localStorage.removeItem('refreshToken');
         dispatch(getLogoutSuccessAction(data));
       })
       .catch(error => {
@@ -177,3 +175,10 @@ export const logoutAction = () => async dispatch => {
       .finally(() => dispatch(getFinishLoadingAction()));
   }
 };
+
+function getUserInfo(data) {
+  return {
+    ...data.user,
+    accessToken: data.accessToken.split(' ')[1],
+  };
+}
