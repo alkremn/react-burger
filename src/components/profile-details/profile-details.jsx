@@ -72,7 +72,14 @@ export const ProfileDetails = () => {
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    dispatch(updateUserAction(form));
+    const updatedForm = Object.assign(
+      {},
+      user.name === form.name ? null : { name: form.name },
+      user.email === form.email ? null : { email: form.email },
+      form.password === '' ? null : { password: form.password }
+    );
+
+    dispatch(updateUserAction(updatedForm));
     setDisabledFields(initialDisabledFields);
     setActiveField('');
   };

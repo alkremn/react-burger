@@ -73,7 +73,7 @@ export const registerAction = form => async dispatch => {
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const refreshTokenAction = next => async dispatch => {
+export const refreshTokenAction = (next, user) => async dispatch => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (refreshToken) {
     dispatch(getStartLoadingAction());
@@ -83,19 +83,22 @@ export const refreshTokenAction = next => async dispatch => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: refreshToken }),
+      body: JSON.stringify({ token: JSON.parse(refreshToken) }),
     })
       .then(res => checkResponse(res))
       .then(data => {
         if (!data.success) {
           return Promise.reject(data.message);
         }
-        localStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
         const accessToken = data.accessToken.split(' ')[1];
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
         localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, accessToken }));
 
         dispatch(getUpdateTokenAction(accessToken));
+        if (user) {
+          dispatch(next(user));
+        }
         dispatch(next());
       })
       .catch(error => {
@@ -131,6 +134,7 @@ export const updateUserAction = user => async (dispatch, getState) => {
   fetch(`${baseURL}/auth/user`, {
     method: 'PATCH',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${getState().auth.user.accessToken}`,
     },
     body: JSON.stringify(user),
@@ -140,10 +144,12 @@ export const updateUserAction = user => async (dispatch, getState) => {
       if (!data.success) {
         return Promise.reject(data.message);
       }
+      const accessToken = JSON.parse(localStorage.getItem('userInfo')).accessToken;
+      localStorage.setItem('userInfo', JSON.stringify({ ...data.user, accessToken }));
       dispatch(getUpdateUserSuccessAction(data));
     })
     .catch(error => {
-      dispatch(refreshTokenAction(updateUserAction));
+      dispatch(refreshTokenAction(updateUserAction, user));
     })
     .finally(() => dispatch(getFinishLoadingAction()));
 };
