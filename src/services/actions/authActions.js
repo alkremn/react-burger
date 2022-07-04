@@ -164,7 +164,7 @@ export const logoutAction = () => async dispatch => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: refreshToken }),
+      body: JSON.stringify({ token: JSON.parse(refreshToken) }),
     })
       .then(res => checkResponse(res))
       .then(data => {
