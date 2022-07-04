@@ -2,23 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { titles } from '../../utils/utils';
 
-// redux
-import { useDispatch } from 'react-redux';
-
 // components
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsList from './../burger-ingredients-list/burger-ingredients-list';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 
-// actions
-import { fetchIngredientsAction } from './../../services/actions/ingredientsActions';
-
-// types
-import { PropTypes } from 'prop-types';
-
-export default function BurgerIngredients({ onPopupOpen }) {
-  const dispatch = useDispatch();
-
+export default function BurgerIngredients() {
   const [currentTab, setCurrentTab] = useState(0);
 
   const [firstListRef, firstInView] = useInView({ threshold: 0.2 });
@@ -41,10 +30,6 @@ export default function BurgerIngredients({ onPopupOpen }) {
     }
   }, [firstInView, secondInView, thirdInView]);
 
-  useEffect(() => {
-    dispatch(fetchIngredientsAction());
-  }, [dispatch]);
-
   const handleMenuClick = idx => {
     setCurrentTab(idx);
     if (headerRefs[idx].current) {
@@ -54,33 +39,18 @@ export default function BurgerIngredients({ onPopupOpen }) {
 
   return (
     <section className={burgerIngredientsStyles.container}>
-      <h1
-        className={`text text_type_main-default ${burgerIngredientsStyles.title}`}
-      >
+      <h1 className={`text text_type_main-default ${burgerIngredientsStyles.title}`}>
         Соберите бургер
       </h1>
       <div className={burgerIngredientsStyles.menu}>
         {titles &&
           titles.map((title, i) => (
-            <Tab
-              key={i}
-              value={i}
-              active={currentTab === i}
-              onClick={handleMenuClick}
-            >
+            <Tab key={i} value={i} active={currentTab === i} onClick={handleMenuClick}>
               {title}
             </Tab>
           ))}
       </div>
-      <BurgerIngredientsList
-        onPopupOpen={onPopupOpen}
-        listRefs={listRefs}
-        headerRefs={headerRefs}
-      />
+      <BurgerIngredientsList listRefs={listRefs} headerRefs={headerRefs} />
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  onPopupOpen: PropTypes.func.isRequired,
-};

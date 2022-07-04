@@ -1,70 +1,98 @@
-import React, { useState } from 'react';
-import mainStyles from './app.module.css';
-
-// redux
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import styles from './app.module.css';
 
 // components
 import AppHeader from './../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from './../burger-constructor/burger-constructor';
-import IngredientDetails from '../ingredient-details/ingredient-details';
+import { ProtectedRoute } from './../protected-route';
+import {
+  LoginPage,
+  RegisterPage,
+  ConstructorPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  IngredientPage,
+  NotFoundPage,
+} from '../../pages/index';
+import { useSelector, useDispatch } from 'react-redux';
+import { Loader } from '../loader/loader';
+import {
+  fetchIngredientsAction,
+  removeDetailedIngredient,
+} from '../../services/actions/ingredientsActions';
 import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 
-// react-dnd
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-
 function App() {
-  const { ingredients, selectedIngredients } = useSelector(
-    store => store.ingredients
-  );
+  const { isLoading } = useSelector(store => store.async);
+  const { ingredients } = useSelector(store => store.ingredients);
+  const { order } = useSelector(store => store.order);
 
   const [isVisible, setIsVisible] = useState(false);
-  const [isIngredientDetailsSelected, setIsIngredientDetailsSelected] =
-    useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState(null);
 
-  const handleFormSubmit = e => {
-    e.preventDefault();
-    if (selectedIngredients.length > 0) {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (ingredients.length === 0) {
+      dispatch(fetchIngredientsAction());
+    }
+  }, [ingredients, dispatch]);
+
+  useEffect(() => {
+    if (order) {
       setIsVisible(true);
     }
-  };
-
-  const handleOpenPopup = id => {
-    const selectedIngredient = ingredients.find(item => item._id === id);
-    setSelectedIngredient(selectedIngredient);
-    setIsIngredientDetailsSelected(true);
-    setIsVisible(true);
-  };
+  }, [order]);
 
   const handleClosePopup = () => {
-    setIsIngredientDetailsSelected(false);
-    setIsVisible(false);
-    setSelectedIngredient(null);
+    history.push('/');
+    dispatch(removeDetailedIngredient());
   };
+  const handleOrderDetailsClose = () => {
+    setIsVisible(false);
+  };
+
+  const background = location.state && location.state.background;
 
   return (
     <>
+      {isLoading && <Loader />}
       <AppHeader />
-      <main className={mainStyles.mainContainer}>
-        <div className={mainStyles.ingredients}>
-          <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients onPopupOpen={handleOpenPopup} />
-            <BurgerConstructor onFormSubmit={handleFormSubmit} />
-          </DndProvider>
-          {isVisible && (
-            <Modal onClose={handleClosePopup}>
-              {isIngredientDetailsSelected ? (
-                <IngredientDetails ingredient={selectedIngredient} />
-              ) : (
-                <OrderDetails />
-              )}
-            </Modal>
-          )}
-        </div>
+      <main className={styles.mainContainer}>
+        <Switch location={background || location}>
+          <Route path='/login' component={LoginPage} />
+          <Route path='/register' component={RegisterPage} />
+          <Route path='/forgot-password' component={ForgotPasswordPage} />
+          <Route path='/reset-password' component={ResetPasswordPage} />
+          <Route path='/' exact={true}>
+            <ConstructorPage />
+          </Route>
+          <Route path='/ingredients/:id' children={<IngredientPage />} />
+          <ProtectedRoute path='/profile'>
+            <ProfilePage />
+          </ProtectedRoute>
+          <Route path='*' component={NotFoundPage} />
+        </Switch>
+
+        {background && (
+          <Route
+            path='/ingredients/:id'
+            children={
+              <Modal onClose={handleClosePopup}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        )}
+        {isVisible && (
+          <Modal onClose={handleOrderDetailsClose}>
+            <OrderDetails />
+          </Modal>
+        )}
       </main>
     </>
   );

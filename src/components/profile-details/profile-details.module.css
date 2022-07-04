@@ -1,0 +1,30 @@
+.container div:first-child {
+  margin-top: 0;
+}
+
+.inputContainer {
+  margin-top: 24px;
+  width: 480px;
+}
+
+.inputContainer {
+  width: 100%;
+}
+
+.bottomContainer{
+  display: flex;
+  flex-direction: column;
+  margin-top: 60px;
+}
+.cancelButton{
+  background-color: transparent;
+  border: none;
+  color: #4C4CFF;
+  margin-top: 32px;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+.cancelButton:hover{
+  transform: scale(1.2);
+  opacity: 0.8;
+}

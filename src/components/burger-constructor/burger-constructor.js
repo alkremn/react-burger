@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
 import burgerConstructorStyles from './burger-constructor.module.css';
-import { PropTypes } from 'prop-types';
 import { useDrop } from 'react-dnd';
 
 // icons
@@ -10,32 +9,32 @@ import currencyIcon from '../../images/icons/currency_icon.svg';
 import { useDispatch, useSelector } from 'react-redux';
 
 // components
-import {
-  Button,
-  ConstructorElement,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerConstructorCard from '../burger-constructor-card/burger-constructor-card';
 
 // helper functions
-import { calculateTotalCost } from '../../utils/utils';
+import { calculateTotalCost, getIngredientIds } from '../../utils/utils';
 
 // actions
 import {
-  addSelectedIngredient,
-  addSelectedIngredients,
-  removeSelectedIngredient,
+  addSelectedIngredientAction,
+  addSelectedIngredientsAction,
+  removeSelectedIngredientAction,
+  removeSelectedIngredientsAction,
 } from './../../services/actions/ingredientsActions';
+import { postOrderAction } from '../../services/actions/orderActions';
+import { useHistory } from 'react-router-dom';
 
-export default function BurgerConstructor({ onFormSubmit }) {
+export default function BurgerConstructor() {
   const dispatch = useDispatch();
-  const { selectedBun, selectedIngredients } = useSelector(
-    store => store.ingredients
-  );
+  const { user } = useSelector(state => state.auth);
+  const history = useHistory();
+  const { selectedBun, selectedIngredients } = useSelector(store => store.ingredients);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(ingredient) {
-      dispatch(addSelectedIngredient(selectedBun, ingredient));
+      dispatch(addSelectedIngredientAction(selectedBun, ingredient));
     },
     collect: monitor => ({
       isHover: monitor.isOver(),
@@ -43,14 +42,24 @@ export default function BurgerConstructor({ onFormSubmit }) {
   });
 
   const handleDelete = ingredient => {
-    dispatch(removeSelectedIngredient(ingredient));
+    dispatch(removeSelectedIngredientAction(ingredient));
+  };
+
+  const onFormSubmit = e => {
+    e.preventDefault();
+    if (!user) {
+      history.push('/login');
+    } else {
+      dispatch(postOrderAction(getIngredientIds(selectedBun, selectedIngredients)));
+      dispatch(removeSelectedIngredientsAction(selectedBun));
+    }
   };
 
   const handleIngredientMove = useCallback(
     (dragIndex, hoverIndex) => {
       const ingredients = [...selectedIngredients];
       ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
-      dispatch(addSelectedIngredients(ingredients));
+      dispatch(addSelectedIngredientsAction(ingredients));
     },
     [dispatch, selectedIngredients]
   );
@@ -79,9 +88,7 @@ export default function BurgerConstructor({ onFormSubmit }) {
             />
           </div>
         ) : selectedIngredients.length > 0 ? (
-          <span
-            className={`text text_type_main-default ${burgerConstructorStyles.emptyListText}`}
-          >
+          <span className={`text text_type_main-default ${burgerConstructorStyles.emptyListText}`}>
             Пожалуйста, выберите булку
           </span>
         ) : null}
@@ -133,7 +140,3 @@ export default function BurgerConstructor({ onFormSubmit }) {
     </form>
   );
 }
-
-BurgerConstructor.propTypes = {
-  onFormSubmit: PropTypes.func.isRequired,
-};

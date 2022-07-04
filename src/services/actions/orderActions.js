@@ -10,13 +10,13 @@ import {
   getPostOrderFailAction,
 } from './../actionCreators/orderActionCreators';
 
-export const postOrder = ingredientIds => async dispatch => {
+export const postOrderAction = ingredientIds => async (dispatch, getState) => {
   dispatch(getStartLoadingAction());
-
   fetch(`${baseURL}/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: getState().auth.user.accessToken,
     },
     body: JSON.stringify({ ingredients: ingredientIds }),
   })

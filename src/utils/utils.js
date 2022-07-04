@@ -1,6 +1,11 @@
 export const baseURL = 'https://norma.nomoreparties.space/api';
 export const titles = ['Булки', 'Соусы', 'Начинки'];
 export const titlesEn = ['bun', 'sauce', 'main'];
+export const FORGOT_PASSWORD_URL = '/forgot-password';
+
+export const WRONG_EMAIL_TITLE = 'Некорректный E-mail';
+export const ENTER_NAME_TITLE = 'Введите имя';
+export const MAX_PASSWORD_LENGTH = 5;
 
 export function filterIngredients(ingredients) {
   const buns = [];
@@ -57,4 +62,24 @@ export function checkResponse(response) {
     return Promise.reject(`Ошибка ${response.status}`);
   }
   return response.json();
+}
+
+export function validateEmail(email) {
+  return String(email)
+    .toLocaleLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+}
+
+export function isEmailEmpty(email) {
+  return email === '';
+}
+
+export function isPasswordEmpty(password) {
+  return password === '';
+}
+
+export function isPasswordShort(password, minLength) {
+  return password.length < minLength;
 }

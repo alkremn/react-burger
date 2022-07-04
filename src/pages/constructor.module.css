@@ -1,0 +1,6 @@
+.ingredients{
+  display: flex;
+  gap: 10px;
+  max-width: 1120px;
+  height: 100%;
+}
