@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import styles from './app.module.css';
+import { IMainStore } from '../../utils/types';
+import { Location } from 'history';
 
 // components
 import AppHeader from './../app-header/app-header';
@@ -25,15 +27,22 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 
+// Fix ошибки ts для компонентов yandex
+declare module 'react' {
+  interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
+  }
+}
+
 function App() {
-  const { isLoading } = useSelector(store => store.async);
-  const { ingredients } = useSelector(store => store.ingredients);
-  const { order } = useSelector(store => store.order);
+  const { isLoading } = useSelector((store: IMainStore) => store.async);
+  const { ingredients } = useSelector((store: IMainStore) => store.ingredients);
+  const { order } = useSelector((store: IMainStore) => store.order);
 
   const [isVisible, setIsVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const location = useLocation();
+  const location = useLocation<{ background?: Location<{} | null | undefined> }>();
   const history = useHistory();
 
   useEffect(() => {
@@ -56,7 +65,7 @@ function App() {
     setIsVisible(false);
   };
 
-  const background = location.state && location.state.background;
+  const background = location.state?.background;
 
   return (
     <>

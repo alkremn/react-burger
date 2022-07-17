@@ -4,7 +4,7 @@ import { titles } from '../../utils/utils';
 
 // components
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import BurgerIngredientsList from './../burger-ingredients-list/burger-ingredients-list';
+import BurgerIngredientsList from '../burger-ingredients-list/burger-ingredients-list';
 import burgerIngredientsStyles from './burger-ingredients.module.css';
 
 export default function BurgerIngredients() {
@@ -15,9 +15,9 @@ export default function BurgerIngredients() {
   const [thridListRef, thirdInView] = useInView({ threshold: 0.2 });
   const listRefs = [firstListRef, secondListRef, thridListRef];
 
-  const firstHeaderRef = useRef(null);
-  const secondHeaderRef = useRef(null);
-  const thirdHeaderRef = useRef(null);
+  const firstHeaderRef = useRef<HTMLDivElement | null>(null);
+  const secondHeaderRef = useRef<HTMLDivElement | null>(null);
+  const thirdHeaderRef = useRef<HTMLDivElement | null>(null);
   const headerRefs = [firstHeaderRef, secondHeaderRef, thirdHeaderRef];
 
   useEffect(() => {
@@ -30,10 +30,11 @@ export default function BurgerIngredients() {
     }
   }, [firstInView, secondInView, thirdInView]);
 
-  const handleMenuClick = idx => {
-    setCurrentTab(idx);
-    if (headerRefs[idx].current) {
-      headerRefs[idx].current.scrollIntoView({ behavior: 'smooth' });
+  const handleMenuClick = (idx: string) => {
+    const intIdx = parseInt(idx);
+    setCurrentTab(intIdx);
+    if (headerRefs[intIdx].current) {
+      headerRefs[intIdx].current!.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -45,7 +46,7 @@ export default function BurgerIngredients() {
       <div className={burgerIngredientsStyles.menu}>
         {titles &&
           titles.map((title, i) => (
-            <Tab key={i} value={i} active={currentTab === i} onClick={handleMenuClick}>
+            <Tab key={i} value={i.toString()} active={currentTab === i} onClick={handleMenuClick}>
               {title}
             </Tab>
           ))}

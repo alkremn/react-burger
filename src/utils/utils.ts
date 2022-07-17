@@ -1,3 +1,5 @@
+import { IIngredient } from './types';
+
 export const baseURL = 'https://norma.nomoreparties.space/api';
 export const titles = ['Булки', 'Соусы', 'Начинки'];
 export const titlesEn = ['bun', 'sauce', 'main'];
@@ -7,10 +9,10 @@ export const WRONG_EMAIL_TITLE = 'Некорректный E-mail';
 export const ENTER_NAME_TITLE = 'Введите имя';
 export const MAX_PASSWORD_LENGTH = 5;
 
-export function filterIngredients(ingredients) {
-  const buns = [];
-  const mains = [];
-  const sauces = [];
+export function filterIngredients(ingredients: Array<IIngredient>) {
+  const buns: Array<IIngredient> = [];
+  const mains: Array<IIngredient> = [];
+  const sauces: Array<IIngredient> = [];
 
   ingredients.forEach(item => {
     switch (item.type) {
@@ -29,8 +31,8 @@ export function filterIngredients(ingredients) {
   return [buns, sauces, mains];
 }
 
-export function getRandomIntredients(ingredients) {
-  const unique_indexes = new Set();
+export function getRandomIntredients(ingredients: Array<IIngredient>) {
+  const unique_indexes = new Set<number>();
   const count = Math.random() * 3 + 1;
 
   while (unique_indexes.size < count) {
@@ -46,25 +48,25 @@ export function getRandomIntredients(ingredients) {
   return result;
 }
 
-export function calculateTotalCost(bun, ingredients) {
+export function calculateTotalCost(bun: IIngredient, ingredients: Array<IIngredient>) {
   const ingredientsCost = ingredients.reduce((totalCost, currentItem) => {
     return totalCost + currentItem.price;
   }, 0);
   return ingredientsCost + (bun ? bun.price : 0);
 }
 
-export function getIngredientIds(bun, ingredients) {
+export function getIngredientIds(bun: IIngredient, ingredients: Array<IIngredient>) {
   return [bun._id, ...ingredients.map(i => i._id)];
 }
 
-export function checkResponse(response) {
+export function checkResponse(response: any) {
   if (!response.ok) {
     return Promise.reject(`Ошибка ${response.status}`);
   }
   return response.json();
 }
 
-export function validateEmail(email) {
+export function validateEmail(email: string) {
   return String(email)
     .toLocaleLowerCase()
     .match(
@@ -72,14 +74,14 @@ export function validateEmail(email) {
     );
 }
 
-export function isEmailEmpty(email) {
+export function isEmailEmpty(email: string) {
   return email === '';
 }
 
-export function isPasswordEmpty(password) {
+export function isPasswordEmpty(password: string) {
   return password === '';
 }
 
-export function isPasswordShort(password, minLength) {
+export function isPasswordShort(password: string, minLength: number) {
   return password.length < minLength;
 }

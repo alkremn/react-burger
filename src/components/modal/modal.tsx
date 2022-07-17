@@ -1,18 +1,19 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { KeyboardEvent, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import modalStyles from './modal.module.css';
-import { PropTypes } from 'prop-types';
 
 const modalRoot = document.getElementById('react-modals');
 
-export default function Modal({ children, onClose }) {
+interface IModelProps {
+  children: React.ReactNode;
+  onClose: () => void;
+}
+
+export default function Modal({ children, onClose }: IModelProps) {
   const handleClosePopup = useCallback(
-    e => {
-      if (
-        e.target.classList.contains('popup') ||
-        e.target.classList.contains('closeButton')
-      ) {
+    (e: MouseEvent) => {
+      if (e.target.classList.contains('popup') || e.target.classList.contains('closeButton')) {
         onClose();
       }
     },
@@ -20,7 +21,7 @@ export default function Modal({ children, onClose }) {
   );
 
   useEffect(() => {
-    const closeByEscape = e => {
+    const closeByEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
@@ -34,18 +35,10 @@ export default function Modal({ children, onClose }) {
   return createPortal(
     <ModalOverlay onClose={handleClosePopup}>
       <div className={`${modalStyles.container}`}>
-        <button
-          className={`closeButton ${modalStyles.closeButton}`}
-          onClick={handleClosePopup}
-        />
+        <button className={`closeButton ${modalStyles.closeButton}`} onClick={handleClosePopup} />
         {children}
       </div>
     </ModalOverlay>,
-    modalRoot
+    modalRoot!
   );
 }
-
-Modal.propTypes = {
-  children: PropTypes.object,
-  onClose: PropTypes.func.isRequired,
-};

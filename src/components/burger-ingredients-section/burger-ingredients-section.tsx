@@ -1,10 +1,21 @@
 import React from 'react';
 import BurgerIngredient from '../burger-ingredient/burger-ingredient';
 import ingredientsSectionStyles from './burger-ingredients-section.module.css';
-import { PropTypes } from 'prop-types';
-import { ingredientPropTypes } from './../../utils/commonPropTypes';
-export default function BurgerIngredientsSection({ title, ingredients, listRef, headerRef }) {
+import { IIngredient } from '../../utils/types';
 
+interface IBurgerIngredientsSectionProps {
+  title: string;
+  ingredients: Array<IIngredient>;
+  listRef: (node?: Element | null | undefined) => void;
+  headerRef: React.MutableRefObject<HTMLDivElement | null>;
+}
+
+export default function BurgerIngredientsSection({
+  title,
+  ingredients,
+  listRef,
+  headerRef,
+}: IBurgerIngredientsSectionProps) {
   return (
     <li className={ingredientsSectionStyles.sectionContainer}>
       <h2
@@ -21,10 +32,3 @@ export default function BurgerIngredientsSection({ title, ingredients, listRef, 
     </li>
   );
 }
-
-BurgerIngredientsSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired,
-  listRef: PropTypes.func.isRequired,
-  headerRef: PropTypes.object.isRequired,
-};

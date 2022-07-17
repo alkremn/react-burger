@@ -1,16 +1,15 @@
 import React from 'react';
 import modalOverlayStyles from './modal-overlay.module.css';
-import { PropTypes } from 'prop-types';
 
-export default function ModalOverlay({ children, onClose }) {
+interface IModalOverlayProps {
+  children?: React.ReactNode;
+  onClose: () => void;
+}
+
+export default function ModalOverlay({ children, onClose }: IModalOverlayProps) {
   return (
     <div className={`popup ${modalOverlayStyles.button}`} onClick={onClose}>
       {children}
     </div>
   );
 }
-
-ModalOverlay.propTypes = {
-  children: PropTypes.object,
-  onClose: PropTypes.func.isRequired,
-};
