@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useCallback, useEffect } from 'react';
+import React, { MouseEvent, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import modalStyles from './modal.module.css';
@@ -12,8 +12,9 @@ interface IModelProps {
 
 export default function Modal({ children, onClose }: IModelProps) {
   const handleClosePopup = useCallback(
-    (e: MouseEvent) => {
-      if (e.target.classList.contains('popup') || e.target.classList.contains('closeButton')) {
+    (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+      const target = e.target as HTMLDivElement;
+      if (target.classList.contains('popup') || target.classList.contains('closeButton')) {
         onClose();
       }
     },

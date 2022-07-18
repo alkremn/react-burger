@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { MouseEvent, ReactNode } from 'react';
 import modalOverlayStyles from './modal-overlay.module.css';
 
 interface IModalOverlayProps {
-  children?: React.ReactNode;
-  onClose: () => void;
+  children?: ReactNode;
+  onClose: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
 export default function ModalOverlay({ children, onClose }: IModalOverlayProps) {

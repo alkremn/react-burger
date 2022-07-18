@@ -15,9 +15,15 @@ export interface IIngredient {
   __v: number;
 }
 
-interface IOrder {}
+interface IOrder {
+  number: number;
+  name: string;
+}
 
-export interface IUser {}
+export interface IUser {
+  name: string;
+  email: string;
+}
 
 interface ISyncStore {
   isLoading: boolean;
