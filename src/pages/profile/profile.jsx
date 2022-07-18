@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Switch, useRouteMatch } from 'react-router-dom';
-import { logoutAction } from '../services/actions/authActions';
+import { logoutAction } from '../../services/actions/authActions';
 import styles from './profile.module.css';
-import { ProtectedRoute } from '../components/protected-route';
-import { ProfileDetails } from '../components/profile-details/profile-details';
-import { OrderHistory } from '../components/order-history/order-history';
+import { ProtectedRoute } from '../../components/protected-route';
+import { ProfileDetails } from '../../components/profile-details/profile-details';
+import { OrderHistory } from '../../components/order-history/order-history';
 
 export const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export const ProfilePage = () => {
 
   const [isProfileActive, setIsProfileActive] = useState(true);
 
-  const handleLogout = e => {
+  const handleLogout = (e) => {
     dispatch(logoutAction());
   };
 

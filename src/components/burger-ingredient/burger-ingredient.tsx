@@ -8,9 +8,14 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import { ingredientPropTypes } from '../../utils/commonPropTypes';
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
+import { IIngredient } from '../../utils/types';
 
-export default function BurgerIngredient({ ingredient }) {
-  const location = useLocation();
+interface IBurgerIngredientProps {
+  ingredient: IIngredient;
+}
+
+export default function BurgerIngredient({ ingredient }: IBurgerIngredientProps) {
+  const location = useLocation<Location>();
 
   const [, dragRef] = useDrag({
     type: 'ingredient',

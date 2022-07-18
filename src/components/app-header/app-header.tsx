@@ -8,6 +8,10 @@ import {
   Logo,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
+interface IState {
+  [name: string]: boolean;
+}
+
 const defaultState = {
   constructor: false,
   orders: false,
@@ -16,17 +20,17 @@ const defaultState = {
 
 export default function AppHeader() {
   const [activeLink, setActiveLink] = useState('constructor');
-  const [state, setState] = useState({ ...defaultState, [activeLink]: true });
+  const [state, setState] = useState<IState>({ ...defaultState, [activeLink]: true });
 
-  const handleLinkClick = name => {
+  const handleLinkClick = (name: string) => {
     setState({ ...defaultState, [name]: true });
     setActiveLink(name);
   };
 
-  const handleMouseEnter = name => {
+  const handleMouseEnter = (name: string) => {
     setState({ ...state, [name]: true });
   };
-  const handleMouseLeave = name => {
+  const handleMouseLeave = (name: string) => {
     if (state[name] && activeLink !== name) {
       setState({ ...state, [name]: false });
     }

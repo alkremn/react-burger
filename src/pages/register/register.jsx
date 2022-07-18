@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './login.module.css';
+import styles from './register.module.css';
 
 // react-router
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ import {
   WRONG_EMAIL_TITLE,
   ENTER_NAME_TITLE,
   MAX_PASSWORD_LENGTH,
-} from '../utils/utils';
+} from '../../utils/utils';
 
 // helper methods
 import {
@@ -20,10 +20,10 @@ import {
   isEmailEmpty,
   isPasswordEmpty,
   isPasswordShort,
-} from './../utils/utils';
+} from '../../utils/utils';
 
 // actions
-import { registerAction } from '../services/actions/authActions';
+import { registerAction } from '../../services/actions/authActions';
 
 // components
 import {
@@ -39,10 +39,10 @@ export const RegisterPage = () => {
   const [errors, setErrors] = useState({ name: '', email: '', password: '' });
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const handleValidateInput = e => {
+  const handleValidateInput = (e) => {
     if (e.target.name === 'email') {
       const emailText = e.target.value;
       if (!validateEmail(emailText)) {
@@ -73,7 +73,7 @@ export const RegisterPage = () => {
     }
   }, [form]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerAction(form));
   };
@@ -85,8 +85,8 @@ export const RegisterPage = () => {
       </h2>
       <div className={styles.inputContainer}>
         <Input
-          name='name'
-          placeholder='Имя'
+          name="name"
+          placeholder="Имя"
           value={form.name}
           error={errors.name !== ''}
           errorText={errors.name}
@@ -96,8 +96,8 @@ export const RegisterPage = () => {
       </div>
       <div className={styles.inputContainer}>
         <Input
-          name='email'
-          placeholder='E-mail'
+          name="email"
+          placeholder="E-mail"
           value={form.email}
           error={errors.email !== ''}
           errorText={errors.email}
@@ -107,19 +107,19 @@ export const RegisterPage = () => {
       </div>
       <div className={styles.inputContainer}>
         <PasswordInput
-          name='password'
+          name="password"
           value={form.password}
           onChange={handleInputChange}
         />
       </div>
       <div className={styles.ButtonContainer}>
-        <Button type='primary' size='medium' disabled={isSubmitDisabled}>
+        <Button type="primary" size="medium" disabled={isSubmitDisabled}>
           Зарегистрироваться
         </Button>
       </div>
       <span className={`text text_type_main-default ${styles.bottomText}`}>
         Уже зарегистрированы?
-        <Link className={styles.link} to='/login'>
+        <Link className={styles.link} to="/login">
           Войти
         </Link>
       </span>
