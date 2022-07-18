@@ -59,7 +59,7 @@ export function getIngredientIds(bun: IIngredient, ingredients: Array<IIngredien
   return [bun._id, ...ingredients.map(i => i._id)];
 }
 
-export function checkResponse(response: any) {
+export function checkResponse(response: Response) {
   if (!response.ok) {
     return Promise.reject(`Ошибка ${response.status}`);
   }

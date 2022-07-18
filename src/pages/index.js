@@ -1,11 +1,11 @@
-import { ConstructorPage } from './constructor';
-import { LoginPage } from './login';
-import { RegisterPage } from './register';
-import { ForgotPasswordPage } from './forgot-password';
-import { ResetPasswordPage } from './reset-password';
-import { ProfilePage } from './profile';
-import { IngredientPage } from './ingredient';
-import { NotFoundPage } from './not-found';
+import { ConstructorPage } from './consturctor/constructor';
+import { LoginPage } from './login/login';
+import { RegisterPage } from './register/register';
+import { ForgotPasswordPage } from './forgotPassword/forgot-password';
+import { ResetPasswordPage } from './resetPassword/reset-password';
+import { ProfilePage } from './profile/profile';
+import { IngredientPage } from './ingredient/ingredient';
+import { NotFoundPage } from './notFound/not-found';
 
 export {
   ConstructorPage,

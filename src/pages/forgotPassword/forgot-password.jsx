@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import styles from './forgot-password.module.css';
-import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  Button,
+  Input,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { validateEmail } from '../utils/utils';
+import { validateEmail } from '../../utils/utils';
 
 // redux
 import { useDispatch } from 'react-redux';
 
 // actions
-import { resetPasswordRequestAction } from '../services/actions/passwordResetActions';
-import Modal from '../components/modal/modal';
-import { ResponseMessage } from '../components/resonse-message/response-message';
+import { resetPasswordRequestAction } from '../../services/actions/passwordResetActions';
+import Modal from '../../components/modal/modal';
+import { ResponseMessage } from '../../components/resonse-message/response-message';
 
 export const ForgotPasswordPage = () => {
   const dispatch = useDispatch();
@@ -25,7 +28,7 @@ export const ForgotPasswordPage = () => {
   const [isResponseSuccessfull, setIsResponseSuccessfull] = useState(false);
   const [responseMessage, setResponseMessage] = useState('');
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const emailText = e.target.value;
     setEmail(emailText);
 
@@ -39,7 +42,7 @@ export const ForgotPasswordPage = () => {
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await dispatch(resetPasswordRequestAction(email));
@@ -62,25 +65,27 @@ export const ForgotPasswordPage = () => {
   return (
     <>
       <form className={styles.container} onSubmit={handleSubmit}>
-        <h2 className={`text text_type_main-medium ${styles.title}`}>Восстановление пароля</h2>
+        <h2 className={`text text_type_main-medium ${styles.title}`}>
+          Восстановление пароля
+        </h2>
         <div className={styles.inputContainer}>
           <Input
-            name='email'
-            type='email'
-            placeholder='Укажите e-mail'
+            name="email"
+            type="email"
+            placeholder="Укажите e-mail"
             value={email}
             error={!isValid}
             onChange={handleInputChange}
           />
         </div>
         <div className={styles.ButtonContainer}>
-          <Button type='primary' size='medium' disabled={!isActive}>
+          <Button type="primary" size="medium" disabled={!isActive}>
             Восстановить
           </Button>
         </div>
         <span className={`text text_type_main-default ${styles.bottomText}`}>
           Вспомнили пароль?
-          <Link className={styles.link} to='/login'>
+          <Link className={styles.link} to="/login">
             Войти
           </Link>
         </span>
