@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FocusEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import styles from './profile-details.module.css';
 
 // components
@@ -12,17 +12,18 @@ import { validateEmail, WRONG_EMAIL_TITLE } from '../../utils/utils';
 
 // actions
 import { updateUserAction } from './../../services/actions/authActions';
+import { IMainStore } from '../../utils/types';
 
 const initialForm = { name: '', email: '', password: '' };
 const initialDisabledFields = { name: true, email: true, password: true };
 
 export const ProfileDetails = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector(store => store.auth);
+  const { user } = useSelector((store: IMainStore) => store.auth);
 
-  const nameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState(initialForm);
@@ -38,23 +39,29 @@ export const ProfileDetails = () => {
   useEffect(() => {
     switch (activeField) {
       case 'name':
-        nameRef.current.focus();
+        if(nameRef.current){
+          nameRef.current.focus();
+        }
         break;
       case 'email':
-        emailRef.current.focus();
+        if(emailRef.current){
+          emailRef.current.focus();
+        }
         break;
       case 'password':
-        passwordRef.current.focus();
+        if(passwordRef.current){
+          passwordRef.current.focus();
+        }
         break;
       default:
     }
   }, [activeField]);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleValidateInput = e => {
+  const handleValidateInput = (e: FocusEvent<HTMLInputElement>) => {
     const emailText = e.target.value;
     if (e.target.name === 'email') {
       if (!validateEmail(emailText)) {
@@ -65,12 +72,12 @@ export const ProfileDetails = () => {
     }
   };
 
-  const handleEditModeIconClick = title => {
+  const handleEditModeIconClick = (title: string) => {
     setDisabledFields({ ...initialDisabledFields, [title]: false });
     setActiveField(title);
   };
 
-  const handleFormSubmit = e => {
+  const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     const updatedForm = Object.assign(
       {},

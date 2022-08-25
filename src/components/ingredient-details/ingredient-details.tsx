@@ -3,12 +3,13 @@ import NutritionFact from '../nutrition-fact/nutrition-fact';
 import ingredientDetailsStyles from './ingredient-details.module.css';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { IMainStore, IIngredient } from '../../utils/types';
 
 export default function IngredientDetails() {
-  const { ingredients } = useSelector(store => store.ingredients);
-  const { id } = useParams();
+  const { ingredients } = useSelector((store: IMainStore) => store.ingredients);
+  const { id } = useParams<{ id: string }>();
 
-  const [ingredient, setIngredient] = useState(null);
+  const [ingredient, setIngredient] = useState<IIngredient | undefined>(undefined);
 
   useEffect(() => {
     if (ingredients.length > 0) {

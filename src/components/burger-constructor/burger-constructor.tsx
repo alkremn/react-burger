@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { FormEvent, useCallback, useMemo } from 'react';
 import burgerConstructorStyles from './burger-constructor.module.css';
 import { useDrop } from 'react-dnd';
 
@@ -21,15 +21,21 @@ import {
   addSelectedIngredientsAction,
   removeSelectedIngredientAction,
   removeSelectedIngredientsAction,
-} from './../../services/actions/ingredientsActions';
+} from '../../services/actions/ingredientsActions';
 import { postOrderAction } from '../../services/actions/orderActions';
+
 import { useHistory } from 'react-router-dom';
+import { IMainStore, IIngredient } from '../../utils/types';
+
+
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector((store: IMainStore) => store.auth);
   const history = useHistory();
-  const { selectedBun, selectedIngredients } = useSelector(store => store.ingredients);
+  const { selectedBun, selectedIngredients } = useSelector(
+    (store: IMainStore) => store.ingredients
+  );
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
@@ -41,11 +47,11 @@ export default function BurgerConstructor() {
     }),
   });
 
-  const handleDelete = ingredient => {
+  const handleDelete = (ingredient: IIngredient) => {
     dispatch(removeSelectedIngredientAction(ingredient));
   };
 
-  const onFormSubmit = e => {
+  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) {
       history.push('/login');
@@ -56,7 +62,7 @@ export default function BurgerConstructor() {
   };
 
   const handleIngredientMove = useCallback(
-    (dragIndex, hoverIndex) => {
+    (dragIndex: number, hoverIndex: number) => {
       const ingredients = [...selectedIngredients];
       ingredients.splice(hoverIndex, 0, ingredients.splice(dragIndex, 1)[0]);
       dispatch(addSelectedIngredientsAction(ingredients));
@@ -131,7 +137,7 @@ export default function BurgerConstructor() {
               src={currencyIcon}
               alt='currency icon'
             />
-            <Button type='primary' size='large'>
+            <Button type='primary' size='large' htmlType='submit'>
               Оформить заказ
             </Button>
           </div>
