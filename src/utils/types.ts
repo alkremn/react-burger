@@ -15,7 +15,7 @@ export interface IIngredient {
   __v: number;
 }
 
-interface IOrder {
+export interface IOrder {
   number: number;
   name: string;
 }
@@ -51,4 +51,9 @@ export interface IMainStore {
   auth: IAuthStore;
   ingredients: IIngredientsStore;
   order: IOrderStore;
+}
+
+export interface ILoginForm {
+  email: string;
+  password: string;
 }

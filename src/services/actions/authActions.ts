@@ -12,14 +12,16 @@ import {
   getUpdateUserSuccessAction,
 } from '../actionCreators/authActionCreator';
 
-import { baseURL, checkResponse } from './../../utils/utils';
+import { baseURL, checkResponse } from '../../utils/utils';
 
 import {
   getLoginSuccessAction,
   getRegisterSuccessAction,
-} from './../actionCreators/authActionCreator';
+} from '../actionCreators/authActionCreator';
+import { AppDispatch } from '../types';
+import { ILoginForm } from '../../utils/types';
 
-export const loginAction = form => async dispatch => {
+export const loginAction = (form: ILoginForm) => async (dispatch: AppDispatch) => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/auth/login`, {
@@ -46,7 +48,7 @@ export const loginAction = form => async dispatch => {
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const registerAction = form => async dispatch => {
+export const registerAction = form => async (dispatch: AppDispatch) => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/auth/register`, {
