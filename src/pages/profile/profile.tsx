@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Switch, useRouteMatch } from 'react-router-dom';
 import { logoutAction } from '../../services/actions/authActions';
@@ -13,7 +13,7 @@ export const ProfilePage = () => {
 
   const [isProfileActive, setIsProfileActive] = useState(true);
 
-  const handleLogout = (e) => {
+  const handleLogout = (e: MouseEvent<HTMLButtonElement>) => {
     dispatch(logoutAction());
   };
 

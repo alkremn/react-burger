@@ -17,7 +17,6 @@ import {
   IngredientPage,
   NotFoundPage,
 } from '../../pages/index';
-import { useSelector, useDispatch } from 'react-redux';
 import { Loader } from '../loader/loader';
 import {
   fetchIngredientsAction,
@@ -26,6 +25,7 @@ import {
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
+import { useDispatch, useSelector } from './../../utils/hooks';
 
 // Fix ошибки ts для компонентов yandex
 declare module 'react' {

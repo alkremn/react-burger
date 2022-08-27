@@ -39,12 +39,12 @@ export const ForgotPasswordPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = await dispatch(resetPasswordRequestAction(email));
+      const response: any = await dispatch(resetPasswordRequestAction(email));
       if (response) {
         setIsResponseSuccessfull(true);
         setResponseMessage(response.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       setResponseMessage(error.message);
     }
   };

@@ -1,6 +1,5 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { IUser } from '../../utils/types';
 import { rootReducer } from '../reducers/rootReducer';
 
 declare global {
@@ -8,12 +7,6 @@ declare global {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
   }
 }
-
-type TInitialState = {
-  auth: {
-    user: IUser | null;
-  };
-};
 
 const initialState: any = {
   auth: {

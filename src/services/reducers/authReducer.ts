@@ -12,7 +12,7 @@ import {
   LOGOUT_FAIL,
 } from '../constants/authConstants';
 
-type TAuthState = {
+export type TAuthState = {
   user: IUser | null;
   message: string;
 };

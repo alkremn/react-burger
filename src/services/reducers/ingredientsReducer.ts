@@ -16,7 +16,7 @@ import {
   REMOVE_SELECTED_BUN,
 } from '../constants/ingredientsContstants';
 
-type TIngredientsState = {
+export type TIngredientsState = {
   ingredients: IIngredient[];
   selectedBun: IIngredient | null;
   selectedIngredients: IIngredient[];

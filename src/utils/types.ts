@@ -23,6 +23,7 @@ export interface IOrder {
 export interface IUser {
   name: string;
   email: string;
+  accessToken?: string;
 }
 
 interface ISyncStore {
@@ -54,6 +55,12 @@ export interface IMainStore {
 }
 
 export interface ILoginForm {
+  email: string;
+  password: string;
+}
+
+export interface IRegisterForm {
+  name: string;
   email: string;
   password: string;
 }

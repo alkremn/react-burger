@@ -2,10 +2,8 @@ import React, { ChangeEvent, FocusEvent, FormEvent, useEffect, useState } from '
 import styles from './login.module.css';
 import { ILoginForm } from '../../utils/types';
 import { Link, useHistory } from 'react-router-dom';
-import { Location } from 'history';
 
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   isEmailEmpty,
   isPasswordEmpty,
@@ -14,8 +12,9 @@ import {
   validateEmail,
 } from '../../utils/utils';
 import { loginAction } from '../../services/actions/authActions';
+import { useDispatch, useSelector } from './../../utils/hooks';
 
-export const LoginPage = ({ location }) => {
+export const LoginPage = ({ location }: { location: { from: string } }) => {
   const { user } = useSelector(store => store.auth);
   const dispatch = useDispatch();
 

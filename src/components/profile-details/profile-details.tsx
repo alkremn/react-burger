@@ -4,15 +4,14 @@ import styles from './profile-details.module.css';
 // components
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 
-// redux
-import { useDispatch, useSelector } from 'react-redux';
-
 // helper functions
 import { validateEmail, WRONG_EMAIL_TITLE } from '../../utils/utils';
 
 // actions
 import { updateUserAction } from './../../services/actions/authActions';
 import { IMainStore } from '../../utils/types';
+import { useDispatch } from '../../utils/hooks';
+import { useSelector } from './../../utils/hooks';
 
 const initialForm = { name: '', email: '', password: '' };
 const initialDisabledFields = { name: true, email: true, password: true };
@@ -39,17 +38,17 @@ export const ProfileDetails = () => {
   useEffect(() => {
     switch (activeField) {
       case 'name':
-        if(nameRef.current){
+        if (nameRef.current) {
           nameRef.current.focus();
         }
         break;
       case 'email':
-        if(emailRef.current){
+        if (emailRef.current) {
           emailRef.current.focus();
         }
         break;
       case 'password':
-        if(passwordRef.current){
+        if (passwordRef.current) {
           passwordRef.current.focus();
         }
         break;

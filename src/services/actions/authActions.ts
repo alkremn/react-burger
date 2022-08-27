@@ -18,8 +18,10 @@ import {
   getLoginSuccessAction,
   getRegisterSuccessAction,
 } from '../actionCreators/authActionCreator';
-import { AppDispatch } from '../types';
-import { ILoginForm } from '../../utils/types';
+import { AppDispatch, AppThunk } from '../types';
+import { ILoginForm, IRegisterForm, IUser } from '../../utils/types';
+import { TRootState } from '../reducers';
+import { Dispatch } from 'redux';
 
 export const loginAction = (form: ILoginForm) => async (dispatch: AppDispatch) => {
   dispatch(getStartLoadingAction());
@@ -48,7 +50,7 @@ export const loginAction = (form: ILoginForm) => async (dispatch: AppDispatch) =
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const registerAction = form => async (dispatch: AppDispatch) => {
+export const registerAction = (form: IRegisterForm) => async (dispatch: AppDispatch) => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/auth/register`, {
@@ -75,7 +77,7 @@ export const registerAction = form => async (dispatch: AppDispatch) => {
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const refreshTokenAction = (next, user) => async dispatch => {
+export const refreshTokenAction = (next: any, user?: IUser) => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (refreshToken) {
     dispatch(getStartLoadingAction());
@@ -94,7 +96,7 @@ export const refreshTokenAction = (next, user) => async dispatch => {
         }
         localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
         const accessToken = data.accessToken.split(' ')[1];
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        const userInfo = JSON.parse(localStorage.getItem('userInfo') ?? '');
         localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, accessToken }));
 
         dispatch(getUpdateTokenAction(accessToken));
@@ -110,12 +112,12 @@ export const refreshTokenAction = (next, user) => async dispatch => {
   }
 };
 
-export const getUserAction = () => async (dispatch, getState) => {
+export const getUserAction = () => async (dispatch: AppThunk, getState: () => any) => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/auth/user`, {
     headers: {
-      Authorization: `Bearer ${getState().auth.accessToken}`,
+      Authorization: `Bearer ${getState().auth.user.accessToken}`,
     },
   })
     .then(res => checkResponse(res))
@@ -131,32 +133,33 @@ export const getUserAction = () => async (dispatch, getState) => {
     .finally(() => dispatch(getFinishLoadingAction()));
 };
 
-export const updateUserAction = user => async (dispatch, getState) => {
-  dispatch(getStartLoadingAction());
-  fetch(`${baseURL}/auth/user`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${getState().auth.user.accessToken}`,
-    },
-    body: JSON.stringify(user),
-  })
-    .then(res => checkResponse(res))
-    .then(data => {
-      if (!data.success) {
-        return Promise.reject(data.message);
-      }
-      const accessToken = JSON.parse(localStorage.getItem('userInfo')).accessToken;
-      localStorage.setItem('userInfo', JSON.stringify({ ...data.user, accessToken }));
-      dispatch(getUpdateUserSuccessAction(data));
+export const updateUserAction =
+  (user: IUser) => async (dispatch: AppThunk, getState: () => TRootState) => {
+    dispatch(getStartLoadingAction());
+    fetch(`${baseURL}/auth/user`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getState().user?.accessToken}`,
+      },
+      body: JSON.stringify(user),
     })
-    .catch(error => {
-      dispatch(refreshTokenAction(updateUserAction, user));
-    })
-    .finally(() => dispatch(getFinishLoadingAction()));
-};
+      .then(res => checkResponse(res))
+      .then(data => {
+        if (!data.success) {
+          return Promise.reject(data.message);
+        }
+        const accessToken = JSON.parse(localStorage.getItem('userInfo') ?? '').accessToken;
+        localStorage.setItem('userInfo', JSON.stringify({ ...data.user, accessToken }));
+        dispatch(getUpdateUserSuccessAction(data));
+      })
+      .catch(_ => {
+        dispatch(refreshTokenAction(updateUserAction, user));
+      })
+      .finally(() => dispatch(getFinishLoadingAction()));
+  };
 
-export const logoutAction = () => async dispatch => {
+export const logoutAction = () => async (dispatch: AppThunk) => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (refreshToken) {
     dispatch(getStartLoadingAction());
@@ -184,7 +187,7 @@ export const logoutAction = () => async dispatch => {
   }
 };
 
-function getUserInfo(data) {
+function getUserInfo(data: { user: IUser; accessToken: string }) {
   return {
     ...data.user,
     accessToken: data.accessToken.split(' ')[1],

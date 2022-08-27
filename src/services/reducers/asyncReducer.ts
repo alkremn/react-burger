@@ -1,7 +1,7 @@
 import { LOADING_START, LOADING_FINISH } from '../constants/asyncConstants';
 import { TAsyncActions } from '../types/asyncTypes';
 
-type TAsyncState = {
+export type TAsyncState = {
   isLoading: boolean;
 };
 
