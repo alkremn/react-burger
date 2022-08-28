@@ -72,23 +72,24 @@ function App() {
     <>
       {isLoading && <Loader />}
       <AppHeader />
-      <main className={styles.mainContainer}>
-        <Switch location={background || location}>
-          <Route path='/login' component={LoginPage} />
-          <Route path='/register' component={RegisterPage} />
-          <Route path='/forgot-password' component={ForgotPasswordPage} />
-          <Route path='/reset-password' component={ResetPasswordPage} />
-          <Route path='/feed' component={FeedPage} />
-          <Route path='/' exact={true}>
-            <ConstructorPage />
-          </Route>
-          <Route path='/ingredients/:id' children={<IngredientPage />} />
-          <ProtectedRoute path='/profile'>
-            <ProfilePage />
-          </ProtectedRoute>
-          <Route path='*' component={NotFoundPage} />
-        </Switch>
-
+      <main className={styles.page}>
+        <div className={styles.mainContainer}>
+          <Switch location={background || location}>
+            <Route path='/login' component={LoginPage} />
+            <Route path='/register' component={RegisterPage} />
+            <Route path='/forgot-password' component={ForgotPasswordPage} />
+            <Route path='/reset-password' component={ResetPasswordPage} />
+            <Route path='/feed' component={FeedPage} />
+            <Route path='/' exact={true}>
+              <ConstructorPage />
+            </Route>
+            <Route path='/ingredients/:id' children={<IngredientPage />} />
+            <ProtectedRoute path='/profile'>
+              <ProfilePage />
+            </ProtectedRoute>
+            <Route path='*' component={NotFoundPage} />
+          </Switch>
+        </div>
         {background && (
           <Route
             path='/ingredients/:id'

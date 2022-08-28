@@ -36,7 +36,9 @@ export const OrderListItem = ({ ingredientIds }: IOrderListItemProps) => {
       <div className={styles.bottomContainer}>
         <div className={styles.iconsContainer}>
           {imageUrls.map((url, idx) => (
-            <img key={idx} className={styles.iconImage} src={url} alt='icon' />
+            <div className={styles.iconDiv}>
+              <img key={idx} className={styles.iconImage} src={url} alt='icon' />
+            </div>
           ))}
         </div>
         <p className={styles.price}>

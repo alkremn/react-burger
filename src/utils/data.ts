@@ -228,6 +228,6 @@ export const feedData = {
       updatedAt: '2021-06-23T14:43:22.603Z',
     },
   ],
-  total: 1,
-  totalToday: 1,
+  total: 45,
+  totalToday: 12,
 };

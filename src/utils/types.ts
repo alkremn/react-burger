@@ -16,8 +16,13 @@ export interface IIngredient {
 }
 
 export interface IOrder {
+  _id: string;
   number: number;
-  name: string;
+  name?: string;
+  ingredients: string[];
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IUser {

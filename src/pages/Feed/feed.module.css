@@ -1,11 +1,9 @@
-.container{
+.mainContainer {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  max-width: 1120px;
   height: 100%;
-}
-
-.feedListContainer {
+  margin-top: 40px;
 }
 
 .title {
@@ -17,15 +15,14 @@
   font-weight: bold;
 }
 
-.feedList {
-  box-sizing: border-box;
-  min-width:600px;
-  display: flex;
-  flex-direction: column;
-  padding-left: 0;
-  margin-top: 40px;
-  list-style: none;
-  overflow: scroll;
-  overflow-x: hidden;
+
+.contentContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 60px;
 }
+
+
+
+
 
