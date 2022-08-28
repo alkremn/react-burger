@@ -210,3 +210,24 @@ export const data = [
     __v: 0,
   },
 ];
+
+export const feedData = {
+  success: true,
+  orders: [
+    {
+      ingredients: [
+        '60d3b41abdacab0026a733c6',
+        '60d3b41abdacab0026a733ca',
+        '60d3b41abdacab0026a733ce',
+        '60d3b41abdacab0026a733d1',
+      ],
+      _id: '',
+      status: 'done',
+      number: 0,
+      createdAt: '2021-06-23T14:43:22.587Z',
+      updatedAt: '2021-06-23T14:43:22.603Z',
+    },
+  ],
+  total: 1,
+  totalToday: 1,
+};

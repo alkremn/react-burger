@@ -59,7 +59,7 @@ export default function AppHeader() {
           </li>
           <li>
             <NavLink
-              to=''
+              to='/feed'
               onMouseEnter={() => handleMouseEnter('orders')}
               onMouseLeave={() => handleMouseLeave('orders')}
               onClick={() => handleLinkClick('orders')}

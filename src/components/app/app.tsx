@@ -26,6 +26,7 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from './../../utils/hooks';
+import { FeedPage } from '../../pages/Feed/feed';
 
 // Fix ошибки ts для компонентов yandex
 declare module 'react' {
@@ -77,6 +78,7 @@ function App() {
           <Route path='/register' component={RegisterPage} />
           <Route path='/forgot-password' component={ForgotPasswordPage} />
           <Route path='/reset-password' component={ResetPasswordPage} />
+          <Route path='/feed' component={FeedPage} />
           <Route path='/' exact={true}>
             <ConstructorPage />
           </Route>

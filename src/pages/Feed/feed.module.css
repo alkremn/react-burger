@@ -1,0 +1,31 @@
+.container{
+  display: flex;
+  gap: 10px;
+  max-width: 1120px;
+  height: 100%;
+}
+
+.feedListContainer {
+}
+
+.title {
+  margin: 0;
+  font-size: 36px;
+  align-self: flex-start;
+  line-height: 40px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.feedList {
+  box-sizing: border-box;
+  min-width:600px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-top: 40px;
+  list-style: none;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
