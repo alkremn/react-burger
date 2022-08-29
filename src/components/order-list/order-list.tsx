@@ -11,7 +11,7 @@ export const OrderList = ({ orders }: OrderListProps) => {
   return (
     <ul className={styles.orderList}>
       {orders.map(order => (
-        <OrderListItem ingredientIds={order.ingredients} />
+        <OrderListItem key={order._id} orderId={order._id} ingredientIds={order.ingredients} />
       ))}
     </ul>
   );

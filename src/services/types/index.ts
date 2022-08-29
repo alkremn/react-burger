@@ -8,7 +8,11 @@ import { TOrderActions } from './orderTypes';
 
 export type RootState = ReturnType<typeof store.getState>;
 
-type TApplicationActions = TAuthActions | TAsyncActions | TIngredientsActions | TOrderActions;
+export type TApplicationActions =
+  | TAuthActions
+  | TAsyncActions
+  | TIngredientsActions
+  | TOrderActions;
 
 export type AppThunk<TReturn = void> = ActionCreator<
   ThunkAction<TReturn, Action, RootState, TApplicationActions>

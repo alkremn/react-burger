@@ -6,6 +6,7 @@ import styles from './profile.module.css';
 import { ProtectedRoute } from '../../components/protected-route';
 import { ProfileDetails } from '../../components/profile-details/profile-details';
 import { OrderHistory } from '../../components/order-history/order-history';
+import { OrderPage } from '../order/order';
 
 export const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -57,6 +58,9 @@ export const ProfilePage = () => {
           </ProtectedRoute>
           <ProtectedRoute path={`${path}/orders`}>
             <OrderHistory />
+          </ProtectedRoute>
+          <ProtectedRoute path={`${path}/orders/:id`}>
+            <OrderPage />
           </ProtectedRoute>
         </Switch>
       </div>

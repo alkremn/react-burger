@@ -27,6 +27,7 @@ import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from './../../utils/hooks';
 import { FeedPage } from '../../pages/Feed/feed';
+import { OrderPage } from '../../pages/order/order';
 
 // Fix ошибки ts для компонентов yandex
 declare module 'react' {
@@ -79,7 +80,8 @@ function App() {
             <Route path='/register' component={RegisterPage} />
             <Route path='/forgot-password' component={ForgotPasswordPage} />
             <Route path='/reset-password' component={ResetPasswordPage} />
-            <Route path='/feed' component={FeedPage} />
+            <Route path='/feed' exact={true} component={FeedPage} />
+            <Route path='/feed/:id' children={<OrderPage />} />
             <Route path='/' exact={true}>
               <ConstructorPage />
             </Route>
@@ -91,14 +93,20 @@ function App() {
           </Switch>
         </div>
         {background && (
-          <Route
-            path='/ingredients/:id'
-            children={
-              <Modal onClose={handleClosePopup}>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
+          <>
+            <Route
+              path='/ingredients/:id'
+              children={
+                <Modal onClose={handleClosePopup}>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path='/feed/:id'
+              children={<Modal onClose={handleClosePopup}>{/* <Ingredient Details /> */}</Modal>}
+            />
+          </>
         )}
         {isVisible && (
           <Modal onClose={handleOrderDetailsClose}>
