@@ -7,7 +7,7 @@ export function getPostOrderSuccessAction(response: {
 }): IGetPostOrderSuccessAction {
   return {
     type: POST_ORDER_SUCCESS,
-    order: { name: response.name, number: response.order.number },
+    payload: { name: response.name, number: response.order.number },
   };
 }
 

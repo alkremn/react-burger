@@ -12,41 +12,41 @@ import {
   REMOVE_SELECTED_BUN,
   ADD_DETAILED_INGREDIENT,
   REMOVE_DETAILED_INGREDIENT,
-} from '../constants/ingredientsContstants';
+} from '../constants/ingredientContstants';
 
 export interface IGetAddSelectedBunAction {
   readonly type: typeof ADD_SELECTED_BUN;
-  readonly selectedBun: IIngredient;
+  readonly payload: IIngredient;
 }
 
 export interface IGetFetchIngredientsSuccessAction {
   readonly type: typeof FETCH_INGREDIENTS_SUCCESS;
-  readonly ingredients: IIngredient[];
+  readonly payload: IIngredient[];
 }
 
 export interface IGetFetchIngredientsFailAction {
   readonly type: typeof FETCH_INGREDIENTS_FAIL;
-  readonly error: String;
+  readonly payload: String;
 }
 
 export interface IGetAddSelectedIngredientsAction {
   readonly type: typeof ADD_SELECTED_INGREDIENTS;
-  readonly ingredients: IIngredient[];
+  readonly payload: IIngredient[];
 }
 
 export interface IGetIncrementIngredientCountAction {
   readonly type: typeof INCREMENT_INGREDIENT_COUNT;
-  readonly ingredientId: string;
+  readonly payload: string;
 }
 
 export interface IGetDecrementIngredientCountAction {
   readonly type: typeof DECREMENT_INGREDIENT_COUNT;
-  readonly ingredientId: string;
+  readonly payload: string;
 }
 
 export interface IGetAddSelectedIngredientAction {
   readonly type: typeof ADD_SELECTED_INGREDIENT;
-  readonly ingredient: IIngredient;
+  readonly payload: IIngredient;
 }
 
 export interface IGetRemoveSelectedIngredientsAction {
@@ -58,12 +58,12 @@ export interface IGetRemoveSelectedBunAction {
 
 export interface IGetRemoveSelectedIngredientAction {
   readonly type: typeof REMOVE_SELECTED_INGREDIENT;
-  readonly uniqueId?: string;
+  readonly payload?: string;
 }
 
 export interface IGetAddDetailedIngredientAction {
   readonly type: typeof ADD_DETAILED_INGREDIENT;
-  readonly ingredient: IIngredient;
+  readonly payload: IIngredient;
 }
 
 export interface IGetRemoveDetailedIngredientAction {

@@ -15,9 +15,9 @@ const initialState: TOrderState = {
 export const orderReducer = (state = initialState, action: TOrderActions) => {
   switch (action.type) {
     case POST_ORDER_SUCCESS:
-      return { ...state, error: null, order: action.order };
+      return { ...state, error: null, order: action.payload };
     case POST_ORDER_FAIL:
-      return { ...initialState, error: action.error };
+      return { ...initialState, error: action.payload };
     default:
       return state;
   }

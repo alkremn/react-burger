@@ -27,44 +27,44 @@ import {
   REMOVE_SELECTED_BUN,
   ADD_DETAILED_INGREDIENT,
   REMOVE_DETAILED_INGREDIENT,
-} from '../constants/ingredientsContstants';
+} from '../constants/ingredientContstants';
 
 export function getAddSelectedBunAction(selectedBun: IIngredient): IGetAddSelectedBunAction {
-  return { type: ADD_SELECTED_BUN, selectedBun };
+  return { type: ADD_SELECTED_BUN, payload: selectedBun };
 }
 
 export function getFetchIngredientsSuccessAction(
   ingredients: IIngredient[]
 ): IGetFetchIngredientsSuccessAction {
-  return { type: FETCH_INGREDIENTS_SUCCESS, ingredients };
+  return { type: FETCH_INGREDIENTS_SUCCESS, payload: ingredients };
 }
 
 export function getFetchIngredientsFailAction(error: string): IGetFetchIngredientsFailAction {
-  return { type: FETCH_INGREDIENTS_FAIL, error };
+  return { type: FETCH_INGREDIENTS_FAIL, payload: error };
 }
 
 export function getAddSelectedIngredientsAction(
   ingredients: IIngredient[]
 ): IGetAddSelectedIngredientsAction {
-  return { type: ADD_SELECTED_INGREDIENTS, ingredients };
+  return { type: ADD_SELECTED_INGREDIENTS, payload: ingredients };
 }
 
 export function getIncrementIngredientCountAction(
   ingredient: IIngredient
 ): IGetIncrementIngredientCountAction {
-  return { type: INCREMENT_INGREDIENT_COUNT, ingredientId: ingredient._id };
+  return { type: INCREMENT_INGREDIENT_COUNT, payload: ingredient._id };
 }
 
 export function getDecrementIngredientCountAction(
   ingredient: IIngredient
 ): IGetDecrementIngredientCountAction {
-  return { type: DECREMENT_INGREDIENT_COUNT, ingredientId: ingredient._id };
+  return { type: DECREMENT_INGREDIENT_COUNT, payload: ingredient._id };
 }
 
 export function getAddSelectedIngredientAction(
   updatedIngredient: IIngredient
 ): IGetAddSelectedIngredientAction {
-  return { type: ADD_SELECTED_INGREDIENT, ingredient: updatedIngredient };
+  return { type: ADD_SELECTED_INGREDIENT, payload: updatedIngredient };
 }
 
 export function getRemoveSelectedIngredientsAction(): IGetRemoveSelectedIngredientsAction {
@@ -77,13 +77,13 @@ export function getRemoveSelectedBunAction(): IGetRemoveSelectedBunAction {
 export function getRemoveSelectedIngredientAction(
   ingredient: IIngredient
 ): IGetRemoveSelectedIngredientAction {
-  return { type: REMOVE_SELECTED_INGREDIENT, uniqueId: ingredient.uniqueId };
+  return { type: REMOVE_SELECTED_INGREDIENT, payload: ingredient.uniqueId };
 }
 
 export function getAddDetailedIngredientAction(
   ingredient: IIngredient
 ): IGetAddDetailedIngredientAction {
-  return { type: ADD_DETAILED_INGREDIENT, ingredient };
+  return { type: ADD_DETAILED_INGREDIENT, payload: ingredient };
 }
 
 export function getRemoveDetailedIngredientAction(): IGetRemoveDetailedIngredientAction {

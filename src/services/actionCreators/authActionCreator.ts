@@ -27,41 +27,41 @@ import {
 export function getLoginSuccessAction(user: IUser): IGetLoginSuccessAction {
   return {
     type: LOGIN_SUCCESS,
-    user,
+    payload: user,
   };
 }
 
 export function getLoginFailAction(error: string): IGetLoginFailAction {
-  return { type: LOGIN_FAIL, error };
+  return { type: LOGIN_FAIL, payload: error };
 }
 
 export function getRegisterSuccessAction(user: IUser): IGetRegisterSuccessAction {
   return {
     type: REGISTER_SUCCESS,
-    user,
+    payload: user,
   };
 }
 
 export function getUpdateTokenAction(token: string): IGetUpdateTokenAction {
-  return { type: UPDATE_TOKEN, token };
+  return { type: UPDATE_TOKEN, payload: token };
 }
 
 export function getRegisterFailAction(error: string): IGetRegisterFailAction {
-  return { type: REGISTER_FAIL, error };
+  return { type: REGISTER_FAIL, payload: error };
 }
 
 export function getLogoutSuccessAction(message: string): IGetLogoutSuccessAction {
-  return { type: LOGOUT_SUCCESS, message };
+  return { type: LOGOUT_SUCCESS, payload: message };
 }
 
 export function getLogoutFailAction(error: string): IGetLogoutFailAction {
-  return { type: LOGOUT_FAIL, error };
+  return { type: LOGOUT_FAIL, payload: error };
 }
 
 export function getUpdateUserSuccessAction(user: IUser): IGetUpdateUserSuccessAction {
-  return { type: UPDATE_USER_SUCCESS, user };
+  return { type: UPDATE_USER_SUCCESS, payload: user };
 }
 
 export function getUpdateUserFailAction(error: string): IGetUpdateUserFailAction {
-  return { type: UPDATE_USER_FAIL, error };
+  return { type: UPDATE_USER_FAIL, payload: error };
 }

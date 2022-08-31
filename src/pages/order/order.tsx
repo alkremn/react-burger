@@ -5,7 +5,7 @@ import { useSelector } from '../../utils/hooks';
 import { IMainStore } from '../../utils/types';
 
 export const OrderPage = () => {
-  const { orders } = useSelector((store: IMainStore) => store.ingredients);
+  // const { orders } = useSelector((store: IMainStore) => store.orders);
   const { id } = useParams<{ id: string }>();
   return (
     <div className={styles.container}>

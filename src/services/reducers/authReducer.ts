@@ -25,23 +25,23 @@ const initialState: TAuthState = {
 export const authReducer = (state = initialState, action: TAuthActions) => {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      return { ...state, user: action.user, message: null };
+      return { ...state, user: action.payload, message: null };
     case REGISTER_FAIL:
-      return { ...initialState, error: action.error };
+      return { ...initialState, error: action.payload };
     case LOGIN_SUCCESS:
-      return { ...state, user: action.user, message: null };
+      return { ...state, user: action.payload, message: null };
     case LOGIN_FAIL:
-      return { ...initialState, message: action.error };
+      return { ...initialState, message: action.payload };
     case LOGOUT_SUCCESS:
-      return { ...initialState, user: null, message: action.message };
+      return { ...initialState, user: null, message: action.payload };
     case LOGOUT_FAIL:
-      return { ...initialState, user: null, message: action.error };
+      return { ...initialState, user: null, message: action.payload };
     case UPDATE_USER_SUCCESS:
-      return { ...initialState, user: action.user, message: null };
+      return { ...initialState, user: action.payload, message: null };
     case UPDATE_USER_FAIL:
-      return { ...initialState, user: null, message: action.error };
+      return { ...initialState, user: null, message: action.payload };
     case UPDATE_TOKEN:
-      return { ...state, user: { ...state.user, accessToken: action.token }, message: null };
+      return { ...state, user: { ...state.user, accessToken: action.payload }, message: null };
     default:
       return state;
   }

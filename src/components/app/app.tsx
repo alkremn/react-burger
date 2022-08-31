@@ -26,7 +26,7 @@ import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from './../../utils/hooks';
-import { FeedPage } from '../../pages/Feed/feed';
+import { FeedPage } from '../../pages/feed/feed';
 import { OrderPage } from '../../pages/order/order';
 
 // Fix ошибки ts для компонентов yandex
