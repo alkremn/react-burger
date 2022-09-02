@@ -1,16 +1,13 @@
 import React from 'react';
-import { IOrder } from '../../utils/types';
 import { OrderListItem } from '../order-list-item/order-list-item';
 import styles from './order-list.module.css';
+import { useSelector } from '../../utils/hooks';
 
-interface OrderListProps {
-  orders: IOrder[];
-}
-
-export const OrderList = ({ orders }: OrderListProps) => {
+export const OrderList = () => {
+  const { orderData } = useSelector(store => store.ws);
   return (
     <ul className={styles.orderList}>
-      {orders.map(order => (
+      {orderData?.orders.map(order => (
         <OrderListItem key={order._id} orderId={order._id} ingredientIds={order.ingredients} />
       ))}
     </ul>

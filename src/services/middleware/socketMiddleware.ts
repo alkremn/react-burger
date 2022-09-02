@@ -7,7 +7,7 @@ import {
 import { WS_CONNECTION_START } from '../constants';
 import { AppDispatch, RootState, TApplicationActions } from '../types';
 import { TWsActions } from '../types/wsTypes';
-import { getWsGetOrdersAction } from '../actionCreators/wsActions';
+import { getWsGetOrderDataAction } from '../actionCreators/wsActions';
 
 export const socketMiddleware = (wsUrl: string, wsActions?: TWsActions): Middleware => {
   return (store: MiddlewareAPI<AppDispatch, RootState>) => {
@@ -37,8 +37,7 @@ export const socketMiddleware = (wsUrl: string, wsActions?: TWsActions): Middlew
         socket.onmessage = ({ data }) => {
           const parsedData = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
-          dispatch(getWsGetOrdersAction(restParsedData.orders));
-          console.log(restParsedData);
+          dispatch(getWsGetOrderDataAction(restParsedData));
         };
       }
 

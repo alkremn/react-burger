@@ -40,8 +40,8 @@ export const OrderListItem = ({ orderId, ingredientIds }: IOrderListItemProps) =
         <div className={styles.bottomContainer}>
           <ul className={styles.iconsContainer}>
             {imageUrls.map((url, idx) => (
-              <li className={styles.iconDiv}>
-                <img key={idx} className={styles.iconImage} src={url} alt='icon' />
+              <li key={idx} className={styles.iconDiv}>
+                <img className={styles.iconImage} src={url} alt='icon' />
               </li>
             ))}
           </ul>

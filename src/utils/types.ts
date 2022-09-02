@@ -25,6 +25,12 @@ export interface IOrder {
   updatedAt: string;
 }
 
+export interface IOrderData {
+  orders: IOrder[];
+  total: number;
+  totalToday: number;
+}
+
 export interface IUser {
   name: string;
   email: string;

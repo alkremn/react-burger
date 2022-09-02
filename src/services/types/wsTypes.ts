@@ -1,10 +1,10 @@
-import { IOrder } from '../../utils/types';
+import { IOrderData } from '../../utils/types';
 import {
   WS_CONNECTION_SUCCESS,
   WS_CONNECTION_ERROR,
-  WS_GET_ORDERS,
   WS_CONNECTION_CLOSED,
   WS_CONNECTION_START,
+  WS_GET_ORDER_DATA,
 } from '../constants';
 
 export interface IWsConnectionStartAction {
@@ -23,9 +23,9 @@ export interface IWsConnectionClosedAction {
   readonly type: typeof WS_CONNECTION_CLOSED;
 }
 
-export interface IWsGetOrdersAction {
-  readonly type: typeof WS_GET_ORDERS;
-  readonly payload: IOrder[];
+export interface IWsGetOrderDataAction {
+  readonly type: typeof WS_GET_ORDER_DATA;
+  readonly payload: IOrderData;
 }
 
 export type TWsActions =
@@ -33,4 +33,4 @@ export type TWsActions =
   | IWsConnectionSuccessAction
   | IWsConnectionErrorAction
   | IWsConnectionClosedAction
-  | IWsGetOrdersAction;
+  | IWsGetOrderDataAction;

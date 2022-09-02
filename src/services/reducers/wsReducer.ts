@@ -3,20 +3,20 @@ import {
   WS_CONNECTION_SUCCESS,
   WS_CONNECTION_CLOSED,
   WS_CONNECTION_ERROR,
-  WS_GET_ORDERS,
+  WS_GET_ORDER_DATA,
 } from '../constants/wsConstants';
-import { IOrder } from '../../utils/types';
+import { IOrderData } from '../../utils/types';
 
 export type TWSState = {
   wsConnected: boolean;
-  orders: IOrder[];
+  orderData: IOrderData | null;
 
   error?: Event;
 };
 
 const initialState: TWSState = {
   wsConnected: false,
-  orders: [],
+  orderData: null,
 };
 
 export const wsReducer = (state = initialState, action: TWsActions) => {
@@ -36,10 +36,10 @@ export const wsReducer = (state = initialState, action: TWsActions) => {
         ...state,
         wsConnected: false,
       };
-    case WS_GET_ORDERS:
+    case WS_GET_ORDER_DATA:
       return {
         ...state,
-        orders: action.payload,
+        orderData: action.payload,
       };
     default:
       return state;
