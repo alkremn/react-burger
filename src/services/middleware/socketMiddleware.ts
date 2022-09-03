@@ -4,7 +4,7 @@ import {
   getWsConnectionClosedAction,
   getWsConnectionErrorAction,
 } from '../actionCreators';
-import { WS_CONNECTION_START } from '../constants';
+import { WS_CONNECTION_STOP, WS_CONNECTION_START } from '../constants';
 import { AppDispatch, RootState, TApplicationActions } from '../types';
 import { TWsActions } from '../types/wsTypes';
 import { getWsGetOrderDataAction } from '../actionCreators/wsActions';
@@ -21,6 +21,11 @@ export const socketMiddleware = (wsUrl: string, wsActions?: TWsActions): Middlew
       if (type === WS_CONNECTION_START && user) {
         socket = new WebSocket(wsUrl);
       }
+
+      if (type === WS_CONNECTION_STOP && user) {
+        socket?.close();
+      }
+
       if (socket) {
         socket.onopen = () => {
           dispatch(getWsConnectionSuccessAction());

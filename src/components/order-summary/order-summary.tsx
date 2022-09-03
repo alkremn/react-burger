@@ -4,8 +4,8 @@ import styles from './order-summary.module.css';
 interface OrderSummaryProps {
   total: number | undefined;
   totalToday: number | undefined;
-  readyList: string[];
-  inProgressList: string[];
+  readyList: number[];
+  inProgressList: number[];
 }
 
 export const OrderSummary = ({
@@ -20,16 +20,16 @@ export const OrderSummary = ({
         <div className={styles.finished}>
           <h2 className='text text_type_main-medium'>Готовы:</h2>
           <ul className={`${styles.list} ${styles.secondaryColor}`}>
-            {readyList.map(id => (
-              <li key={id}>{id}</li>
+            {readyList.map(number => (
+              <li key={number}>{number}</li>
             ))}
           </ul>
         </div>
         <div>
           <h2 className='text text_type_main-medium'>В работе:</h2>
           <ul className={styles.list}>
-            {inProgressList.map(id => (
-              <li key={id}>{id}</li>
+            {inProgressList.map(number => (
+              <li key={number}>{number}</li>
             ))}
           </ul>
         </div>

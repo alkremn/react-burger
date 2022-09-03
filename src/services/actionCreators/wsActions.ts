@@ -3,6 +3,7 @@ import {
   WS_CONNECTION_START,
   WS_CONNECTION_SUCCESS,
   WS_CONNECTION_ERROR,
+  WS_CONNECTION_STOP,
   WS_CONNECTION_CLOSED,
   WS_GET_ORDER_DATA,
 } from '../constants';
@@ -22,6 +23,12 @@ export function getWsConnectionSuccessAction() {
 export function getWsConnectionErrorAction() {
   return {
     type: WS_CONNECTION_ERROR,
+  };
+}
+
+export function getWsConnectionStopAction() {
+  return {
+    type: WS_CONNECTION_STOP,
   };
 }
 

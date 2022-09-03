@@ -5,6 +5,7 @@ import {
   WS_CONNECTION_CLOSED,
   WS_CONNECTION_START,
   WS_GET_ORDER_DATA,
+  WS_CONNECTION_STOP,
 } from '../constants';
 
 export interface IWsConnectionStartAction {
@@ -17,6 +18,10 @@ export interface IWsConnectionSuccessAction {
 
 export interface IWsConnectionErrorAction {
   readonly type: typeof WS_CONNECTION_ERROR;
+}
+
+export interface IWsConnectionStopAction {
+  readonly type: typeof WS_CONNECTION_STOP;
 }
 
 export interface IWsConnectionClosedAction {
@@ -32,5 +37,6 @@ export type TWsActions =
   | IWsConnectionStartAction
   | IWsConnectionSuccessAction
   | IWsConnectionErrorAction
+  | IWsConnectionStopAction
   | IWsConnectionClosedAction
   | IWsGetOrderDataAction;
