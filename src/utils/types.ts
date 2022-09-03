@@ -63,11 +63,18 @@ interface IOrderStore {
   error: string;
 }
 
+interface IWsStore {
+  wsConnected: boolean;
+  orderData: IOrderData | null;
+  error?: Event;
+}
+
 export interface IMainStore {
   async: ISyncStore;
   auth: IAuthStore;
   ingredients: IIngredientsStore;
   order: IOrderStore;
+  ws: IWsStore;
 }
 
 export interface ILoginForm {

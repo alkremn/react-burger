@@ -18,8 +18,11 @@ export const socketMiddleware = (wsUrl: string, wsActions?: TWsActions): Middlew
       const { type } = action;
       const { user } = getState().auth;
 
-      if (type === WS_CONNECTION_START && user) {
-        socket = new WebSocket(wsUrl);
+      if (type === WS_CONNECTION_START) {
+        if (user) {
+          socket = new WebSocket(wsUrl);
+        } else {
+        }
       }
 
       if (type === WS_CONNECTION_STOP && user) {

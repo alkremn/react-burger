@@ -28,6 +28,13 @@ import OrderDetails from '../order-details/order-details';
 import { useDispatch, useSelector } from './../../utils/hooks';
 import { FeedPage } from '../../pages/feed/feed';
 import { OrderPage } from '../../pages/order/order';
+import { OrderSummary } from '../order-summary/order-summary';
+import {
+  getFinishLoadingAction,
+  getStartLoadingAction,
+  getWsConnectionStartAction,
+  getWsConnectionStopAction,
+} from '../../services/actionCreators';
 
 // Fix ошибки ts для компонентов yandex
 declare module 'react' {
@@ -54,13 +61,21 @@ function App() {
   }, [ingredients, dispatch]);
 
   useEffect(() => {
+    dispatch(getWsConnectionStartAction());
+    return () => {
+      dispatch(getWsConnectionStopAction());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (order) {
       setIsVisible(true);
     }
   }, [order]);
 
   const handleClosePopup = () => {
-    history.push('/');
+    const path = location.pathname.split('/')[1];
+    history.push(`/${path === 'ingredients' ? '' : path}`);
     dispatch(removeDetailedIngredient());
   };
   const handleOrderDetailsClose = () => {
@@ -104,7 +119,11 @@ function App() {
             />
             <Route
               path='/feed/:id'
-              children={<Modal onClose={handleClosePopup}>{/* <Ingredient Details /> */}</Modal>}
+              children={
+                <Modal onClose={handleClosePopup}>
+                  <OrderSummary />
+                </Modal>
+              }
             />
           </>
         )}

@@ -1,34 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import styles from './feed.module.css';
 import { OrderList } from '../../components/order-list/order-list';
-import { OrderSummary } from '../../components/order-summary/order-summary';
-import {
-  getWsConnectionStartAction,
-  getWsConnectionStopAction,
-} from '../../services/actionCreators/wsActions';
+import { FeedSummary } from '../../components/feed-summary/feed-summary';
 import { useDispatch, useSelector } from '../../utils/hooks';
 import { DONE } from '../../utils/utils';
-import {
-  getFinishLoadingAction,
-  getStartLoadingAction,
-} from '../../services/actionCreators/asyncActionCreator';
+import { getFinishLoadingAction } from '../../services/actionCreators/asyncActionCreator';
+import { IMainStore } from '../../utils/types';
 
 export const FeedPage = () => {
   const dispatch = useDispatch();
-  const { orderData } = useSelector(store => store.ws);
+  const { orderData } = useSelector((store: IMainStore) => store.ws);
 
   const [total, setTotal] = useState<number>();
   const [totalToday, setTotalToday] = useState<number>();
   const [readyList, setReadyList] = useState<number[]>([]);
   const [inProgressList, setInProgressList] = useState<number[]>([]);
-
-  useEffect(() => {
-    dispatch(getStartLoadingAction());
-    dispatch(getWsConnectionStartAction());
-    return () => {
-      dispatch(getWsConnectionStopAction());
-    };
-  }, [dispatch]);
 
   useEffect(() => {
     if (orderData) {
@@ -56,7 +42,7 @@ export const FeedPage = () => {
       <h1 className={`text text_type_main-default ${styles.title}`}>Лента заказов</h1>
       <div className={styles.contentContainer}>
         <OrderList />
-        <OrderSummary
+        <FeedSummary
           total={total}
           totalToday={totalToday}
           readyList={readyList}
