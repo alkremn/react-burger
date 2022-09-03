@@ -25,6 +25,11 @@ export interface IOrder {
   updatedAt: string;
 }
 
+export interface IOrderIngredient {
+  ingredient: IIngredient;
+  count?: number;
+}
+
 export interface IOrderData {
   orders: IOrder[];
   total: number;

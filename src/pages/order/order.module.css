@@ -1,17 +1,71 @@
 .container {
+  margin-top: 122px;
   max-width: 640px;
-
+  display: flex;
+  flex-direction: column;
 }
 
 .orderNumber {
-
+  margin: 0;
+  font-family: 'Iceland';
+  align-self: center;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 24px;
 }
 
 .orderTitle {
   margin-top: 40px;
-  font-family: 'JetBrains Mono';
   font-weight: 700;
   font-size: 24px;
   line-height: 30px;
   color: #F2F2F3;
+}
+
+.status {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 12px;
+}
+
+.statusReady {
+  color: #00CCCC;
+}
+
+.listTitle {
+  margin-top: 60px;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+}
+
+.buttomContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.timeStamp {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #8585AD;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  color: #8585AD;
+}
+
+.priceDigits {
+  margin-right: 8px;
+  font-family: 'Iceland';
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 24px;
 }

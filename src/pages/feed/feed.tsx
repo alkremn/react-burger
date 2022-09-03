@@ -8,6 +8,10 @@ import {
 } from '../../services/actionCreators/wsActions';
 import { useDispatch, useSelector } from '../../utils/hooks';
 import { DONE } from '../../utils/utils';
+import {
+  getFinishLoadingAction,
+  getStartLoadingAction,
+} from '../../services/actionCreators/asyncActionCreator';
 
 export const FeedPage = () => {
   const dispatch = useDispatch();
@@ -19,6 +23,7 @@ export const FeedPage = () => {
   const [inProgressList, setInProgressList] = useState<number[]>([]);
 
   useEffect(() => {
+    dispatch(getStartLoadingAction());
     dispatch(getWsConnectionStartAction());
     return () => {
       dispatch(getWsConnectionStopAction());
@@ -27,6 +32,7 @@ export const FeedPage = () => {
 
   useEffect(() => {
     if (orderData) {
+      dispatch(getFinishLoadingAction());
       setTotal(orderData.total);
       setTotalToday(orderData.totalToday);
 
@@ -43,7 +49,7 @@ export const FeedPage = () => {
       setReadyList(readyList);
       setInProgressList(inProgressList);
     }
-  }, [orderData]);
+  }, [orderData, dispatch]);
 
   return (
     <section className={styles.mainContainer}>

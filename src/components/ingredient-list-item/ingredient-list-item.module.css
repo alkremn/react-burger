@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:5px;
+}
+
+.leftContainer {
+  display: flex;
+  align-items: center;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+  border-radius: 50%;
+}
+
+.image {
+  width: 59px;
+  height: 59px;
+  background-color: #1C1C21;
+  border-radius: 50%;
+}
+
+.title {
+font-weight: 400;
+color: #F2F2F3;
+margin-left: 16px;
+}
+
+.price {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-family: 'Iceland';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 24px;
+}
+.countPrice {
+  margin-right: 9px;
+}
