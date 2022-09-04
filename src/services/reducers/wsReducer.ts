@@ -10,8 +10,6 @@ import { IOrderData } from '../../utils/types';
 export type TWSState = {
   wsConnected: boolean;
   orderData: IOrderData | null;
-
-  error?: Event;
 };
 
 const initialState: TWSState = {

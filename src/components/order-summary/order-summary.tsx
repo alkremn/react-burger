@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './order-summary.module.css';
-import { DONE } from '../../utils/utils';
+import { DONE, timeSince, getStatusText } from '../../utils/utils';
 import { IngredientList } from '../ingredient-list/ingredient-list';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useParams } from 'react-router-dom';
@@ -25,7 +25,7 @@ export const OrderSummary = () => {
       const orderIngredients: IOrderIngredient[] = [];
       const uniqueIds = new Set(foundOrder.ingredients);
       uniqueIds.forEach(id => {
-        const matchedIngredient = ingredients?.find(ingredient => ingredient._id !== id);
+        const matchedIngredient = ingredients?.find(ingredient => ingredient._id === id);
         if (matchedIngredient) {
           const count = foundOrder.ingredients.filter(ingredientId => ingredientId === id).length;
           totalPrice += matchedIngredient!.price * count;
@@ -46,12 +46,20 @@ export const OrderSummary = () => {
           order?.status === DONE ? `${styles.statusReady}` : ''
         }`}
       >
-        {order?.status === DONE ? 'Выполнен' : 'Готовится'}
+        {getStatusText(order?.status)}
       </span>
       <h3 className={`text text_type_main-default ${styles.listTitle}`}>Состав:</h3>
       <IngredientList orderIngredients={orderIngredients} />
       <div className={styles.buttomContainer}>
-        <p className={`text text_type_main-default ${styles.timeStamp}`}>Вчера, 13:50 i-GMT+3</p>
+        <p className={`text text_type_main-default ${styles.timeStamp}`}>
+          {order?.createdAt && timeSince(order?.createdAt)},{' '}
+          {order?.createdAt &&
+            new Date(order?.createdAt).toLocaleTimeString('en-US', {
+              hour12: false,
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+        </p>
         <p className={styles.price}>
           <span className={styles.priceDigits}>{totalPrice}</span>
           <CurrencyIcon type='primary' />

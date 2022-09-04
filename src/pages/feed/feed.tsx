@@ -4,8 +4,15 @@ import { OrderList } from '../../components/order-list/order-list';
 import { FeedSummary } from '../../components/feed-summary/feed-summary';
 import { useDispatch, useSelector } from '../../utils/hooks';
 import { DONE } from '../../utils/utils';
-import { getFinishLoadingAction } from '../../services/actionCreators/asyncActionCreator';
+import {
+  getFinishLoadingAction,
+  getStartLoadingAction,
+} from '../../services/actionCreators/asyncActionCreator';
 import { IMainStore } from '../../utils/types';
+import {
+  getWsConnectionStartAction,
+  getWsConnectionStopAction,
+} from '../../services/actionCreators/wsActions';
 
 export const FeedPage = () => {
   const dispatch = useDispatch();
@@ -15,6 +22,14 @@ export const FeedPage = () => {
   const [totalToday, setTotalToday] = useState<number>();
   const [readyList, setReadyList] = useState<number[]>([]);
   const [inProgressList, setInProgressList] = useState<number[]>([]);
+
+  useEffect(() => {
+    dispatch(getStartLoadingAction());
+    dispatch(getWsConnectionStartAction());
+    return () => {
+      dispatch(getWsConnectionStopAction());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (orderData) {

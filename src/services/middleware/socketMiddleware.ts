@@ -3,29 +3,28 @@ import {
   getWsConnectionSuccessAction,
   getWsConnectionClosedAction,
   getWsConnectionErrorAction,
+  getFinishLoadingAction,
 } from '../actionCreators';
-import { WS_CONNECTION_STOP, WS_CONNECTION_START } from '../constants';
+import { WS_CONNECTION_STOP, WS_CONNECTION_START, WS_SECURE_CONNECTION_START } from '../constants';
 import { AppDispatch, RootState, TApplicationActions } from '../types';
-import { TWsActions } from '../types/wsTypes';
 import { getWsGetOrderDataAction } from '../actionCreators/wsActions';
+import { TAuthState } from '../reducers/authReducer';
 
-export const socketMiddleware = (wsUrl: string, wsActions?: TWsActions): Middleware => {
+export const socketMiddleware = (wsUrl: string): Middleware => {
   return (store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
     return next => (action: TApplicationActions) => {
       const { dispatch, getState } = store;
       const { type } = action;
-      const { user } = getState().auth;
+      const { user }: TAuthState = getState().auth;
 
       if (type === WS_CONNECTION_START) {
-        if (user) {
-          socket = new WebSocket(wsUrl);
-        } else {
-        }
-      }
-
-      if (type === WS_CONNECTION_STOP && user) {
+        socket = new WebSocket(`${wsUrl}/all`);
+        dispatch(getFinishLoadingAction());
+      } else if (type === WS_SECURE_CONNECTION_START) {
+        socket = new WebSocket(`${wsUrl}?token=${user?.accessToken}`);
+      } else if (type === WS_CONNECTION_STOP) {
         socket?.close();
       }
 
@@ -36,6 +35,7 @@ export const socketMiddleware = (wsUrl: string, wsActions?: TWsActions): Middlew
 
         socket.onclose = () => {
           dispatch(getWsConnectionClosedAction());
+          dispatch(getFinishLoadingAction());
         };
 
         socket.onerror = () => {
@@ -45,7 +45,10 @@ export const socketMiddleware = (wsUrl: string, wsActions?: TWsActions): Middlew
         socket.onmessage = ({ data }) => {
           const parsedData = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
-          dispatch(getWsGetOrderDataAction(restParsedData));
+          if (success) {
+            dispatch(getWsGetOrderDataAction(restParsedData));
+          }
+          dispatch(getFinishLoadingAction());
         };
       }
 

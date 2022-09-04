@@ -4,6 +4,8 @@ export const baseURL = 'https://norma.nomoreparties.space/api';
 export const titles = ['Булки', 'Соусы', 'Начинки'];
 export const titlesEn = ['bun', 'sauce', 'main'];
 export const FORGOT_PASSWORD_URL = '/forgot-password';
+export const CREATED = 'created';
+export const PENDING = 'pending';
 export const DONE = 'done';
 
 export const WRONG_EMAIL_TITLE = 'Некорректный E-mail';
@@ -87,4 +89,47 @@ export function isPasswordEmpty(password: string) {
 
 export function isPasswordShort(password: string, minLength: number) {
   return password.length < minLength;
+}
+
+export function timeSince(date: string) {
+  const dateObject = new Date(date);
+  var seconds = Math.floor((new Date().getTime() - dateObject.getTime()) / 1000);
+
+  var interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + ' Лет';
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + ' Месяцев';
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    const days = Math.floor(interval);
+    switch (days) {
+      case 1:
+        return 'Вчера';
+      case 2:
+        return '2 Дня Назад';
+      case 3:
+        return '3 Дня Назад';
+      case 4:
+        return '4 Дня Назад';
+      default:
+        return days + ' Дня Назад';
+    }
+  }
+  return 'Сегодня';
+}
+
+export function getStatusText(status?: string) {
+  switch (status) {
+    case CREATED:
+      return 'Создан';
+    case PENDING:
+      return 'Готовится';
+    case DONE:
+      return 'Выполнен';
+  }
 }

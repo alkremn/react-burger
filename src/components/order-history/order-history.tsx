@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import {
+  getStartLoadingAction,
+  getWsConnectionStopAction,
+  getWsSecureConnectionStartAction,
+} from '../../services/actionCreators';
+import { useDispatch } from '../../utils/hooks';
 import { OrderList } from '../order-list/order-list';
-import styles from './order-history.module.css';
 
 export const OrderHistory = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getStartLoadingAction());
+    dispatch(getWsSecureConnectionStartAction());
+    return () => {
+      dispatch(getWsConnectionStopAction());
+    };
+  }, [dispatch]);
+
   return <OrderList />;
 };

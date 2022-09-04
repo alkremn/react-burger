@@ -17,7 +17,7 @@ const initialState: any = {
   },
 };
 
-const wsUrl: string = 'wss://norma.nomoreparties.space/orders/all';
+const wsUrl: string = 'wss://norma.nomoreparties.space/orders';
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

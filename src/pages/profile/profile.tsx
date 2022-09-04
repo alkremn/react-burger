@@ -8,7 +8,11 @@ import { ProfileDetails } from '../../components/profile-details/profile-details
 import { OrderHistory } from '../../components/order-history/order-history';
 import { OrderPage } from '../order/order';
 
-export const ProfilePage = () => {
+interface IProfilePageProps {
+  onClosePopup: () => void;
+}
+
+export const ProfilePage = ({ onClosePopup }: IProfilePageProps) => {
   const dispatch = useDispatch();
   const { path, url } = useRouteMatch();
 

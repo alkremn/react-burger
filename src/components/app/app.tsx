@@ -29,14 +29,6 @@ import { useDispatch, useSelector } from './../../utils/hooks';
 import { FeedPage } from '../../pages/feed/feed';
 import { OrderPage } from '../../pages/order/order';
 import { OrderSummary } from '../order-summary/order-summary';
-import {
-  getFinishLoadingAction,
-  getStartLoadingAction,
-  getWsConnectionStartAction,
-  getWsConnectionStopAction,
-} from '../../services/actionCreators';
-
-// Fix ошибки ts для компонентов yandex
 declare module 'react' {
   interface FunctionComponent<P = {}> {
     (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
@@ -61,20 +53,13 @@ function App() {
   }, [ingredients, dispatch]);
 
   useEffect(() => {
-    dispatch(getWsConnectionStartAction());
-    return () => {
-      dispatch(getWsConnectionStopAction());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
     if (order) {
       setIsVisible(true);
     }
   }, [order]);
 
   const handleClosePopup = () => {
-    const path = location.pathname.split('/')[1];
+    const path = location.pathname.split('/').slice(1, -1).join('/');
     history.push(`/${path === 'ingredients' ? '' : path}`);
     dispatch(removeDetailedIngredient());
   };
@@ -102,7 +87,7 @@ function App() {
             </Route>
             <Route path='/ingredients/:id' children={<IngredientPage />} />
             <ProtectedRoute path='/profile'>
-              <ProfilePage />
+              <ProfilePage onClosePopup={handleClosePopup} />
             </ProtectedRoute>
             <Route path='*' component={NotFoundPage} />
           </Switch>
@@ -125,6 +110,16 @@ function App() {
                 </Modal>
               }
             />
+            <ProtectedRoute path={`/profile/orders/:id`}>
+              <Route
+                path={`/profile/orders/:id`}
+                children={
+                  <Modal onClose={handleClosePopup}>
+                    <OrderSummary />
+                  </Modal>
+                }
+              />
+            </ProtectedRoute>
           </>
         )}
         {isVisible && (

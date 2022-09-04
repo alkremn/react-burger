@@ -6,11 +6,18 @@ import {
   WS_CONNECTION_STOP,
   WS_CONNECTION_CLOSED,
   WS_GET_ORDER_DATA,
+  WS_SECURE_CONNECTION_START,
 } from '../constants';
 
 export const getWsConnectionStartAction = () => {
   return {
     type: WS_CONNECTION_START,
+  };
+};
+
+export const getWsSecureConnectionStartAction = () => {
+  return {
+    type: WS_SECURE_CONNECTION_START,
   };
 };
 

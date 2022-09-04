@@ -8,7 +8,14 @@ export const OrderList = () => {
   return (
     <ul className={styles.orderList}>
       {orderData?.orders.map(order => (
-        <OrderListItem key={order._id} orderId={order._id} ingredientIds={order.ingredients} />
+        <OrderListItem
+          key={order._id}
+          orderId={order._id}
+          orderNumber={order.number}
+          title={order.name}
+          createdAt={order.createdAt}
+          ingredientIds={order.ingredients}
+        />
       ))}
     </ul>
   );

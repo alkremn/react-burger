@@ -21,7 +21,6 @@ import {
 import { AppDispatch, AppThunk } from '../types';
 import { ILoginForm, IRegisterForm, IUser } from '../../utils/types';
 import { TRootState } from '../reducers';
-import { Dispatch } from 'redux';
 
 export const loginAction = (form: ILoginForm) => async (dispatch: AppDispatch) => {
   dispatch(getStartLoadingAction());

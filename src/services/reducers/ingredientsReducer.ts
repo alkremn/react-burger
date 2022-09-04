@@ -60,7 +60,7 @@ export const ingredientsReducer = (state = initialState, action: TIngredientsAct
       return {
         ...state,
         selectedIngredients: [],
-        ingredients: state.ingredients.map(item => {
+        ingredients: state.ingredients?.map(item => {
           if (item._id === state.selectedBun?._id) {
             return item;
           }
