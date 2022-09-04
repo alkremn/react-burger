@@ -105,10 +105,12 @@ export const refreshTokenAction =
           localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, accessToken }));
 
           dispatch(getUpdateTokenAction(accessToken));
-          if (user) {
-            dispatch(next(user));
+          if (next) {
+            if (user) {
+              dispatch(next(user));
+            }
+            dispatch(next());
           }
-          dispatch(next());
         })
         .catch(error => {
           dispatch(getRegisterFailAction(error));

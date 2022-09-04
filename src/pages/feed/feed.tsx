@@ -16,6 +16,7 @@ import {
 export const FeedPage = () => {
   const dispatch = useDispatch();
   const { orderData } = useSelector(store => store.ws);
+  const { isLoading } = useSelector(store => store.async);
 
   const [total, setTotal] = useState<number>();
   const [totalToday, setTotalToday] = useState<number>();
@@ -31,7 +32,6 @@ export const FeedPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('asdf');
     if (orderData) {
       dispatch(getFinishLoadingAction());
       setTotal(orderData.total);
@@ -54,16 +54,20 @@ export const FeedPage = () => {
 
   return (
     <section className={styles.mainContainer}>
-      <h1 className={`text text_type_main-default ${styles.title}`}>Лента заказов</h1>
-      <div className={styles.contentContainer}>
-        <OrderList />
-        <FeedSummary
-          total={total}
-          totalToday={totalToday}
-          readyList={readyList}
-          inProgressList={inProgressList}
-        />
-      </div>
+      {!isLoading && orderData && (
+        <>
+          <h1 className={`text text_type_main-default ${styles.title}`}>Лента заказов</h1>
+          <div className={styles.contentContainer}>
+            <OrderList />
+            <FeedSummary
+              total={total}
+              totalToday={totalToday}
+              readyList={readyList}
+              inProgressList={inProgressList}
+            />
+          </div>
+        </>
+      )}
     </section>
   );
 };
