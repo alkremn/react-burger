@@ -3,30 +3,33 @@ import {
   getStartLoadingAction,
 } from '../actionCreators/asyncActionCreator';
 import { baseURL, checkResponse } from '../../utils/utils';
-import { AppThunk } from '../types';
+import { AppDispatch, AppThunk } from '../types';
 
-export const resetPasswordRequestAction = (email: string) => (dispatch: AppThunk) => {
-  dispatch(getStartLoadingAction());
+export const resetPasswordRequestAction =
+  (email: string): AppThunk =>
+  (dispatch: AppDispatch) => {
+    dispatch(getStartLoadingAction());
 
-  return fetch(`${baseURL}/password-reset`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email }),
-  })
-    .then(res => checkResponse(res))
-    .then(data => {
-      if (data.success) {
-        return Promise.resolve(data);
-      }
-      return Promise.reject(data);
+    return fetch(`${baseURL}/password-reset`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
     })
-    .finally(() => dispatch(getFinishLoadingAction()));
-};
+      .then(res => checkResponse(res))
+      .then(data => {
+        if (data.success) {
+          return Promise.resolve(data);
+        }
+        return Promise.reject(data);
+      })
+      .finally(() => dispatch(getFinishLoadingAction()));
+  };
 
 export const resetPasswordAction =
-  (form: { password: string; token: string }) => (dispatch: AppThunk) => {
+  (form: { password: string; token: string }): AppThunk =>
+  (dispatch: AppDispatch) => {
     dispatch(getStartLoadingAction());
 
     return fetch(`${baseURL}/password-reset/reset`, {

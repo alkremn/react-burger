@@ -9,16 +9,16 @@ import { validateEmail, WRONG_EMAIL_TITLE } from '../../utils/utils';
 
 // actions
 import { updateUserAction } from './../../services/actions/authActions';
-import { IMainStore } from '../../utils/types';
 import { useDispatch } from '../../utils/hooks';
 import { useSelector } from './../../utils/hooks';
+import { IRegisterForm } from '../../utils/types';
 
-const initialForm = { name: '', email: '', password: '' };
+const initialForm: IRegisterForm = { name: '', email: '', password: '' };
 const initialDisabledFields = { name: true, email: true, password: true };
 
 export const ProfileDetails = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((store: IMainStore) => store.auth);
+  const { user } = useSelector(store => store.auth);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const emailRef = useRef<HTMLInputElement | null>(null);
@@ -80,8 +80,8 @@ export const ProfileDetails = () => {
     e.preventDefault();
     const updatedForm = Object.assign(
       {},
-      user.name === form.name ? null : { name: form.name },
-      user.email === form.email ? null : { email: form.email },
+      user?.name === form.name ? { name: form.name } : undefined,
+      user?.email === form.email ? { email: form.email } : undefined,
       form.password === '' ? null : { password: form.password }
     );
 
@@ -92,7 +92,7 @@ export const ProfileDetails = () => {
 
   const handleCancelClick = () => {
     setDisabledFields(initialDisabledFields);
-    setForm({ ...initialForm, name: user.name, email: user.email });
+    setForm({ ...initialForm, name: user?.name, email: user?.email });
     setActiveField('');
   };
 
@@ -106,7 +106,7 @@ export const ProfileDetails = () => {
           placeholder='Имя'
           disabled={disabledFields.name}
           icon={activeField === 'name' ? 'CloseIcon' : 'EditIcon'}
-          value={form.name}
+          value={form.name ?? ''}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
           onIconClick={() => handleEditModeIconClick('name')}
@@ -122,7 +122,7 @@ export const ProfileDetails = () => {
           placeholder='Логин'
           disabled={disabledFields.email}
           icon={activeField === 'email' ? 'CloseIcon' : 'EditIcon'}
-          value={form.email}
+          value={form.email ?? ''}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
           onIconClick={() => handleEditModeIconClick('email')}
@@ -138,7 +138,7 @@ export const ProfileDetails = () => {
           placeholder='Пароль'
           disabled={disabledFields.password}
           icon={activeField === 'password' ? 'CloseIcon' : 'EditIcon'}
-          value={form.password}
+          value={form.password ?? ''}
           onBlur={handleValidateInput}
           onChange={handleInputChange}
           onIconClick={() => handleEditModeIconClick('password')}

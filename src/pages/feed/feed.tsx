@@ -3,12 +3,11 @@ import styles from './feed.module.css';
 import { OrderList } from '../../components/order-list/order-list';
 import { FeedSummary } from '../../components/feed-summary/feed-summary';
 import { useDispatch, useSelector } from '../../utils/hooks';
-import { DONE } from '../../utils/utils';
+import { DONE, getConnectionUrl } from '../../utils/utils';
 import {
   getFinishLoadingAction,
   getStartLoadingAction,
 } from '../../services/actionCreators/asyncActionCreator';
-import { IMainStore } from '../../utils/types';
 import {
   getWsConnectionStartAction,
   getWsConnectionStopAction,
@@ -16,7 +15,7 @@ import {
 
 export const FeedPage = () => {
   const dispatch = useDispatch();
-  const { orderData } = useSelector((store: IMainStore) => store.ws);
+  const { orderData } = useSelector(store => store.ws);
 
   const [total, setTotal] = useState<number>();
   const [totalToday, setTotalToday] = useState<number>();
@@ -25,13 +24,14 @@ export const FeedPage = () => {
 
   useEffect(() => {
     dispatch(getStartLoadingAction());
-    dispatch(getWsConnectionStartAction());
+    dispatch(getWsConnectionStartAction(getConnectionUrl()));
     return () => {
       dispatch(getWsConnectionStopAction());
     };
   }, [dispatch]);
 
   useEffect(() => {
+    console.log('asdf');
     if (orderData) {
       dispatch(getFinishLoadingAction());
       setTotal(orderData.total);

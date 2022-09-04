@@ -10,16 +10,17 @@ import {
   getPostOrderFailAction,
 } from '../actionCreators/orderActionCreators';
 import { TRootState } from '../reducers';
-import { AppThunk } from '../types';
+import { AppDispatch, AppThunk } from '../types';
 
 export const postOrderAction =
-  (ingredientIds: string[]) => async (dispatch: AppThunk, getState: () => TRootState) => {
+  (ingredientIds: string[]): AppThunk =>
+  async (dispatch: AppDispatch, getState: () => TRootState) => {
     dispatch(getStartLoadingAction());
 
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Content-Type', 'application/json');
-    if (getState().user?.accessToken) {
-      requestHeaders.set('Authorization', getState().user?.accessToken!);
+    if (getState().auth.user?.accessToken) {
+      requestHeaders.set('Authorization', getState().auth.user!.accessToken!);
     }
 
     fetch(`${baseURL}/orders`, {
@@ -29,6 +30,7 @@ export const postOrderAction =
     })
       .then(res => checkResponse(res))
       .then(data => {
+        console.log(data);
         if (!data.success) {
           return Promise.reject(data.message);
         }

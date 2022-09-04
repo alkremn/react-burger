@@ -4,4 +4,10 @@ import { TIngredientsState } from './ingredientsReducer';
 import { TOrderState } from './orderReducer';
 import { TWSState } from './wsReducer';
 
-export type TRootState = TAsyncState & TAuthState & TIngredientsState & TOrderState & TWSState;
+export interface TRootState {
+  async: TAsyncState;
+  auth: TAuthState;
+  ingredients: TIngredientsState;
+  order: TOrderState;
+  ws: TWSState;
+}

@@ -22,96 +22,102 @@ import { AppDispatch, AppThunk } from '../types';
 import { ILoginForm, IRegisterForm, IUser } from '../../utils/types';
 import { TRootState } from '../reducers';
 
-export const loginAction = (form: ILoginForm) => async (dispatch: AppDispatch) => {
-  dispatch(getStartLoadingAction());
-
-  fetch(`${baseURL}/auth/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(form),
-  })
-    .then(res => checkResponse(res))
-    .then(data => {
-      if (!data.success) {
-        return Promise.reject(data.message);
-      }
-      const userInfo = getUserInfo(data);
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));
-      localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
-
-      dispatch(getLoginSuccessAction(userInfo));
-    })
-    .catch(error => {
-      dispatch(getLoginFailAction(error));
-    })
-    .finally(() => dispatch(getFinishLoadingAction()));
-};
-
-export const registerAction = (form: IRegisterForm) => async (dispatch: AppDispatch) => {
-  dispatch(getStartLoadingAction());
-
-  fetch(`${baseURL}/auth/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(form),
-  })
-    .then(res => checkResponse(res))
-    .then(data => {
-      if (!data.success) {
-        return Promise.reject(data.message);
-      }
-      const userInfo = getUserInfo(data);
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));
-      localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
-
-      dispatch(getRegisterSuccessAction(userInfo));
-    })
-    .catch(error => {
-      dispatch(getRegisterFailAction(error));
-    })
-    .finally(() => dispatch(getFinishLoadingAction()));
-};
-
-export const refreshTokenAction = (next: any, user?: IUser) => async (dispatch: AppDispatch) => {
-  const refreshToken = localStorage.getItem('refreshToken');
-  if (refreshToken) {
+export const loginAction =
+  (form: ILoginForm): AppThunk =>
+  async (dispatch: AppDispatch) => {
     dispatch(getStartLoadingAction());
 
-    fetch(`${baseURL}/auth/token`, {
+    fetch(`${baseURL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: JSON.parse(refreshToken) }),
+      body: JSON.stringify(form),
     })
       .then(res => checkResponse(res))
       .then(data => {
         if (!data.success) {
           return Promise.reject(data.message);
         }
+        const userInfo = getUserInfo(data);
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
         localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
-        const accessToken = data.accessToken.split(' ')[1];
-        const userInfo = JSON.parse(localStorage.getItem('userInfo') ?? '');
-        localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, accessToken }));
 
-        dispatch(getUpdateTokenAction(accessToken));
-        if (user) {
-          dispatch(next(user));
+        dispatch(getLoginSuccessAction(userInfo));
+      })
+      .catch(error => {
+        dispatch(getLoginFailAction(error));
+      })
+      .finally(() => dispatch(getFinishLoadingAction()));
+  };
+
+export const registerAction =
+  (form: IRegisterForm): AppThunk =>
+  async (dispatch: AppDispatch) => {
+    dispatch(getStartLoadingAction());
+
+    fetch(`${baseURL}/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    })
+      .then(res => checkResponse(res))
+      .then(data => {
+        if (!data.success) {
+          return Promise.reject(data.message);
         }
-        dispatch(next());
+        const userInfo = getUserInfo(data);
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
+
+        dispatch(getRegisterSuccessAction(userInfo));
       })
       .catch(error => {
         dispatch(getRegisterFailAction(error));
       })
       .finally(() => dispatch(getFinishLoadingAction()));
-  }
-};
+  };
 
-export const getUserAction = () => async (dispatch: AppThunk, getState: () => any) => {
+export const refreshTokenAction =
+  (next?: any, user?: IUser): AppThunk =>
+  async (dispatch: AppDispatch) => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      dispatch(getStartLoadingAction());
+
+      fetch(`${baseURL}/auth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: JSON.parse(refreshToken) }),
+      })
+        .then(res => checkResponse(res))
+        .then(data => {
+          if (!data.success) {
+            return Promise.reject(data.message);
+          }
+          localStorage.setItem('refreshToken', JSON.stringify(data.refreshToken));
+          const accessToken = data.accessToken.split(' ')[1];
+          const userInfo = JSON.parse(localStorage.getItem('userInfo') ?? '');
+          localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, accessToken }));
+
+          dispatch(getUpdateTokenAction(accessToken));
+          if (user) {
+            dispatch(next(user));
+          }
+          dispatch(next());
+        })
+        .catch(error => {
+          dispatch(getRegisterFailAction(error));
+        })
+        .finally(() => dispatch(getFinishLoadingAction()));
+    }
+  };
+
+export const getUserAction = (): AppThunk => async (dispatch: AppDispatch, getState: () => any) => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/auth/user`, {
@@ -133,13 +139,14 @@ export const getUserAction = () => async (dispatch: AppThunk, getState: () => an
 };
 
 export const updateUserAction =
-  (user: IUser) => async (dispatch: AppThunk, getState: () => TRootState) => {
+  (user: IUser): AppThunk =>
+  async (dispatch: AppDispatch, getState: () => TRootState) => {
     dispatch(getStartLoadingAction());
     fetch(`${baseURL}/auth/user`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getState().user?.accessToken}`,
+        Authorization: `Bearer ${getState().auth.user?.accessToken}`,
       },
       body: JSON.stringify(user),
     })
@@ -158,7 +165,7 @@ export const updateUserAction =
       .finally(() => dispatch(getFinishLoadingAction()));
   };
 
-export const logoutAction = () => async (dispatch: AppThunk) => {
+export const logoutAction = (): AppThunk => async (dispatch: AppDispatch) => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (refreshToken) {
     dispatch(getStartLoadingAction());

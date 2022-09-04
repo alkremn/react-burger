@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import styles from './app.module.css';
-import { IMainStore } from '../../utils/types';
 import { Location } from 'history';
 
 // components
@@ -36,9 +35,9 @@ declare module 'react' {
 }
 
 function App() {
-  const { isLoading } = useSelector((store: IMainStore) => store.async);
-  const { ingredients } = useSelector((store: IMainStore) => store.ingredients);
-  const { order } = useSelector((store: IMainStore) => store.order);
+  const { isLoading } = useSelector(store => store.async);
+  const { ingredients } = useSelector(store => store.ingredients);
+  const { order } = useSelector(store => store.order);
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -59,8 +58,7 @@ function App() {
   }, [order]);
 
   const handleClosePopup = () => {
-    const path = location.pathname.split('/').slice(1, -1).join('/');
-    history.push(`/${path === 'ingredients' ? '' : path}`);
+    history.goBack();
     dispatch(removeDetailedIngredient());
   };
   const handleOrderDetailsClose = () => {
@@ -86,6 +84,9 @@ function App() {
               <ConstructorPage />
             </Route>
             <Route path='/ingredients/:id' children={<IngredientPage />} />
+            <ProtectedRoute path={`/profile/orders/:id`}>
+              <OrderPage />
+            </ProtectedRoute>
             <ProtectedRoute path='/profile'>
               <ProfilePage onClosePopup={handleClosePopup} />
             </ProtectedRoute>

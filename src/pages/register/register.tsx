@@ -5,7 +5,7 @@ import styles from './register.module.css';
 import { Link } from 'react-router-dom';
 
 // redux
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 
 // constants
 import { WRONG_EMAIL_TITLE, ENTER_NAME_TITLE, MAX_PASSWORD_LENGTH } from '../../utils/utils';
@@ -73,7 +73,7 @@ export const RegisterPage = () => {
         <Input
           name='name'
           placeholder='Имя'
-          value={form.name}
+          value={form.name ?? ''}
           error={errors.name !== ''}
           errorText={errors.name}
           onBlur={handleValidateInput}
@@ -84,7 +84,7 @@ export const RegisterPage = () => {
         <Input
           name='email'
           placeholder='E-mail'
-          value={form.email}
+          value={form.email ?? ''}
           error={errors.email !== ''}
           errorText={errors.email}
           onBlur={handleValidateInput}
@@ -92,7 +92,7 @@ export const RegisterPage = () => {
         />
       </div>
       <div className={styles.inputContainer}>
-        <PasswordInput name='password' value={form.password} onChange={handleInputChange} />
+        <PasswordInput name='password' value={form.password ?? ''} onChange={handleInputChange} />
       </div>
       <div className={styles.ButtonContainer}>
         <Button type='primary' size='medium' disabled={isSubmitDisabled}>

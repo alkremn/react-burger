@@ -1,58 +1,46 @@
-import type { Middleware, MiddlewareAPI } from 'redux';
-import {
-  getWsConnectionSuccessAction,
-  getWsConnectionClosedAction,
-  getWsConnectionErrorAction,
-  getFinishLoadingAction,
-} from '../actionCreators';
-import { WS_CONNECTION_STOP, WS_CONNECTION_START, WS_SECURE_CONNECTION_START } from '../constants';
-import { AppDispatch, RootState, TApplicationActions } from '../types';
-import { getWsGetOrderDataAction } from '../actionCreators/wsActions';
-import { TAuthState } from '../reducers/authReducer';
+import type { Middleware } from 'redux';
+import { WsActions } from '../types/index';
+import { TRootState } from '../reducers';
 
-export const socketMiddleware = (wsUrl: string): Middleware => {
-  return (store: MiddlewareAPI<AppDispatch, RootState>) => {
+export const socketMiddleware = (wsActions: WsActions): Middleware<{}, TRootState> => {
+  return store => next => action => {
     let socket: WebSocket | null = null;
+    const { dispatch } = store;
+    const { type, payload } = action;
+    const { onInit, onOpen, onClose, onError, onData, onStop } = wsActions;
 
-    return next => (action: TApplicationActions) => {
-      const { dispatch, getState } = store;
-      const { type } = action;
-      const { user }: TAuthState = getState().auth;
-
-      if (type === WS_CONNECTION_START) {
-        socket = new WebSocket(`${wsUrl}/all`);
-        dispatch(getFinishLoadingAction());
-      } else if (type === WS_SECURE_CONNECTION_START) {
-        socket = new WebSocket(`${wsUrl}?token=${user?.accessToken}`);
-      } else if (type === WS_CONNECTION_STOP) {
-        socket?.close();
-      }
+    if (type === onInit) {
+      socket = new WebSocket(payload);
 
       if (socket) {
-        socket.onopen = () => {
-          dispatch(getWsConnectionSuccessAction());
+        socket.onopen = event => {
+          dispatch({ type: onOpen, event: event });
         };
 
-        socket.onclose = () => {
-          dispatch(getWsConnectionClosedAction());
-          dispatch(getFinishLoadingAction());
+        socket.onclose = event => {
+          dispatch({ type: onClose, payload: event });
         };
 
-        socket.onerror = () => {
-          dispatch(getWsConnectionErrorAction());
+        socket.onerror = event => {
+          dispatch({ type: onError, payload: event });
         };
+
+        if (type === onStop) {
+          socket.close();
+          dispatch({ type: onClose });
+        }
 
         socket.onmessage = ({ data }) => {
           const parsedData = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
           if (success) {
-            dispatch(getWsGetOrderDataAction(restParsedData));
+            dispatch({ type: onData, payload: restParsedData });
+          } else {
+            dispatch({ type: onError, payload: restParsedData.message });
           }
-          dispatch(getFinishLoadingAction());
         };
       }
-
-      next(action);
-    };
+    }
+    next(action);
   };
 };

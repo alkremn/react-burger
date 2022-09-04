@@ -3,7 +3,8 @@ import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import styles from './reset-password.module.css';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
+
 import {
   isPasswordShort,
   MAX_PASSWORD_LENGTH,

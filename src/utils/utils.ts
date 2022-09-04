@@ -11,6 +11,11 @@ export const DONE = 'done';
 export const WRONG_EMAIL_TITLE = 'Некорректный E-mail';
 export const ENTER_NAME_TITLE = 'Введите имя';
 export const MAX_PASSWORD_LENGTH = 5;
+export const INVALID_TOKEN_RESPONSE = 'Invalid or missing token';
+
+const WS_URL = 'wss://norma.nomoreparties.space/orders';
+export const getConnectionUrl = () => `${WS_URL}/all`;
+export const getSecureConnectUrl = (token: string) => `${WS_URL}?token=${token}`;
 
 export function filterIngredients(ingredients: Array<IIngredient>) {
   const buns: Array<IIngredient> = [];
@@ -51,14 +56,14 @@ export function getRandomIntredients(ingredients: Array<IIngredient>) {
   return result;
 }
 
-export function calculateTotalCost(bun: IIngredient, ingredients: Array<IIngredient>) {
+export function calculateTotalCost(bun: IIngredient | null, ingredients: Array<IIngredient>) {
   const ingredientsCost = ingredients.reduce((totalCost, currentItem) => {
     return totalCost + currentItem.price;
   }, 0);
   return ingredientsCost + (bun ? bun.price : 0);
 }
 
-export function getIngredientIds(bun: IIngredient, ingredients: Array<IIngredient>) {
+export function getIngredientIds(bun: IIngredient, ingredients: IIngredient[]) {
   return [bun._id, ...ingredients.map(i => i._id)];
 }
 
@@ -79,16 +84,18 @@ export function validateEmail(email: string) {
     : false;
 }
 
-export function isEmailEmpty(email: string) {
+export function isEmailEmpty(email: string | undefined) {
   return email === '';
 }
 
-export function isPasswordEmpty(password: string) {
+export function isPasswordEmpty(password: string | undefined) {
   return password === '';
 }
 
-export function isPasswordShort(password: string, minLength: number) {
-  return password.length < minLength;
+export function isPasswordShort(password: string | undefined, minLength: number) {
+  if (password) {
+    return password.length < minLength;
+  }
 }
 
 export function timeSince(date: string) {

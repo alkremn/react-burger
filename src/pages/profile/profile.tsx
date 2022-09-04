@@ -1,12 +1,11 @@
 import React, { MouseEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../utils/hooks';
 import { NavLink, Switch, useRouteMatch } from 'react-router-dom';
 import { logoutAction } from '../../services/actions/authActions';
 import styles from './profile.module.css';
 import { ProtectedRoute } from '../../components/protected-route';
 import { ProfileDetails } from '../../components/profile-details/profile-details';
 import { OrderHistory } from '../../components/order-history/order-history';
-import { OrderPage } from '../order/order';
 
 interface IProfilePageProps {
   onClosePopup: () => void;
@@ -62,9 +61,6 @@ export const ProfilePage = ({ onClosePopup }: IProfilePageProps) => {
           </ProtectedRoute>
           <ProtectedRoute path={`${path}/orders`}>
             <OrderHistory />
-          </ProtectedRoute>
-          <ProtectedRoute path={`${path}/orders/:id`}>
-            <OrderPage />
           </ProtectedRoute>
         </Switch>
       </div>

@@ -22,17 +22,15 @@ import {
 import { postOrderAction } from '../../services/actions/orderActions';
 
 import { useHistory } from 'react-router-dom';
-import { IMainStore, IIngredient } from '../../utils/types';
+import { IIngredient } from '../../utils/types';
 import { useDispatch } from '../../utils/hooks';
 import { useSelector } from './../../utils/hooks';
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
-  const { user } = useSelector((store: IMainStore) => store.auth);
+  const { user } = useSelector(store => store.auth);
   const history = useHistory();
-  const { selectedBun, selectedIngredients } = useSelector(
-    (store: IMainStore) => store.ingredients
-  );
+  const { selectedBun, selectedIngredients } = useSelector(store => store.ingredients);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
@@ -53,8 +51,10 @@ export default function BurgerConstructor() {
     if (!user) {
       history.push('/login');
     } else {
-      dispatch(postOrderAction(getIngredientIds(selectedBun, selectedIngredients)));
-      dispatch(removeSelectedIngredientsAction(selectedBun));
+      if (selectedBun) {
+        dispatch(postOrderAction(getIngredientIds(selectedBun, selectedIngredients)));
+        dispatch(removeSelectedIngredientsAction(selectedBun));
+      }
     }
   };
 

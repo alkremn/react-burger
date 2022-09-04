@@ -18,11 +18,10 @@ import {
   getStartLoadingAction,
 } from '../actionCreators/asyncActionCreator';
 import { IIngredient } from './../../utils/types';
-import { AppThunk } from '../types';
+import { AppDispatch, AppThunk } from '../types';
 
-export const fetchIngredientsAction = () => async (dispatch: AppThunk) => {
+export const fetchIngredientsAction = (): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(getStartLoadingAction());
-
   fetch(`${baseURL}/ingredients`)
     .then(res => checkResponse(res))
     .then(dataJson => {
@@ -35,12 +34,14 @@ export const fetchIngredientsAction = () => async (dispatch: AppThunk) => {
 };
 
 export const addSelectedIngredientsAction =
-  (ingredients: IIngredient[]) => (dispatch: AppThunk) => {
+  (ingredients: IIngredient[]): AppThunk =>
+  (dispatch: AppDispatch) => {
     dispatch(getAddSelectedIngredientsAction(ingredients));
   };
 
 export const addSelectedIngredientAction =
-  (selectedBun: IIngredient, ingredient: IIngredient) => (dispatch: AppThunk) => {
+  (selectedBun: IIngredient | null, ingredient: IIngredient): AppThunk =>
+  (dispatch: AppDispatch) => {
     if (ingredient.type === 'bun') {
       if (selectedBun) {
         dispatch(getDecrementIngredientCountAction(selectedBun));
@@ -58,20 +59,25 @@ export const addSelectedIngredientAction =
   };
 
 export const removeSelectedIngredientsAction =
-  (selectedBun: IIngredient) => (dispatch: AppThunk) => {
+  (selectedBun: IIngredient): AppThunk =>
+  (dispatch: AppDispatch) => {
     dispatch(getRemoveSelectedIngredientsAction());
     dispatch(getDecrementIngredientCountAction(selectedBun));
     dispatch(getRemoveSelectedBunAction());
   };
 
-export const removeSelectedIngredientAction = (ingredient: IIngredient) => (dispatch: AppThunk) => {
-  dispatch(getRemoveSelectedIngredientAction(ingredient));
-  dispatch(getDecrementIngredientCountAction(ingredient));
-};
-export const addDetailedIngredient = (ingredient: IIngredient) => (dispatch: AppThunk) => {
-  dispatch(getAddDetailedIngredientAction(ingredient));
-};
+export const removeSelectedIngredientAction =
+  (ingredient: IIngredient): AppThunk =>
+  (dispatch: AppDispatch) => {
+    dispatch(getRemoveSelectedIngredientAction(ingredient));
+    dispatch(getDecrementIngredientCountAction(ingredient));
+  };
+export const addDetailedIngredient =
+  (ingredient: IIngredient): AppThunk =>
+  (dispatch: AppDispatch) => {
+    dispatch(getAddDetailedIngredientAction(ingredient));
+  };
 
-export const removeDetailedIngredient = () => (dispatch: AppThunk) => {
+export const removeDetailedIngredient = (): AppThunk => (dispatch: AppDispatch) => {
   dispatch(getRemoveDetailedIngredientAction());
 };

@@ -26,7 +26,7 @@ export interface IGetFetchIngredientsSuccessAction {
 
 export interface IGetFetchIngredientsFailAction {
   readonly type: typeof FETCH_INGREDIENTS_FAIL;
-  readonly payload: String;
+  readonly payload: string;
 }
 
 export interface IGetAddSelectedIngredientsAction {

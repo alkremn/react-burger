@@ -43,7 +43,7 @@ export interface IGetLogoutSuccessAction {
 
 export interface IGetLogoutFailAction {
   readonly type: typeof LOGOUT_FAIL;
-  readonly payload: String;
+  readonly payload: string;
 }
 
 export interface IGetUpdateUserSuccessAction {

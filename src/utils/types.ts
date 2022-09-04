@@ -37,8 +37,8 @@ export interface IOrderData {
 }
 
 export interface IUser {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   accessToken?: string;
 }
 
@@ -83,7 +83,7 @@ export interface ILoginForm {
 }
 
 export interface IRegisterForm {
-  name: string;
-  email: string;
-  password: string;
+  name: string | undefined;
+  email: string | undefined;
+  password: string | undefined;
 }

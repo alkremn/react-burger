@@ -6,18 +6,12 @@ import {
   WS_CONNECTION_STOP,
   WS_CONNECTION_CLOSED,
   WS_GET_ORDER_DATA,
-  WS_SECURE_CONNECTION_START,
 } from '../constants';
 
-export const getWsConnectionStartAction = () => {
+export const getWsConnectionStartAction = (url: string) => {
   return {
     type: WS_CONNECTION_START,
-  };
-};
-
-export const getWsSecureConnectionStartAction = () => {
-  return {
-    type: WS_SECURE_CONNECTION_START,
+    payload: url,
   };
 };
 
@@ -27,9 +21,10 @@ export function getWsConnectionSuccessAction() {
   };
 }
 
-export function getWsConnectionErrorAction() {
+export function getWsConnectionErrorAction(message: string) {
   return {
     type: WS_CONNECTION_ERROR,
+    payload: message
   };
 }
 
@@ -39,9 +34,10 @@ export function getWsConnectionStopAction() {
   };
 }
 
-export function getWsConnectionClosedAction() {
+export function getWsConnectionClosedAction(payload: string) {
   return {
     type: WS_CONNECTION_CLOSED,
+    payload,
   };
 }
 

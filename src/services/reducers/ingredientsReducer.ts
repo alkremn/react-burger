@@ -1,5 +1,5 @@
 import { TIngredientsActions } from '../types/ingredientsTypes';
-import { IIngredient } from './../../utils/types';
+import { IIngredient } from '../../utils/types';
 
 import {
   FETCH_INGREDIENTS_SUCCESS,
@@ -16,13 +16,13 @@ import {
   REMOVE_SELECTED_BUN,
 } from '../constants/ingredientContstants';
 
-export type TIngredientsState = {
+export interface TIngredientsState {
   ingredients: IIngredient[];
   selectedBun: IIngredient | null;
   selectedIngredients: IIngredient[];
   detailedIngredient: IIngredient | null;
   error: string | null;
-};
+}
 
 const initialState: TIngredientsState = {
   ingredients: [],
@@ -32,7 +32,10 @@ const initialState: TIngredientsState = {
   error: null,
 };
 
-export const ingredientsReducer = (state = initialState, action: TIngredientsActions) => {
+export const ingredientsReducer = (
+  state = initialState,
+  action: TIngredientsActions
+): TIngredientsState => {
   switch (action.type) {
     case FETCH_INGREDIENTS_SUCCESS:
       return {
