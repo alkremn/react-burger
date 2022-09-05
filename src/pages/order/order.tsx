@@ -22,18 +22,18 @@ export const OrderPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!user) {
-      history.push('/login');
-    }
-    dispatch(getStartLoadingAction());
-    if (!user!.accessToken) {
-      dispatch(refreshTokenAction());
+    if (pathname.includes('/profile/orders/')) {
+      if (!user) {
+        history.push('/login');
+      }
+
+      dispatch(getStartLoadingAction());
+      if (!user?.accessToken) {
+        dispatch(refreshTokenAction());
+      }
+      dispatch(getWsConnectionStartAction(getSecureConnectUrl(user!.accessToken!)));
     } else {
-      dispatch(
-        getWsConnectionStartAction(
-          pathname.includes('/feed/') ? getConnectionUrl() : getSecureConnectUrl(user!.accessToken)
-        )
-      );
+      dispatch(getWsConnectionStartAction(getConnectionUrl()));
     }
     return () => {
       dispatch(getWsConnectionStopAction());

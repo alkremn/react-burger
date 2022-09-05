@@ -21,6 +21,7 @@ import {
 import { AppDispatch, AppThunk } from '../types';
 import { ILoginForm, IRegisterForm, IUser } from '../../utils/types';
 import { TRootState } from '../reducers';
+import { RootState } from '../store';
 
 export const loginAction =
   (form: ILoginForm): AppThunk =>
@@ -119,12 +120,12 @@ export const refreshTokenAction =
     }
   };
 
-export const getUserAction = (): AppThunk => async (dispatch: AppDispatch, getState: () => any) => {
+export const getUserAction = (): AppThunk => async (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch(getStartLoadingAction());
 
   fetch(`${baseURL}/auth/user`, {
     headers: {
-      Authorization: `Bearer ${getState().auth.user.accessToken}`,
+      Authorization: `Bearer ${getState().auth.user?.accessToken}`,
     },
   })
     .then(res => checkResponse(res))

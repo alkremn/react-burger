@@ -17,15 +17,12 @@ export const postOrderAction =
   async (dispatch: AppDispatch, getState: () => TRootState) => {
     dispatch(getStartLoadingAction());
 
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set('Content-Type', 'application/json');
-    if (getState().auth.user?.accessToken) {
-      requestHeaders.set('Authorization', getState().auth.user!.accessToken!);
-    }
-
     fetch(`${baseURL}/orders`, {
       method: 'POST',
-      headers: requestHeaders,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getState().auth.user!.accessToken!}`,
+      },
       body: JSON.stringify({ ingredients: ingredientIds }),
     })
       .then(res => checkResponse(res))
