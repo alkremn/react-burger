@@ -4,8 +4,6 @@ import listItemStyles from './burger-ingredient.module.css';
 // components
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-// PropTypes
-import { ingredientPropTypes } from '../../utils/commonPropTypes';
 import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
 import { IIngredient } from '../../utils/types';
@@ -40,7 +38,3 @@ export default function BurgerIngredient({ ingredient }: IBurgerIngredientProps)
     </li>
   );
 }
-
-BurgerIngredient.propTypes = {
-  ingredient: ingredientPropTypes.isRequired,
-};

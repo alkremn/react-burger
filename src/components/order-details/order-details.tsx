@@ -3,14 +3,11 @@ import orderDetailsStyles from './order-details.module.css';
 
 // icons
 import checkImage from '../../images/icons/check_mark.svg';
-
-// helpers
-import { useSelector } from 'react-redux';
-import { IMainStore } from '../../utils/types';
+import { useSelector } from '../../utils/hooks';
 
 export default function OrderDetails() {
-  const { isLoading } = useSelector((store: IMainStore) => store.async);
-  const { order } = useSelector((store: IMainStore) => store.order);
+  const { isLoading } = useSelector(store => store.async);
+  const { order } = useSelector(store => store.order);
 
   return (
     <div className={orderDetailsStyles.container}>

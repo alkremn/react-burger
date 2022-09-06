@@ -5,9 +5,6 @@ import { useDrop } from 'react-dnd';
 // icons
 import currencyIcon from '../../images/icons/currency_icon.svg';
 
-// redux
-import { useDispatch, useSelector } from 'react-redux';
-
 // components
 import { Button, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerConstructorCard from '../burger-constructor-card/burger-constructor-card';
@@ -25,21 +22,19 @@ import {
 import { postOrderAction } from '../../services/actions/orderActions';
 
 import { useHistory } from 'react-router-dom';
-import { IMainStore, IIngredient } from '../../utils/types';
-
-
+import { IIngredient } from '../../utils/types';
+import { useDispatch } from '../../utils/hooks';
+import { useSelector } from './../../utils/hooks';
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
-  const { user } = useSelector((store: IMainStore) => store.auth);
+  const { user } = useSelector(store => store.auth);
   const history = useHistory();
-  const { selectedBun, selectedIngredients } = useSelector(
-    (store: IMainStore) => store.ingredients
-  );
+  const { selectedBun, selectedIngredients } = useSelector(store => store.ingredients);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop(ingredient) {
+    drop(ingredient: IIngredient) {
       dispatch(addSelectedIngredientAction(selectedBun, ingredient));
     },
     collect: monitor => ({
@@ -56,8 +51,10 @@ export default function BurgerConstructor() {
     if (!user) {
       history.push('/login');
     } else {
-      dispatch(postOrderAction(getIngredientIds(selectedBun, selectedIngredients)));
-      dispatch(removeSelectedIngredientsAction(selectedBun));
+      if (selectedBun) {
+        dispatch(postOrderAction(getIngredientIds(selectedBun, selectedIngredients)));
+        dispatch(removeSelectedIngredientsAction(selectedBun));
+      }
     }
   };
 

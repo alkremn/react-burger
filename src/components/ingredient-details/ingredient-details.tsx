@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import NutritionFact from '../nutrition-fact/nutrition-fact';
 import ingredientDetailsStyles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { IMainStore, IIngredient } from '../../utils/types';
+import { IIngredient } from '../../utils/types';
+import { useSelector } from '../../utils/hooks';
 
 export default function IngredientDetails() {
-  const { ingredients } = useSelector((store: IMainStore) => store.ingredients);
+  const { ingredients } = useSelector(store => store.ingredients);
   const { id } = useParams<{ id: string }>();
 
   const [ingredient, setIngredient] = useState<IIngredient | undefined>(undefined);

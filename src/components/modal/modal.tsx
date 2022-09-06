@@ -14,7 +14,7 @@ export default function Modal({ children, onClose }: IModelProps) {
   const handleClosePopup = useCallback(
     (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
       const target = e.target as HTMLDivElement;
-      if (target.classList.contains('popup') || target.classList.contains('closeButton')) {
+      if (target.classList.contains('popup')) {
         onClose();
       }
     },
@@ -36,7 +36,7 @@ export default function Modal({ children, onClose }: IModelProps) {
   return createPortal(
     <ModalOverlay onClose={handleClosePopup}>
       <div className={`${modalStyles.container}`}>
-        <button className={`closeButton ${modalStyles.closeButton}`} onClick={handleClosePopup} />
+        <button className={`closeButton ${modalStyles.closeButton}`} onClick={onClose} />
         {children}
       </div>
     </ModalOverlay>,

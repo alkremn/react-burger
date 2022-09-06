@@ -15,14 +15,31 @@ export interface IIngredient {
   __v: number;
 }
 
-interface IOrder {
+export interface IOrder {
+  _id: string;
   number: number;
-  name: string;
+  name?: string;
+  ingredients: string[];
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IOrderIngredient {
+  ingredient: IIngredient;
+  count?: number;
+}
+
+export interface IOrderData {
+  orders: IOrder[];
+  total: number;
+  totalToday: number;
 }
 
 export interface IUser {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
+  accessToken?: string;
 }
 
 interface ISyncStore {
@@ -46,9 +63,27 @@ interface IOrderStore {
   error: string;
 }
 
+interface IWsStore {
+  wsConnected: boolean;
+  orderData: IOrderData | null;
+  error?: Event;
+}
+
 export interface IMainStore {
   async: ISyncStore;
   auth: IAuthStore;
   ingredients: IIngredientsStore;
   order: IOrderStore;
+  ws: IWsStore;
+}
+
+export interface ILoginForm {
+  email: string;
+  password: string;
+}
+
+export interface IRegisterForm {
+  name: string | undefined;
+  email: string | undefined;
+  password: string | undefined;
 }

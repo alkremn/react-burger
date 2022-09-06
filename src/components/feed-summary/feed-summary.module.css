@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 580px;
+}
+
+.topContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 36px;
+}
+
+.title {
+  margin: 0;
+}
+
+.list {
+  list-style: none;
+  padding-left: 0;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+.secondaryColor {
+  color: #00CCCC; 
+}
+
+.list li {
+  font-family: 'Iceland';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 24px;
+  margin-bottom: 8px;
+}
+
+.topMargin {
+  margin-top: 60px;
+}
+
+.digits {
+  font-family: 'Iceland';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 144px;
+  line-height: 120px;
+}

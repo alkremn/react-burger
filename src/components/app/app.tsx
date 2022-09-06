@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import styles from './app.module.css';
-import { IMainStore } from '../../utils/types';
 import { Location } from 'history';
 
 // components
@@ -17,7 +16,6 @@ import {
   IngredientPage,
   NotFoundPage,
 } from '../../pages/index';
-import { useSelector, useDispatch } from 'react-redux';
 import { Loader } from '../loader/loader';
 import {
   fetchIngredientsAction,
@@ -26,8 +24,10 @@ import {
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import OrderDetails from '../order-details/order-details';
-
-// Fix ошибки ts для компонентов yandex
+import { useDispatch, useSelector } from './../../utils/hooks';
+import { FeedPage } from '../../pages/feed/feed';
+import { OrderPage } from '../../pages/order/order';
+import { OrderSummary } from '../order-summary/order-summary';
 declare module 'react' {
   interface FunctionComponent<P = {}> {
     (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
@@ -35,9 +35,9 @@ declare module 'react' {
 }
 
 function App() {
-  const { isLoading } = useSelector((store: IMainStore) => store.async);
-  const { ingredients } = useSelector((store: IMainStore) => store.ingredients);
-  const { order } = useSelector((store: IMainStore) => store.order);
+  const { isLoading } = useSelector(store => store.async);
+  const { ingredients } = useSelector(store => store.ingredients);
+  const { order } = useSelector(store => store.order);
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -58,7 +58,7 @@ function App() {
   }, [order]);
 
   const handleClosePopup = () => {
-    history.push('/');
+    history.goBack();
     dispatch(removeDetailedIngredient());
   };
   const handleOrderDetailsClose = () => {
@@ -71,31 +71,57 @@ function App() {
     <>
       {isLoading && <Loader />}
       <AppHeader />
-      <main className={styles.mainContainer}>
-        <Switch location={background || location}>
-          <Route path='/login' component={LoginPage} />
-          <Route path='/register' component={RegisterPage} />
-          <Route path='/forgot-password' component={ForgotPasswordPage} />
-          <Route path='/reset-password' component={ResetPasswordPage} />
-          <Route path='/' exact={true}>
-            <ConstructorPage />
-          </Route>
-          <Route path='/ingredients/:id' children={<IngredientPage />} />
-          <ProtectedRoute path='/profile'>
-            <ProfilePage />
-          </ProtectedRoute>
-          <Route path='*' component={NotFoundPage} />
-        </Switch>
-
+      <main className={styles.page}>
+        <div className={styles.mainContainer}>
+          <Switch location={background || location}>
+            <Route path='/login' component={LoginPage} />
+            <Route path='/register' component={RegisterPage} />
+            <Route path='/forgot-password' component={ForgotPasswordPage} />
+            <Route path='/reset-password' component={ResetPasswordPage} />
+            <Route path='/feed' exact={true} component={FeedPage} />
+            <Route path='/feed/:id' children={<OrderPage />} />
+            <Route path='/' exact={true}>
+              <ConstructorPage />
+            </Route>
+            <Route path='/ingredients/:id' children={<IngredientPage />} />
+            <ProtectedRoute path={`/profile/orders/:id`}>
+              <OrderPage />
+            </ProtectedRoute>
+            <ProtectedRoute path='/profile'>
+              <ProfilePage onClosePopup={handleClosePopup} />
+            </ProtectedRoute>
+            <Route path='*' component={NotFoundPage} />
+          </Switch>
+        </div>
         {background && (
-          <Route
-            path='/ingredients/:id'
-            children={
-              <Modal onClose={handleClosePopup}>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
+          <>
+            <Route
+              path='/ingredients/:id'
+              children={
+                <Modal onClose={handleClosePopup}>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path='/feed/:id'
+              children={
+                <Modal onClose={handleClosePopup}>
+                  <OrderSummary />
+                </Modal>
+              }
+            />
+            <ProtectedRoute path={`/profile/orders/:id`}>
+              <Route
+                path={`/profile/orders/:id`}
+                children={
+                  <Modal onClose={handleClosePopup}>
+                    <OrderSummary />
+                  </Modal>
+                }
+              />
+            </ProtectedRoute>
+          </>
         )}
         {isVisible && (
           <Modal onClose={handleOrderDetailsClose}>

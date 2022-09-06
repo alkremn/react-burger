@@ -3,9 +3,9 @@ import listStyles from './burger-ingredients-list.module.css';
 import BurgerIngredientsSection from '../burger-ingredients-section/burger-ingredients-section';
 import { filterIngredients, titles } from '../../utils/utils';
 // redux
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../utils/hooks';
 
-import { IMainStore, IIngredient } from '../../utils/types';
+import { IIngredient } from '../../utils/types';
 
 interface BurgerIngredientsListProps {
   listRefs: Array<(node?: Element | null | undefined) => void>;
@@ -16,7 +16,7 @@ export default function BurgerIngredientsList({
   listRefs,
   headerRefs,
 }: BurgerIngredientsListProps) {
-  const { ingredients } = useSelector((store: IMainStore) => store.ingredients);
+  const { ingredients } = useSelector(store => store.ingredients);
   const [filteredIngredients, setFilteredIngredients] = useState<IIngredient[][]>([[], [], []]);
 
   useEffect(() => {

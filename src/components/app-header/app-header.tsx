@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import headerStyles from './app-header.module.css';
 import {
   BurgerIcon,
@@ -14,13 +14,24 @@ interface IState {
 
 const defaultState = {
   constructor: false,
-  orders: false,
+  feed: false,
   profile: false,
 };
 
 export default function AppHeader() {
-  const [activeLink, setActiveLink] = useState('constructor');
+  const { pathname } = useLocation();
+  const [activeLink, setActiveLink] = useState<string>(pathname);
   const [state, setState] = useState<IState>({ ...defaultState, [activeLink]: true });
+
+  useEffect(() => {
+    if (pathname === '/') {
+      setActiveLink('constructor');
+      setState({ ...defaultState, constructor: true });
+    } else {
+      setActiveLink(pathname.slice(1));
+      setState({ ...defaultState, [pathname.slice(1)]: true });
+    }
+  }, [pathname]);
 
   const handleLinkClick = (name: string) => {
     setState({ ...defaultState, [name]: true });
@@ -59,15 +70,15 @@ export default function AppHeader() {
           </li>
           <li>
             <NavLink
-              to=''
-              onMouseEnter={() => handleMouseEnter('orders')}
-              onMouseLeave={() => handleMouseLeave('orders')}
-              onClick={() => handleLinkClick('orders')}
+              to='/feed'
+              onMouseEnter={() => handleMouseEnter('feed')}
+              onMouseLeave={() => handleMouseLeave('feed')}
+              onClick={() => handleLinkClick('feed')}
             >
-              <ListIcon type={`${state.orders ? 'primary' : 'secondary'}`} />
+              <ListIcon type={`${state.feed ? 'primary' : 'secondary'}`} />
               <p
                 className={`text text_type_main-default pl-2 ${
-                  state.orders ? 'text_color_active' : 'text_color_inactive'
+                  state.feed ? 'text_color_active' : 'text_color_inactive'
                 }`}
               >
                 Лента заказов
