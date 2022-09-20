@@ -14,7 +14,7 @@ import {
   INCREMENT_INGREDIENT_COUNT,
   DECREMENT_INGREDIENT_COUNT,
   REMOVE_SELECTED_BUN,
-} from '../constants/ingredientContstants';
+} from '../constants/ingredientConstants';
 
 export interface TIngredientsState {
   ingredients: IIngredient[];

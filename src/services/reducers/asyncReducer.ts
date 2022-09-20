@@ -17,5 +17,6 @@ export const asyncReducer = (state = initialState, action: TAsyncActions): TAsyn
       return { ...state, isLoading: false };
     default:
       return state;
+
   }
 };

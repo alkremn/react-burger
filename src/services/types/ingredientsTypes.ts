@@ -12,7 +12,7 @@ import {
   REMOVE_SELECTED_BUN,
   ADD_DETAILED_INGREDIENT,
   REMOVE_DETAILED_INGREDIENT,
-} from '../constants/ingredientContstants';
+} from '../constants/ingredientConstants';
 
 export interface IGetAddSelectedBunAction {
   readonly type: typeof ADD_SELECTED_BUN;
