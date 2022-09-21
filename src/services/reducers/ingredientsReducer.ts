@@ -24,7 +24,7 @@ export interface TIngredientsState {
   error: string | null;
 }
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   ingredients: [],
   selectedBun: null,
   selectedIngredients: [],

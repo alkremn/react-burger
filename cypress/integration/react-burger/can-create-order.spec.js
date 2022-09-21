@@ -1,6 +1,6 @@
 describe('can create order', function () {
   before(function () {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
     const dataTransfer = new DataTransfer();
     cy.get('[class^=burger-ingredient_listItem]').first().trigger('dragstart', { dataTransfer });
     cy.get('[class^=burger-constructor_container]').first().trigger('drop', { dataTransfer });
@@ -14,6 +14,13 @@ describe('can create order', function () {
 
   it('should show order confirmation modal', function () {
     cy.get('[class^=button_button_]').contains('Оформить заказ').click();
+    cy.get('input[name="email"]').type('testtest@test.eb');
+    cy.get('input[name="password"]').type('testtest');
+    cy.get('[class^=button_button_]').contains('Войти').click();
+
+    cy.wait(2000);
+
+    cy.get('[class^=button_button_]', { timeout: 3000 }).contains('Оформить заказ').click();
     cy.get('[class^=order-details_container_]', { timeout: 30000 })
       .should('be.visible')
       .contains('Ваш заказ начали готовить');

@@ -5,7 +5,7 @@ export interface TAsyncState {
   isLoading: boolean;
 }
 
-const initialState: TAsyncState = {
+export const initialState: TAsyncState = {
   isLoading: false,
 };
 

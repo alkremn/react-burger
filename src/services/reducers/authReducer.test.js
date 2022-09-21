@@ -1,4 +1,4 @@
-import { authReducer } from './authReducer';
+import { authReducer, initialState } from './authReducer';
 import * as types from '../constants/authConstants';
 
 describe('auth reducer', () => {
@@ -18,10 +18,7 @@ describe('auth reducer', () => {
   };
 
   it('should return the initial state', () => {
-    expect(authReducer(undefined, {})).toEqual({
-      user: null,
-      message: null,
-    });
+    expect(authReducer(undefined, {})).toEqual(initialState);
   });
 
   it('should handle REGISTER_SUCCESS', () => {
@@ -31,8 +28,8 @@ describe('auth reducer', () => {
         payload: user,
       })
     ).toEqual({
+      ...initialState,
       user,
-      message: null,
     });
   });
 
@@ -43,7 +40,7 @@ describe('auth reducer', () => {
         payload: 'Error message',
       })
     ).toEqual({
-      user: null,
+      ...initialState,
       message: 'Error message',
     });
   });
@@ -55,8 +52,8 @@ describe('auth reducer', () => {
         payload: user,
       })
     ).toEqual({
+      ...initialState,
       user,
-      message: null,
     });
   });
 
@@ -67,7 +64,7 @@ describe('auth reducer', () => {
         payload: 'Error message',
       })
     ).toEqual({
-      user: null,
+      ...initialState,
       message: 'Error message',
     });
   });
@@ -79,7 +76,7 @@ describe('auth reducer', () => {
         payload: 'Success',
       })
     ).toEqual({
-      user: null,
+      ...initialState,
       message: 'Success',
     });
   });
@@ -91,7 +88,7 @@ describe('auth reducer', () => {
         payload: 'Error message',
       })
     ).toEqual({
-      user: null,
+      ...initialState,
       message: 'Error message',
     });
   });
@@ -103,8 +100,8 @@ describe('auth reducer', () => {
         payload: user,
       })
     ).toEqual({
+      ...initialState,
       user,
-      message: null,
     });
   });
 
@@ -115,7 +112,7 @@ describe('auth reducer', () => {
         payload: 'Error message',
       })
     ).toEqual({
-      user: null,
+      ...initialState,
       message: 'Error message',
     });
   });
@@ -130,8 +127,8 @@ describe('auth reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       user: { ...user, accessToken: 'token' },
-      message: null,
     });
   });
 });

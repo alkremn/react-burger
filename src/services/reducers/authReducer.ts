@@ -17,7 +17,7 @@ export interface TAuthState {
   message: string | null;
 }
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
   user: null,
   message: null,
 };

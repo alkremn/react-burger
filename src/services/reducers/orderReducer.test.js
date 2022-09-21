@@ -1,4 +1,4 @@
-import { orderReducer } from './orderReducer';
+import { orderReducer, initialState } from './orderReducer';
 import { POST_ORDER_SUCCESS, POST_ORDER_FAIL } from '../constants/orderConstants';
 
 describe('order reducer', () => {
@@ -18,10 +18,7 @@ describe('order reducer', () => {
   };
 
   it('should return the initial state', () => {
-    expect(orderReducer(undefined, {})).toEqual({
-      order: null,
-      error: null,
-    });
+    expect(orderReducer(undefined, {})).toEqual(initialState);
   });
 
   it('should handle POST_ORDER_SUCCESS', () => {
@@ -31,8 +28,8 @@ describe('order reducer', () => {
         payload: order,
       })
     ).toEqual({
+      ...initialState,
       order,
-      error: null,
     });
   });
 
@@ -43,7 +40,7 @@ describe('order reducer', () => {
         payload: 'error message',
       })
     ).toEqual({
-      order: null,
+      ...initialState,
       error: 'error message',
     });
   });

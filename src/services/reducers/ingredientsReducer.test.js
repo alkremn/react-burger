@@ -1,15 +1,9 @@
-import { ingredientsReducer } from './ingredientsReducer';
+import { ingredientsReducer, initialState } from './ingredientsReducer';
 import * as types from '../constants/ingredientConstants';
 
 describe('ingredients reducer', () => {
   it('should return the initial state', () => {
-    expect(ingredientsReducer(undefined, {})).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    expect(ingredientsReducer(undefined, {})).toEqual(initialState);
   });
 
   it('should handle FETCH_INGREDIENTS_SUCCESS', () => {
@@ -18,13 +12,7 @@ describe('ingredients reducer', () => {
         type: types.FETCH_INGREDIENTS_SUCCESS,
         payload: [],
       })
-    ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    ).toEqual(initialState);
   });
 
   it('should handle FETCH_INGREDIENTS_FAIL', () => {
@@ -34,10 +22,7 @@ describe('ingredients reducer', () => {
         payload: 'error message',
       })
     ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
+      ...initialState,
       error: 'error message',
     });
   });
@@ -49,11 +34,8 @@ describe('ingredients reducer', () => {
         payload: {},
       })
     ).toEqual({
-      ingredients: [],
+      ...initialState,
       selectedBun: {},
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
     });
   });
 
@@ -62,13 +44,7 @@ describe('ingredients reducer', () => {
       ingredientsReducer(undefined, {
         type: types.REMOVE_SELECTED_BUN,
       })
-    ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    ).toEqual(initialState);
   });
 
   it('should handle ADD_SELECTED_INGREDIENT', () => {
@@ -78,11 +54,8 @@ describe('ingredients reducer', () => {
         payload: {},
       })
     ).toEqual({
-      ingredients: [],
-      selectedBun: null,
+      ...initialState,
       selectedIngredients: [{}],
-      detailedIngredient: null,
-      error: null,
     });
   });
 
@@ -92,13 +65,7 @@ describe('ingredients reducer', () => {
         type: types.ADD_SELECTED_INGREDIENTS,
         payload: [],
       })
-    ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    ).toEqual(initialState);
   });
 
   it('should handle REMOVE_SELECTED_INGREDIENTS', () => {
@@ -106,26 +73,15 @@ describe('ingredients reducer', () => {
       ingredientsReducer(undefined, {
         type: types.REMOVE_SELECTED_INGREDIENTS,
       })
-    ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    ).toEqual(initialState);
   });
+
   it('should handle REMOVE_SELECTED_INGREDIENT', () => {
     expect(
       ingredientsReducer(undefined, {
         type: types.REMOVE_SELECTED_INGREDIENT,
       })
-    ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    ).toEqual(initialState);
   });
 
   it('should handle INCREMENT_INGREDIENT_COUNT', () => {
@@ -134,13 +90,7 @@ describe('ingredients reducer', () => {
         type: types.INCREMENT_INGREDIENT_COUNT,
         payload: 'id',
       })
-    ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    ).toEqual(initialState);
   });
 
   it('should handle DECREMENT_INGREDIENT_COUNT', () => {
@@ -165,11 +115,8 @@ describe('ingredients reducer', () => {
         payload: {},
       })
     ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
+      ...initialState,
       detailedIngredient: {},
-      error: null,
     });
   });
 
@@ -178,12 +125,6 @@ describe('ingredients reducer', () => {
       ingredientsReducer(undefined, {
         type: types.REMOVE_DETAILED_INGREDIENT,
       })
-    ).toEqual({
-      ingredients: [],
-      selectedBun: null,
-      selectedIngredients: [],
-      detailedIngredient: null,
-      error: null,
-    });
+    ).toEqual(initialState);
   });
 });

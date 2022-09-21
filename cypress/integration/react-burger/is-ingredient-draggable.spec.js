@@ -1,6 +1,6 @@
 describe('is ingredient draggable', function () {
   before(function () {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
   });
 
   it('should drag and drop ingredient', function () {

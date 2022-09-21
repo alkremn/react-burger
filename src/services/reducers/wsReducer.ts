@@ -14,7 +14,7 @@ export type TWSState = {
   errorMessage: string | null;
 };
 
-const initialState: TWSState = {
+export const initialState: TWSState = {
   wsConnected: false,
   orderData: null,
   errorMessage: null,

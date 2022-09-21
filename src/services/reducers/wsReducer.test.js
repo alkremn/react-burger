@@ -1,13 +1,9 @@
-import { wsReducer } from './wsReducer';
+import { wsReducer, initialState } from './wsReducer';
 import * as types from '../constants/wsConstants';
 
 describe('ws reducer', () => {
   it('should return the initial state', () => {
-    expect(wsReducer(undefined, {})).toEqual({
-      wsConnected: false,
-      orderData: null,
-      errorMessage: null,
-    });
+    expect(wsReducer(undefined, {})).toEqual(initialState);
   });
 
   it('should handle WS_CONNECTION_SUCCESS', () => {
@@ -16,9 +12,8 @@ describe('ws reducer', () => {
         type: types.WS_CONNECTION_SUCCESS,
       })
     ).toEqual({
-      orderData: null,
+      ...initialState,
       wsConnected: true,
-      errorMessage: null,
     });
   });
 
@@ -28,9 +23,8 @@ describe('ws reducer', () => {
         type: types.WS_CONNECTION_STOP,
       })
     ).toEqual({
+      ...initialState,
       wsConnected: false,
-      orderData: null,
-      errorMessage: null,
     });
   });
 
@@ -40,9 +34,8 @@ describe('ws reducer', () => {
         type: types.WS_CONNECTION_CLOSED,
       })
     ).toEqual({
+      ...initialState,
       wsConnected: false,
-      orderData: null,
-      errorMessage: null,
     });
   });
 
@@ -50,12 +43,12 @@ describe('ws reducer', () => {
     expect(
       wsReducer(undefined, {
         type: types.WS_CONNECTION_ERROR,
-        payload: "error message"
+        payload: 'error message',
       })
     ).toEqual({
+      ...initialState,
       wsConnected: false,
-      orderData: null,
-      errorMessage: "error message"
+      errorMessage: 'error message',
     });
   });
 
@@ -63,12 +56,11 @@ describe('ws reducer', () => {
     expect(
       wsReducer(undefined, {
         type: types.WS_GET_ORDER_DATA,
-        payload: []
+        payload: [],
       })
     ).toEqual({
-      wsConnected: false,
+      ...initialState,
       orderData: [],
-      errorMessage: null
     });
   });
 });
