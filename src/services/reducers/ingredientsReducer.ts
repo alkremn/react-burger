@@ -14,7 +14,7 @@ import {
   INCREMENT_INGREDIENT_COUNT,
   DECREMENT_INGREDIENT_COUNT,
   REMOVE_SELECTED_BUN,
-} from '../constants/ingredientContstants';
+} from '../constants/ingredientConstants';
 
 export interface TIngredientsState {
   ingredients: IIngredient[];
@@ -24,7 +24,7 @@ export interface TIngredientsState {
   error: string | null;
 }
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   ingredients: [],
   selectedBun: null,
   selectedIngredients: [],

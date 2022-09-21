@@ -27,7 +27,7 @@ import {
   REMOVE_SELECTED_BUN,
   ADD_DETAILED_INGREDIENT,
   REMOVE_DETAILED_INGREDIENT,
-} from '../constants/ingredientContstants';
+} from '../constants/ingredientConstants';
 
 export function getAddSelectedBunAction(selectedBun: IIngredient): IGetAddSelectedBunAction {
   return { type: ADD_SELECTED_BUN, payload: selectedBun };

@@ -5,7 +5,7 @@ export interface TAsyncState {
   isLoading: boolean;
 }
 
-const initialState: TAsyncState = {
+export const initialState: TAsyncState = {
   isLoading: false,
 };
 
@@ -17,5 +17,6 @@ export const asyncReducer = (state = initialState, action: TAsyncActions): TAsyn
       return { ...state, isLoading: false };
     default:
       return state;
+
   }
 };
